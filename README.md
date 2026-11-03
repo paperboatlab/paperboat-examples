@@ -53,3 +53,5 @@ python3 ../paperboat/protocol/smoke_test.py --port <port>   # a running backend 
 ```
 
 Writing your own backend: see Paperboat's API reference (`docs/api`, quickstart).
+
+This repository is published from Paperboat's development tree (`examples/backends`).
