@@ -1,0 +1,60 @@
+# A supply network: sites linked on the Station (a graph), the ordering policy on the Flow
+# page. Served by server.py next to this file. Time is in days.
+domain = "supply"
+
+# Toolkit blocks for the policy and the Dashboard. The sites (Supplier, Warehouse, Store)
+# are station objects defined in code, domain/sites.py.
+import = ["signal", "math", "dashboard"]
+
+# Reorder: a block defined here, on the C++ parent signal/generator (f of its input t).
+# Wire a stock into it: it orders `rate` a day while the stock is under `point`.
+[[blocks]]
+use = "signal/generator"
+type = "reorder"
+label = "Reorder (below point)"
+params = { point = 30, rate = 20 }
+config = { f = "t < point ? rate : 0" }
+
+# The network: supplier → warehouse → two stores.
+[station]
+view = "graph"
+objects = [
+  { id = "factory", type = "supplier", pos = [0, 120] },
+  { id = "warehouse", type = "warehouse", links = { from = "factory" }, pos = [260, 120] },
+  { id = "store-north", type = "store", links = { from = "warehouse" }, pos = [520, 0] },
+  { id = "store-south", type = "store", props = { demand = 8, stock0 = 25 }, links = { from = "warehouse" }, pos = [520, 260] },
+]
+
+# The policy: store-south reorders below 30 units (20 a day), store-north only below 8 (too
+# late: its deliveries take a day, so it runs out and loses sales; try raising it); the
+# warehouse below 150
+# (40 a day, which is what the factory makes). Watch stock levels and lost sales.
+[graph]
+nodes = [
+  { id = "store-north", type = "store", pos = [0, 0] },
+  { id = "north rule", type = "reorder", params = { point = 8, rate = 20 }, pos = [260, 0] },
+  { id = "store-south", type = "store", pos = [0, 220] },
+  { id = "south rule", type = "reorder", pos = [260, 220] },
+  { id = "warehouse", type = "warehouse", pos = [0, 440] },
+  { id = "warehouse rule", type = "reorder", params = { point = 150, rate = 40 }, pos = [260, 440] },
+  { id = "factory", type = "supplier", pos = [0, 620] },
+  { id = "lost", type = "sum", pos = [520, 120] },
+  { id = "lost sales", type = "display", pos = [760, 120] },
+  { id = "north stock", type = "graph", pos = [520, -60] },
+  { id = "south stock", type = "graph", pos = [520, 260] },
+  { id = "warehouse stock", type = "graph", pos = [520, 440] },
+]
+edges = [
+  { from = ["store-north", "stock"], to = ["north rule", "t"] },
+  { from = ["north rule", "y"], to = ["store-north", "order"] },
+  { from = ["store-south", "stock"], to = ["south rule", "t"] },
+  { from = ["south rule", "y"], to = ["store-south", "order"] },
+  { from = ["warehouse", "stock"], to = ["warehouse rule", "t"] },
+  { from = ["warehouse rule", "y"], to = ["warehouse", "order"] },
+  { from = ["store-north", "lost"], to = ["lost", "a"] },
+  { from = ["store-south", "lost"], to = ["lost", "b"] },
+  { from = ["lost", "y"], to = ["lost sales", "in"] },
+  { from = ["store-north", "stock"], to = ["north stock", "in"] },
+  { from = ["store-south", "stock"], to = ["south stock", "in"] },
+  { from = ["warehouse", "stock"], to = ["warehouse stock", "in"] },
+]

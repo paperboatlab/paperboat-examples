@@ -1,0 +1,36 @@
+# Mass on a spring, pushed by a force source. Served by examples/backends/mass-spring-python.
+domain = "mass-spring"
+
+# Every block of these toolkit packages is in the palette.
+import = ["base", "signal", "math", "dashboard"]
+
+# The domain's own blocks (F1, a force source, and P1, a probe on the mass) are defined in
+# code, domain/blocks.py.
+
+# Toolkit templates with this domain's defaults (they replace the imported ones).
+[[blocks]]
+use = "signal/sine"
+defaults = { amplitude = 2, frequency = 0.3 }
+
+[[blocks]]
+use = "signal/step"
+defaults = { value = 2 }
+
+[[blocks]]
+use = "math/gain"
+defaults = { k = -1 }
+
+# Starter graph (graph.load): what the Flow page opens with. Optional; without it the
+# Flow page opens empty.
+# Sent on connect so the UI opens with something runnable: Sine → F1, P1.x → Graph.
+[graph]
+nodes = [
+  { id = "sine-1", type = "sine", pos = [0, 0] },
+  { id = "F1-1", type = "F1", pos = [260, 0] },
+  { id = "P1-1", type = "P1", pos = [0, 200] },
+  { id = "graph-1", type = "graph", pos = [260, 200] },
+]
+edges = [
+  { from = ["sine-1", "y"], to = ["F1-1", "force"] },
+  { from = ["P1-1", "x"], to = ["graph-1", "in"] },
+]

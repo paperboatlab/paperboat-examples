@@ -1,0 +1,54 @@
+# Count and sort the parts in a photo: classic image processing, evaluated once.
+# Served by main.cpp next to this file.
+domain = "parts"
+
+# Every block and station object of these toolkit packages: opencv brings the Image
+# station object, the image blocks (gray, blur, threshold, morphology…) and Image view;
+# dashboard brings Graph and Display.
+import = ["opencv", "dashboard", "base"]
+
+# The domain's own block, Count parts, is defined in code (domain/count.cpp) under the
+# package "parts": the palette gets it without listing it here.
+
+# Starter station: the photo. Change `file` on the Station page to try another one.
+[station]
+objects = [
+  { id = "photo", type = "image", props = { file = "data/parts.png", width = 6 } },
+]
+
+# Starter graph: photo → gray → blur → threshold (Otsu, inverted: dark parts on white) →
+# close the gaps → remove specks → Count parts. The Dashboard shows the stages that matter
+# (the threshold, the cleaned mask, the marked result) and the counts.
+[graph]
+nodes = [
+  { id = "photo", type = "image", pos = [0, 0] },
+  { id = "gray-1", type = "gray", pos = [200, 0] },
+  { id = "blur-1", type = "blur", params = { size = 5 }, pos = [400, 0] },
+  { id = "threshold-1", type = "threshold", params = { otsu = 1, invert = 1 }, pos = [600, 0] },
+  { id = "close-1", type = "close", params = { size = 7 }, pos = [800, 0] },
+  { id = "open-1", type = "open", params = { size = 3 }, pos = [1000, 0] },
+  { id = "count-1", type = "count", pos = [1000, 240] },
+  { id = "1 threshold", type = "view", pos = [600, 200] },
+  { id = "2 cleaned", type = "view", pos = [1000, 140] },
+  { id = "3 result", type = "view", pos = [1260, 240] },
+  { id = "total", type = "display", pos = [1260, 340] },
+  { id = "bolts", type = "display", pos = [1260, 410] },
+  { id = "nuts", type = "display", pos = [1260, 480] },
+  { id = "washers", type = "display", pos = [1260, 550] },
+]
+edges = [
+  { from = ["photo", "image"], to = ["gray-1", "image"] },
+  { from = ["gray-1", "image"], to = ["blur-1", "image"] },
+  { from = ["blur-1", "image"], to = ["threshold-1", "image"] },
+  { from = ["threshold-1", "image"], to = ["close-1", "image"] },
+  { from = ["close-1", "image"], to = ["open-1", "image"] },
+  { from = ["open-1", "image"], to = ["count-1", "mask"] },
+  { from = ["photo", "image"], to = ["count-1", "photo"] },
+  { from = ["threshold-1", "image"], to = ["1 threshold", "image"] },
+  { from = ["open-1", "image"], to = ["2 cleaned", "image"] },
+  { from = ["count-1", "marked"], to = ["3 result", "image"] },
+  { from = ["count-1", "total"], to = ["total", "in"] },
+  { from = ["count-1", "bolts"], to = ["bolts", "in"] },
+  { from = ["count-1", "nuts"], to = ["nuts", "in"] },
+  { from = ["count-1", "washers"], to = ["washers", "in"] },
+]

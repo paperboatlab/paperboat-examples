@@ -1,0 +1,6 @@
+[project]
+name = "paperboat-backend-animation"
+version = "0.0.1"
+description = "Step flow example: a 3D actor animated by move, rotate and scale steps"
+requires-python = ">=3.11"
+dependencies = ["paperboat"]  # the Python runtime: pip install ./python from the repo root

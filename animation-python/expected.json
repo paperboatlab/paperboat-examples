@@ -1,0 +1,11 @@
+{
+  "$comment": "What `--run` (the starter, headless) must produce; checked by protocol/golden.py.",
+  "status": "done",
+  "run": "server.py",
+  "signals": {
+    "final heading": [90, 1e-6],
+    "final x": [-1, 1e-6],
+    "graph-heading": [90, 1e-6]
+  },
+  "logs": ["stopped by stop-1 at t = 10.02 s"]
+}

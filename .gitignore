@@ -1,0 +1,14 @@
+build/
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+.vscode/
+.idea/
+.DS_Store
+.~*
+*.insyncdl
+CLAUDE.md
+AGENTS.md
+.claude/
+.remember/

@@ -1,0 +1,29 @@
+# Parametric geometry, no simulation: a run evaluates the graph once and wires carry
+# lists. Served by server.py next to this file. No toolkit packages: the toolkit has no
+# list-valued blocks yet.
+domain = "parametric"
+
+# Every block is the domain's own, defined in code (domain/blocks.py): Grid, Wave,
+# Attractor, Add lists, Scale list, Boxes → scene and Graph (by index).
+
+# Starter graph (graph.load): what the Flow page opens with. Optional; without it the
+# Flow page opens empty.
+# Grid feeds a wave and an attractor; their sum sets the box heights.
+[graph]
+nodes = [
+  { id = "grid-1", type = "grid", pos = [0, 120] },
+  { id = "wave-1", type = "wave", pos = [260, 0] },
+  { id = "attractor-1", type = "attractor", pos = [260, 200] },
+  { id = "add-1", type = "add", pos = [520, 120] },
+  { id = "boxes-1", type = "boxes", pos = [780, 40] },
+  { id = "graph-1", type = "graph", pos = [780, 260] },
+]
+edges = [
+  { from = ["grid-1", "points"], to = ["wave-1", "points"] },
+  { from = ["grid-1", "points"], to = ["attractor-1", "points"] },
+  { from = ["grid-1", "points"], to = ["boxes-1", "points"] },
+  { from = ["wave-1", "heights"], to = ["add-1", "a"] },
+  { from = ["attractor-1", "heights"], to = ["add-1", "b"] },
+  { from = ["add-1", "y"], to = ["boxes-1", "heights"] },
+  { from = ["add-1", "y"], to = ["graph-1", "in"] },
+]

@@ -1,0 +1,65 @@
+# A chain of masses, springs and dampers: the structure on the Station page (graph view),
+# the test logic on the Flow page. Served by server.py next to this file.
+domain = "chain"
+
+# Toolkit packages for the test logic (step: the test runs as a sequence of stories). The
+# domain's own station objects (Wall, Mass, Spring, Damper) are defined in code,
+# domain/objects.py.
+import = ["step", "signal", "math", "dashboard"]
+
+[[blocks]]
+use = "signal/step"
+label = "Pull (step)"
+defaults = { at = 0.5, value = 5 }
+
+[[blocks]]
+use = "math/threshold"
+label = "Over limit?"
+defaults = { level = 4.5 }
+
+# Starter station, shown as a graph: wall ─ spring-1 ─ mass-1 ─ spring-2 ─ mass-2, with a
+# damper next to each spring. `pos` places each element on the graph.
+[station]
+view = "graph"
+objects = [
+  { id = "wall", type = "wall", pos = [0, 120] },
+  { id = "spring-1", type = "spring", links = { a = "wall", b = "mass-1" }, pos = [220, 0] },
+  { id = "damper-1", type = "damper", links = { a = "wall", b = "mass-1" }, pos = [220, 240] },
+  { id = "mass-1", type = "mass", props = { x0 = 1 }, pos = [440, 120] },
+  { id = "spring-2", type = "spring", links = { a = "mass-1", b = "mass-2" }, pos = [660, 0] },
+  { id = "damper-2", type = "damper", links = { a = "mass-1", b = "mass-2" }, pos = [660, 240] },
+  { id = "mass-2", type = "mass", props = { x0 = 2 }, pos = [880, 120] },
+]
+
+# Starter graph: the test, as two stories in sequence (Start → Pull test → Check).
+# - Pull test (a story, 6 s): pull mass-2 with 5 N from t = 0.5 s and record where it goes
+#   and how hard spring-1 pulls on the wall.
+# - Check (a story, once): is spring-1 over its 4.5 N limit? Shown on the Dashboard.
+# The linked blocks (mass-2, spring-1) stay outside the stories: the structure is always
+# there; the stories are what the test does to it, in order.
+[graph]
+nodes = [
+  { id = "start", type = "start", pos = [-260, 120] },
+  { id = "pull", type = "step", pos = [0, 40] },
+  { id = "x of mass-2", type = "graph", pos = [240, 40] },
+  { id = "tension of spring-1", type = "graph", pos = [240, 180] },
+  { id = "mass-2", type = "mass", pos = [0, 380] },
+  { id = "spring-1", type = "spring", pos = [0, 540] },
+  { id = "limit", type = "threshold", pos = [640, 120] },
+  { id = "overloaded", type = "display", pos = [880, 60] },
+  { id = "tension", type = "display", pos = [880, 200] },
+]
+edges = [
+  { from = ["start", "next"], to = ["pull test", "in"] },
+  { from = ["pull test", "next"], to = ["check", "in"] },
+  { from = ["pull", "y"], to = ["mass-2", "force"] },
+  { from = ["mass-2", "x"], to = ["x of mass-2", "in"] },
+  { from = ["spring-1", "tension"], to = ["tension of spring-1", "in"] },
+  { from = ["spring-1", "tension"], to = ["limit", "u"] },
+  { from = ["limit", "y"], to = ["overloaded", "in"] },
+  { from = ["spring-1", "tension"], to = ["tension", "in"] },
+]
+groups = [
+  { id = "pull test", kind = "story", label = "Pull test", nodes = ["pull", "x of mass-2", "tension of spring-1"], params = { seconds = 6 } },
+  { id = "check", kind = "story", label = "Check", nodes = ["limit", "overloaded", "tension"], params = { seconds = 0 } },
+]

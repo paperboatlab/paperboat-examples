@@ -1,0 +1,6 @@
+[project]
+name = "paperboat-backend-chain"
+version = "0.0.1"
+description = "A chain of masses, springs and dampers, built on the Station graph, for the Paperboat protocol"
+requires-python = ">=3.11"
+dependencies = ["paperboat"]  # the Python runtime: pip install ./python from the repo root

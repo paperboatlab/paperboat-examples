@@ -1,0 +1,11 @@
+{
+  "$comment": "What `--run` (the starter, headless) must produce; checked by protocol/golden.py.",
+  "status": "done",
+  "run": "server.py",
+  "signals": {
+    "lost sales": [29.0826, 1e-3],
+    "south stock": [33.0, 1e-6],
+    "warehouse stock": [183.0, 1e-6]
+  },
+  "logs": ["store-north: lost = 29.08"]
+}

@@ -1,0 +1,55 @@
+# 2D runner that jumps over crates and ducks under bars; the flow is the autopilot. Served by
+# examples/backends/runner-python.
+domain = "runner"
+
+# Every block of these toolkit packages is in the palette.
+import = ["base", "math", "dashboard"]
+
+# The domain's own blocks (Runner, Next crate, Next bar, Jump, Duck) are defined in code,
+# domain/blocks.py: the palette has them without listing them here.
+
+# Toolkit templates with this domain's labels and defaults (they replace the imported ones).
+[[blocks]]
+use = "math/gain"
+defaults = { k = -1 }
+
+[[blocks]]
+use = "math/threshold"
+defaults = { level = -1.6 }
+
+# The Station page shows this backend's own page instead of the built-in scene: a web
+# station (station/index.html, served by the engine on this backend's port).
+[station]
+view = "web"
+page = "station/index.html"
+
+# Starter graph (graph.load): what the Flow page opens with. Optional; without it the
+# Flow page opens empty.
+# Autopilot: jump when the next crate is closer than 1.6 m (−dx > −1.6); duck the same
+# way for the next bar, and stay down while under it (dx < 0 there).
+[graph]
+nodes = [
+  { id = "crate-1", type = "crate", pos = [0, 0] },
+  { id = "gain-crate", type = "gain", pos = [220, 0] },
+  { id = "near-crate", type = "threshold", pos = [440, 0] },
+  { id = "jump-1", type = "jump", pos = [660, 0] },
+  { id = "bar-1", type = "bar", pos = [0, 160] },
+  { id = "gain-bar", type = "gain", pos = [220, 160] },
+  { id = "near-bar", type = "threshold", pos = [440, 160] },
+  { id = "duck-1", type = "duck", pos = [660, 160] },
+  { id = "key-1", type = "key", pos = [440, 320] },
+  { id = "key-down-1", type = "key", params = { key = "ArrowDown" }, pos = [660, 320] },
+  { id = "runner-1", type = "runner", pos = [0, 320] },
+  { id = "graph-y", type = "graph", pos = [220, 320] },
+  { id = "graph-height", type = "graph", pos = [220, 440] },
+]
+edges = [
+  { from = ["crate-1", "dx"], to = ["gain-crate", "u"] },
+  { from = ["gain-crate", "y"], to = ["near-crate", "u"] },
+  { from = ["near-crate", "y"], to = ["jump-1", "trigger"] },
+  { from = ["bar-1", "dx"], to = ["gain-bar", "u"] },
+  { from = ["gain-bar", "y"], to = ["near-bar", "u"] },
+  { from = ["near-bar", "y"], to = ["duck-1", "hold"] },
+  { from = ["runner-1", "y"], to = ["graph-y", "in"] },
+  { from = ["runner-1", "height"], to = ["graph-height", "in"] },
+]

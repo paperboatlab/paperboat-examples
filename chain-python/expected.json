@@ -1,0 +1,11 @@
+{
+  "$comment": "What `--run` (the starter, headless) must produce; checked by protocol/golden.py.",
+  "status": "done",
+  "run": "server.py",
+  "signals": {
+    "x of mass-2": [2.57598, 1e-4],
+    "tension of spring-1": [5.92019, 1e-4],
+    "overloaded": 1
+  },
+  "logs": ["every path ended at t = 6.00 s", "mass-2: v = 0.1484, x = 2.577"]
+}

@@ -1,0 +1,14 @@
+{
+  "$comment": "What `--run` (the starter, headless) must produce; checked by protocol/golden.py.",
+  "status": "done",
+  "run": "build/paperboat-parts",
+  "signals": {
+    "total": 16,
+    "bolts": 5,
+    "nuts": 9,
+    "washers": 2
+  },
+  "logs": [
+    "evaluated 14 blocks"
+  ]
+}

@@ -1,0 +1,6 @@
+[project]
+name = "paperboat-backend-parametric"
+version = "0.0.1"
+description = "Parametric geometry backend for the Paperboat protocol (no simulation)"
+requires-python = ">=3.11"
+dependencies = ["paperboat"]  # the Python runtime: pip install ./python from the repo root

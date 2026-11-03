@@ -1,0 +1,6 @@
+[project]
+name = "paperboat-example-backend"
+version = "0.0.1"
+description = "Reference backend that speaks the Paperboat protocol, for UI work without the C++ engine"
+requires-python = ">=3.11"
+dependencies = ["paperboat"]  # the Python runtime: pip install ./python from the repo root

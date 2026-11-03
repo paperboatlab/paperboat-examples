@@ -1,0 +1,71 @@
+# A 3D actor animated by a Step flow. Served by examples/backends/animation-python.
+domain = "animation"
+
+# Every block of these toolkit packages is in the palette: the Step flow's path (start,
+# when, wait, if, repeat, stop) and the base signal blocks (conditions, keys, clock,
+# graphs).
+import = ["step", "base", "signal", "math", "dashboard"]
+
+# The domain's own steps (Move, Rotate, Scale, each over `seconds`, in the actor's frame)
+# and its Pose probe are defined in code, domain/blocks.py.
+
+# Starter graph (graph.load): what the Flow page opens with. It tells a short story, with
+# groups to keep it readable:
+#   Start → [Walk a square] (a visual group: Repeat ×4 of Move 2 m, Rotate 90°; each Move
+#           eases in and out: its progress → Ease → its curve)
+#         → [Spin] (a story group, 2 s: Constant 45 → Spin, the actor turns 90°)
+#         → [Report] (a story group, once: Pose → the final heading and x on the Dashboard).
+# Alongside: [Pop on Space] (When Key → Scale up and back, any time) and [End at 10 s]
+# (collapsed: Clock → Threshold → When → Stop). Pose → Graph plots the whole run.
+[graph]
+nodes = [
+  { id = "start-1", type = "start", pos = [0, 40] },
+  { id = "repeat-1", type = "repeat", params = { times = 4 }, pos = [220, 40] },
+  { id = "move-1", type = "move", pos = [440, -40] },
+  { id = "rotate-1", type = "rotate", params = { seconds = 0.5 }, pos = [660, -40] },
+  { id = "ease-1", type = "ease", pos = [440, 200] },
+  { id = "spin-rate", type = "constant", params = { value = 45 }, pos = [980, 20] },
+  { id = "spin-1", type = "spin", pos = [1200, 20] },
+  { id = "pose-2", type = "pose", pos = [1520, 0] },
+  { id = "final heading", type = "display", pos = [1760, -20] },
+  { id = "final x", type = "display", pos = [1760, 100] },
+  { id = "key-1", type = "key", pos = [0, 420] },
+  { id = "when-1", type = "when", pos = [220, 420] },
+  { id = "scale-1", type = "scale", params = { to = 1.6, seconds = 0.25 }, pos = [440, 400] },
+  { id = "scale-2", type = "scale", params = { to = 1, seconds = 0.25 }, pos = [660, 400] },
+  { id = "clock-1", type = "clock", pos = [0, 680] },
+  { id = "threshold-1", type = "threshold", params = { level = 10 }, pos = [220, 680] },
+  { id = "when-2", type = "when", pos = [440, 680] },
+  { id = "stop-1", type = "stop", pos = [660, 680] },
+  { id = "pose-1", type = "pose", pos = [980, 340] },
+  { id = "graph-heading", type = "graph", pos = [1220, 320] },
+  { id = "graph-size", type = "graph", pos = [1220, 460] },
+]
+edges = [
+  { from = ["start-1", "next"], to = ["repeat-1", "in"] },
+  { from = ["repeat-1", "loop"], to = ["move-1", "in"] },
+  { from = ["move-1", "next"], to = ["rotate-1", "in"] },
+  { from = ["rotate-1", "next"], to = ["repeat-1", "in"] },
+  { from = ["move-1", "progress"], to = ["ease-1", "t"] },
+  { from = ["ease-1", "y"], to = ["move-1", "curve"] },
+  { from = ["repeat-1", "done"], to = ["spin", "in"] },
+  { from = ["spin", "next"], to = ["report", "in"] },
+  { from = ["spin-rate", "y"], to = ["spin-1", "rate"] },
+  { from = ["pose-2", "heading"], to = ["final heading", "in"] },
+  { from = ["pose-2", "x"], to = ["final x", "in"] },
+  { from = ["key-1", "pressed"], to = ["when-1", "cond"] },
+  { from = ["when-1", "next"], to = ["scale-1", "in"] },
+  { from = ["scale-1", "next"], to = ["scale-2", "in"] },
+  { from = ["clock-1", "t"], to = ["threshold-1", "u"] },
+  { from = ["threshold-1", "y"], to = ["when-2", "cond"] },
+  { from = ["when-2", "next"], to = ["stop-1", "in"] },
+  { from = ["pose-1", "heading"], to = ["graph-heading", "in"] },
+  { from = ["pose-1", "size"], to = ["graph-size", "in"] },
+]
+groups = [
+  { id = "walk", kind = "visual", label = "Walk a square", nodes = ["repeat-1", "move-1", "rotate-1", "ease-1"] },
+  { id = "spin", kind = "story", label = "Spin", nodes = ["spin-rate", "spin-1"], params = { seconds = 2 } },
+  { id = "report", kind = "story", label = "Report", nodes = ["pose-2", "final heading", "final x"], params = { seconds = 0 } },
+  { id = "pop", kind = "visual", label = "Pop on Space", nodes = ["key-1", "when-1", "scale-1", "scale-2"] },
+  { id = "end", kind = "visual", label = "End at 10 s", nodes = ["clock-1", "threshold-1", "when-2", "stop-1"], collapsed = true },
+]
