@@ -1,5 +1,5 @@
 """The mass-spring domain's own blocks, defined by their class attributes. They reach the
-mass through ctx.state, the run's MassSpring (domain/plant.py)."""
+mass through ctx.state, the run's MassSpring (domain/state.py)."""
 
 import paperboat
 

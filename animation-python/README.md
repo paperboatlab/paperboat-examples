@@ -26,7 +26,7 @@ The palette and the starter graph come from `descriptor.toml` (it imports `step`
 descriptor.toml   imports and the starter graph (with its groups)
 expected.json     what the starter run must produce (npm run golden)
 domain/
-  plant.py        the actor: position, orientation (quaternion), size
+  state.py        the actor: position, orientation (quaternion), size
   blocks.py       Move, Rotate, Scale (steps), Pose (a probe) and Spin (a signal block)
 server.py         fills a paperboat.Backend and serves it: no logic
 ```

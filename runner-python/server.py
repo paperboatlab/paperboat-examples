@@ -1,6 +1,6 @@
 """Example Paperboat backend: a 2D runner that jumps over crates and ducks under bars (Python).
 
-The runner and obstacles are the plant (domain/plant.py); the flow decides when to jump or
+The runner and obstacles are the domain state (domain/state.py); the flow decides when to jump or
 duck (control). The starter graph in descriptor.toml is an autopilot. Wire the Key blocks
 to Jump and Duck instead and play it yourself with Space and Arrow Down: the UI forwards
 key presses as `input` messages. The domain's blocks are in domain/blocks.py; the
@@ -10,7 +10,7 @@ protocol, graph checking and run loop are the C++ engine, through the Python bin
 from pathlib import Path
 
 from domain.blocks import BLOCKS
-from domain.plant import Game
+from domain.state import Game
 import paperboat
 
 if __name__ == "__main__":

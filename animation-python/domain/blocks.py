@@ -12,12 +12,12 @@ import math
 
 import paperboat
 
-from .plant import quat_from_vector, quat_mul, rotate
+from .state import quat_from_vector, quat_mul, rotate
 
 
 class Tween(paperboat.Timed):
     def begin(self, ctx, inputs) -> None:
-        self.actor = ctx.state  # the run's Actor (domain/plant.py)
+        self.actor = ctx.state  # the run's Actor (domain/state.py)
 
     def advance(self, ctx, start: float, end: float) -> None:
         self.apply(end - start)
