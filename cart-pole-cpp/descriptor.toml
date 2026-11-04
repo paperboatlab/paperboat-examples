@@ -20,10 +20,34 @@ defaults = { value = 2 }
 use = "math/gain"
 defaults = { k = -1 }
 
+# Default variables (#36): values used by reference, here by the station and the
+# controller. Edit them in the Variables sheet (Alt+V); --var name=value sets one for --run.
+[[variables]]
+name = "pole_length"
+value = 1
+unit = "m"
+min = 0.2
+max = 3
+group = "Plant"
+note = "Pivot to the centre of the bob"
+
+[[variables]]
+name = "kp_theta"
+value = 40
+unit = "N/rad"
+group = "Controller"
+
+[[variables]]
+name = "kd_theta"
+expr = "kp_theta / 5"
+unit = "N·s/rad"
+group = "Controller"
+note = "Damping, a fifth of the stiffness"
+
 # Starter station (station.load): the objects the Station page opens with. Optional.
 [station]
 objects = [
-  { id = "cart-pole-1", type = "cart-pole", props = { cart_mass = 1, pole_mass = 0.2, pole_length = 1, max_force = 50, x0 = 0, theta0 = 0.15 } },
+  { id = "cart-pole-1", type = "cart-pole", props = { cart_mass = 1, pole_mass = 0.2, pole_length = { var = "pole_length" }, max_force = 50, x0 = 0, theta0 = 0.15 } },
 ]
 
 # Starter graph (graph.load): what the Flow page opens with. Optional; without it the
@@ -31,7 +55,7 @@ objects = [
 [graph]
 nodes = [
   { id = "cart-pole-1", type = "cart-pole", pos = [0, 120] },
-  { id = "pid-theta", type = "pid", params = { kp = 40, ki = 0, kd = 8 }, pos = [260, 0] },
+  { id = "pid-theta", type = "pid", params = { kp = { var = "kp_theta" }, ki = 0, kd = { var = "kd_theta" } }, pos = [260, 0] },
   { id = "pid-x", type = "pid", params = { kp = 4, ki = 0, kd = 5 }, pos = [260, 200] },
   { id = "sum-1", type = "sum", pos = [520, 100] },
   { id = "graph-theta", type = "graph", pos = [260, 400] },
