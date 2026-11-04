@@ -74,14 +74,19 @@ void register_cart_pole(paperboat::Registry& registry) {
       {.type = "cart-pole",
        .label = "Cart-pole",
        .role = "body",
-       .props = {{"cart_mass", 1.0}, {"pole_mass", 0.2}, {"pole_length", 1.0}, {"max_force", 50.0},
-                 {"x0", 0.0}, {"theta0", 0.15}},  // x0, theta0: initial conditions (m, rad from upright)
+       .props = {{.id = "cart_mass", .default_value = 1.0, .unit = "kg"},
+                 {.id = "pole_mass", .default_value = 0.2, .unit = "kg"},
+                 {.id = "pole_length", .default_value = 1.0, .unit = "m"},
+                 {.id = "max_force", .default_value = 50.0, .unit = "N"},
+                 {.id = "x0", .default_value = 0.0, .unit = "m"},              // initial conditions:
+                 {.id = "theta0", .default_value = 0.15, .unit = "rad"}},      // from upright
        .links = {},
        .block = paperboat::BlockDef{.type = "cart-pole",
                                     .label = "Cart-pole",
                                     .kind = paperboat::Kind::Source,
-                                    .inputs = {{"force"}},
-                                    .outputs = {{"x"}, {"v"}, {"theta"}, {"omega"}},
+                                    .inputs = {{"force", "signal", "N"}},
+                                    .outputs = {{"x", "signal", "m"}, {"v", "signal", "m/s"},
+                                                {"theta", "signal", "rad"}, {"omega", "signal", "rad/s"}},
                                     .params = {}},
        .description = "A pole on a cart that slides along a rail; balance it by pushing the cart."}));
 }
