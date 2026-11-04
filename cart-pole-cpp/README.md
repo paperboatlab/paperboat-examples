@@ -5,16 +5,18 @@ A cart-pole on the [Paperboat protocol](../../../protocol/README.md), built on t
 
 | Piece | From |
 | --- | --- |
-| Catalog (palette, station objects) | [`descriptor.toml`](descriptor.toml) (imports `base` and `control`), via `load_descriptor_file` |
+| Catalog (palette, station objects) | [`descriptor.toml`](descriptor.toml) (imports `signal`, `math`, `control` and `dashboard`), via `load_descriptor_file` |
 | Sine, gain, sum, PID, key, graph… | toolkit blocks: `catalog.find(type)->make(params)` |
-| Cart-poles and their physics | toolkit station objects (`control/cart-pole`): `catalog.find_object(type)->make(props)` |
+| Cart-poles and their physics | this domain's station object, in [`domain/cart_pole.cpp`](domain/cart_pole.cpp): physics, drawing, linked block; registered with `define_object` |
 | Starter station, starter graph | `[station]` and `[graph]` in `descriptor.toml` |
 | Protocol, server, graph checking, run loop | `engine/core` (`paperboat::core`) |
 
-It is the reference **simple backend** (GUIDELINES §6.1): `main.cpp` fills a
-`core::Backend` and calls `core::serve()`, and there is no domain code at all, so it has
-no `domain/` folder. A domain with its own blocks or station objects adds them there as
-templates.
+It is the reference **simple backend** (GUIDELINES §6.1): `main.cpp` adds the domain's
+own station object to the toolkit's registry, loads the descriptor and calls
+`paperboat::main()`. The domain's code is one file, [`domain/cart_pole.cpp`](domain/cart_pole.cpp):
+a `StationObject` (its state, `step`, `read` and the shapes it draws) registered with
+`define_object`, so the descriptor uses it without importing anything. Everything the
+example needs lives in this folder; the engine knows nothing of cart-poles.
 
 **Station objects.** The Station page lists the cart-poles. Set their masses, pole
 length, force limit and initial conditions (`x0`, `theta0`) there; add more with

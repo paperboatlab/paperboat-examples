@@ -8,7 +8,7 @@ framework: every one must pass the protocol smoke test and its own golden result
 | Folder | Port | What it shows |
 | --- | --- | --- |
 | `mass-spring-python/` | 8765 | Signal flow on a clock: a sine pushes a mass on a spring |
-| `cart-pole-cpp/` | 8766 | C++ with no domain code: PID balances toolkit Cart-pole station objects |
+| `cart-pole-cpp/` | 8766 | C++, its own station object in code: PID balances Cart-poles |
 | `parametric-python/` | 8767 | Evaluated once: a grid shaped by a wave and an attractor becomes boxes |
 | `runner-python/` | 8768 | A game with an autopilot (or play it: Space, ↓); its Station is its own web page |
 | `animation-python/` | 8769 | Step flow as a story: walk (eased), spin, report; groups |
