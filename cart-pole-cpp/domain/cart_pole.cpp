@@ -31,7 +31,7 @@ class CartPole final : public paperboat::StationObject {
 
   Values read() const override { return {{"x", x_}, {"v", v_}, {"theta", theta_}, {"omega", omega_}}; }
 
-  // Semi-implicit Euler, as the earlier example plants did, so results match them.
+  // Semi-implicit Euler, as the earlier example domains did, so results match them.
   void step(const Context& ctx, const Values& in) override {
     const double force = std::clamp(get_or(in, "force"), -max_force_, max_force_);
     const double total = cart_mass_ + pole_mass_;

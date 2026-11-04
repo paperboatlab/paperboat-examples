@@ -27,7 +27,7 @@ descriptor.toml   imports, customised templates, the web station and the starter
 station/          the web station: index.html, runner.js, style.css
 expected.json     what the starter run must produce (npm run golden)
 domain/
-  plant.py        the game: runner, crates and bars
+  state.py        the game: runner, crates and bars
   blocks.py       Runner, Next crate, Next bar (probes); Jump, Duck (sources)
 server.py         fills a paperboat.Backend and serves it: no logic
 ```

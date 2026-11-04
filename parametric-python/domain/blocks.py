@@ -6,7 +6,7 @@ import math
 import paperboat
 from paperboat import Port
 
-from .plant import height_color
+from .state import height_color
 
 
 class Block(paperboat.Block):

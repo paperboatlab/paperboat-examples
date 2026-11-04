@@ -1,4 +1,4 @@
-"""The mass-spring plant: one mass on a spring along x, pushed by the force sources."""
+"""The mass-spring domain state: one mass on a spring along x, pushed by the force sources."""
 
 from paperboat import DomainState
 

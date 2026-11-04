@@ -28,7 +28,7 @@ value = 1
 unit = "m"
 min = 0.2
 max = 3
-group = "Plant"
+group = "Cart-pole"
 note = "Pivot to the centre of the bob"
 
 [[variables]]

@@ -12,7 +12,7 @@ class Runner(paperboat.Block):
     outputs = ["y", "vy", "height"]
 
     def step(self, ctx, inputs) -> dict:
-        game = ctx.state  # the run's Game (domain/plant.py)
+        game = ctx.state  # the run's Game (domain/state.py)
         return {"y": game.y, "vy": game.vy, "height": game.h}
 
 
@@ -23,7 +23,7 @@ class NextCrate(paperboat.Block):
     outputs = ["dx", "height"]
 
     def step(self, ctx, inputs) -> dict:
-        game = ctx.state  # the run's Game (domain/plant.py)
+        game = ctx.state  # the run's Game (domain/state.py)
         o = game.next_of(bar=False)
         return {"dx": game.dx(bar=False), "height": o.top if o else 0.0}
 
@@ -35,7 +35,7 @@ class NextBar(paperboat.Block):
     outputs = ["dx"]
 
     def step(self, ctx, inputs) -> dict:
-        game = ctx.state  # the run's Game (domain/plant.py)
+        game = ctx.state  # the run's Game (domain/state.py)
         return {"dx": game.dx(bar=True)}
 
 
@@ -51,7 +51,7 @@ class Jump(paperboat.Block):
         self.strength = params["strength"]
 
     def step(self, ctx, inputs) -> dict:
-        game = ctx.state  # the run's Game (domain/plant.py)
+        game = ctx.state  # the run's Game (domain/state.py)
         if inputs.get("trigger", 0.0) > 0.5:
             game.jump_speed = self.strength
         return {}
@@ -64,7 +64,7 @@ class Duck(paperboat.Block):
     inputs = ["hold"]
 
     def step(self, ctx, inputs) -> dict:
-        game = ctx.state  # the run's Game (domain/plant.py)
+        game = ctx.state  # the run's Game (domain/state.py)
         game.duck = game.duck or inputs.get("hold", 0.0) > 0.5
         return {}
 

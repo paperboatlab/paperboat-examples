@@ -1,4 +1,4 @@
-"""The parametric plant: nothing moves. It holds the boxes the Boxes block built, on a
+"""The parametric domain state: nothing moves. It holds the boxes the Boxes block built, on a
 ground plate, for the scene at the end of an evaluation."""
 
 from paperboat import DomainState

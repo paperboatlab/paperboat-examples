@@ -6,7 +6,7 @@ Hats start paths: Start once at the beginning, When each time its condition rise
 Space), so several paths run at once. Signal blocks (Key, Threshold, Pose, Graph) feed
 conditions and monitors, sampled once per clock step.
 
-The actor is the plant (domain/plant.py); Move, Rotate, Scale and Pose are the domain's
+The actor is the domain state (domain/state.py); Move, Rotate, Scale and Pose are the domain's
 blocks (domain/blocks.py); everything else is the toolkit's step and base packages. The
 palette and the starter graph are in descriptor.toml; the protocol and the Step flow run
 are the C++ engine, through the Python bindings (python/).
@@ -15,7 +15,7 @@ are the C++ engine, through the Python bindings (python/).
 from pathlib import Path
 
 from domain.blocks import BLOCKS
-from domain.plant import Actor
+from domain.state import Actor
 import paperboat
 
 if __name__ == "__main__":

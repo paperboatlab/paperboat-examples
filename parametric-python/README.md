@@ -12,7 +12,7 @@ The web app drives it with no change, the same as the simulation backends.
 ```
 descriptor.toml   the palette (imports, this domain's blocks) and the starter graph
 domain/
-  plant.py        the boxes the Boxes block builds, on a ground plate
+  state.py        the boxes the Boxes block builds, on a ground plate
   blocks.py       Grid, Wave, Attractor, Add, Scale, Boxes
 server.py         fills a paperboat.Backend and serves it: no logic
 ```

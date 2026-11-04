@@ -1,4 +1,4 @@
-"""The animation plant: one actor (a box with a nose) with a position, an orientation and a
+"""The animation domain state: one actor (a box with a nose) with a position, an orientation and a
 uniform size. Move, Rotate and Scale steps change it; Pose reads it."""
 
 import math

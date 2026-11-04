@@ -9,7 +9,7 @@ a spring, with a force source `F1` and a probe `P1` on the mass.
 ```
 descriptor.toml   the palette (imports, this domain's blocks) and the starter graph
 domain/
-  plant.py        the mass on its spring (semi-implicit Euler)
+  state.py        the mass on its spring (semi-implicit Euler)
   blocks.py       F1 (force source) and P1 (probe)
 server.py         fills a paperboat.Backend and serves it: no logic
 ```
