@@ -26,6 +26,7 @@ class Wall(Element):
     """A fixed anchor."""
 
     type, label, role = "wall", "Wall", "body"
+    description = "A fixed anchor for springs and dampers."
     props = {"x0": 0.0}
 
     def entities(self, id, z):
@@ -37,6 +38,7 @@ class Mass(Element):
     its position and velocity."""
 
     type, label, role = "mass", "Mass", "body"
+    description = "A point mass on a line, pushed by springs and dampers."
     props = {"mass": 1.0, "x0": 1.0}
     block = Linked(inputs=["force"], outputs=["x", "v"], kind="source")
 
@@ -91,6 +93,7 @@ class Spring(Link):
     """A linear spring: tension k · (length − rest)."""
 
     type, label = "spring", "Spring"
+    description = "Pulls its two ends toward its rest length."
     props = {"k": 20.0, "rest": 1.0}
     block = Linked(outputs=["tension"], kind="probe")
 
@@ -102,6 +105,7 @@ class Damper(Link):
     """A linear damper: force c · (relative velocity)."""
 
     type, label = "damper", "Damper"
+    description = "Resists the speed between its two ends."
     props = {"c": 1.5}
 
     def law(self) -> float:

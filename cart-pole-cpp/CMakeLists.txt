@@ -25,7 +25,7 @@ endif()
 set(PAPERBOAT_ENGINE_DIR "${PAPERBOAT_ENGINE_DIR}" CACHE PATH "Paperboat engine sources")
 add_subdirectory(${PAPERBOAT_ENGINE_DIR} paperboat EXCLUDE_FROM_ALL)
 
-add_executable(paperboat-cart-pole main.cpp)
+add_executable(paperboat-cart-pole main.cpp domain/cart_pole.cpp)
 target_link_libraries(paperboat-cart-pole PRIVATE paperboat::core paperboat_warnings)
 target_compile_definitions(paperboat-cart-pole PRIVATE
   PAPERBOAT_DESCRIPTOR="${CMAKE_CURRENT_SOURCE_DIR}/descriptor.toml")
