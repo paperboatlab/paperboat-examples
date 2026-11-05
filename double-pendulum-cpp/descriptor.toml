@@ -71,6 +71,7 @@ nodes = [
   { id = "balance", type = "balance", params = { l1 = { var = "l1" }, l2 = { var = "l2" } }, pos = [-200, 600] },
   { id = "key-left", type = "key", params = { key = "ArrowLeft" }, pos = [-200, 760] },
   { id = "key-right", type = "key", params = { key = "ArrowRight" }, pos = [0, 760] },
+  { id = "key-release", type = "key", params = { key = "Space" }, pos = [200, 760] },
 
   { id = "graph-mass", type = "graph", pos = [300, 40] },
   { id = "graph-theta1", type = "graph", pos = [300, 200] },
@@ -108,6 +109,7 @@ edges = [
   # Arrow keys nudge the cart while balancing (balance block reads them; only it runs in that story).
   { from = ["key-left", "pressed"], to = ["balance", "left"] },
   { from = ["key-right", "pressed"], to = ["balance", "right"] },
+  { from = ["key-release", "pressed"], to = ["balance story", "until"] },
 
   # Monitors.
   { from = ["identify", "m_hat"], to = ["graph-mass", "in"] },
