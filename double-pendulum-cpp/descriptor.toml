@@ -5,7 +5,7 @@ domain = "double-pendulum"
 
 # step: the stories run as a sequence. math: the force sum. dashboard: the monitors. The
 # domain's own station object and blocks are in code (domain/), so they need no import.
-import = ["step", "math", "dashboard"]
+import = ["step", "math", "base", "dashboard"]
 
 [[blocks]]
 use = "math/sum"
@@ -69,6 +69,8 @@ nodes = [
   { id = "swing", type = "swing", params = { l1 = { var = "l1" }, l2 = { var = "l2" } }, pos = [-200, 200] },
   { id = "catch", type = "catch", params = { l1 = { var = "l1" }, l2 = { var = "l2" } }, pos = [60, 300] },
   { id = "balance", type = "balance", params = { l1 = { var = "l1" }, l2 = { var = "l2" } }, pos = [-200, 600] },
+  { id = "key-left", type = "key", params = { key = "ArrowLeft" }, pos = [-200, 760] },
+  { id = "key-right", type = "key", params = { key = "ArrowRight" }, pos = [0, 760] },
 
   { id = "graph-mass", type = "graph", pos = [300, 40] },
   { id = "graph-theta1", type = "graph", pos = [300, 200] },
@@ -102,6 +104,10 @@ edges = [
   { from = ["balance", "force"], to = ["sum", "c"] },
   { from = ["sum", "y"], to = ["dip-1", "force"] },
   { from = ["sum", "y"], to = ["identify", "force"] },
+
+  # Arrow keys nudge the cart while balancing (balance block reads them; only it runs in that story).
+  { from = ["key-left", "pressed"], to = ["balance", "left"] },
+  { from = ["key-right", "pressed"], to = ["balance", "right"] },
 
   # Monitors.
   { from = ["identify", "m_hat"], to = ["graph-mass", "in"] },

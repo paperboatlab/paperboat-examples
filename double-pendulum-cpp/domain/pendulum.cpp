@@ -258,6 +258,7 @@ class Balance final : public Block {
  public:
   explicit Balance(const Values& p)
       : max_force_(get_or(p, "max_force", 80.0)),
+        control_gain_(get_or(p, "control_gain", 20.0)),
         link1_length_(get_or(p, "l1", 0.5)), link2_length_(get_or(p, "l2", 0.5)) {}
 
   Values step(const Context&, const Values& in) override {
@@ -269,11 +270,17 @@ class Balance final : public Block {
     const State6 e = wrap_angles(state_of(in));
     double u = 0;
     for (std::size_t i = 0; i < gain_.size(); ++i) u += gain_[i] * e[i];
+    // Manual nudge with the arrow keys: only this block runs during the balance story, so
+    // the control is naturally gated to "after the plant is balanced".
+    const double left = get_or(in, "left", 0.0);
+    const double right = get_or(in, "right", 0.0);
+    u -= (right - left) * control_gain_;
     return {{"force", std::clamp(-u, -max_force_, max_force_)}};
   }
 
  private:
   double max_force_;
+  double control_gain_;
   double link1_length_, link2_length_;
   double cached_mass_ = -1.0;
   std::array<double, 6> gain_{};
@@ -377,10 +384,13 @@ void register_pendulum(paperboat::Registry& registry) {
        .inputs = [] {
          auto ports = state_inputs();
          ports.push_back({.id = "m_hat", .type = "signal", .unit = "kg"});
+         ports.push_back({.id = "left", .type = "signal"});
+         ports.push_back({.id = "right", .type = "signal"});
          return ports;
        }(),
        .outputs = {{"force", "signal", "N"}},
        .params = {{.id = "max_force", .default_value = 80.0, .unit = "N"},
+                  {.id = "control_gain", .default_value = 20.0, .unit = "N"},
                   {.id = "l1", .default_value = 0.5, .unit = "m"},
                   {.id = "l2", .default_value = 0.5, .unit = "m"}},
        .description = "LQR at upright, with the gain from the estimated payload."}));
