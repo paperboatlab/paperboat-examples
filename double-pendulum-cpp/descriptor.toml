@@ -12,6 +12,25 @@ use = "math/sum"
 label = "Force (one story at a time)"
 defaults = { signs = "+++" }
 
+# Default variables (#36): the link lengths shared by the plant, the estimator and the
+# controllers. Edit them in the Variables sheet (Alt+V); --var name=value sets one for --run.
+[[variables]]
+name = "l1"
+value = 0.5
+unit = "m"
+min = 0.1
+max = 2
+group = "Links"
+note = "Length of link 1 (pivot to joint)"
+
+[[variables]]
+name = "l2"
+value = 0.5
+unit = "m"
+min = 0.1
+max = 2
+group = "Links"
+note = "Length of link 2 (joint to payload)"
 # Starter station: the cart and its two links. Every field except `payload` is known to the
 # controllers; `payload` is what the first story estimates (and what the real plant has).
 [station]
@@ -22,9 +41,9 @@ pos = [0, 0]
 [station.objects.props]
 cart_mass = 1.0
 link1_mass = 0.3
-link1_length = 0.5
+link1_length = { var = "l1" }
 link2_mass = 0.2
-link2_length = 0.5
+link2_length = { var = "l2" }
 payload = 0.25
 cart_damping = 0.1
 joint1_damping = 0.002
@@ -46,10 +65,10 @@ nodes = [
 
   { id = "dip-1", type = "double-pendulum", pos = [-460, 420] },
   { id = "sum", type = "sum", pos = [-200, 420] },
-  { id = "identify", type = "identify", pos = [-200, 40] },
-  { id = "swing", type = "swing", pos = [-200, 200] },
-  { id = "catch", type = "catch", pos = [60, 300] },
-  { id = "balance", type = "balance", pos = [-200, 600] },
+  { id = "identify", type = "identify", params = { l1 = { var = "l1" }, l2 = { var = "l2" } }, pos = [-200, 40] },
+  { id = "swing", type = "swing", params = { l1 = { var = "l1" }, l2 = { var = "l2" } }, pos = [-200, 200] },
+  { id = "catch", type = "catch", params = { l1 = { var = "l1" }, l2 = { var = "l2" } }, pos = [60, 300] },
+  { id = "balance", type = "balance", params = { l1 = { var = "l1" }, l2 = { var = "l2" } }, pos = [-200, 600] },
 
   { id = "graph-mass", type = "graph", pos = [300, 40] },
   { id = "graph-theta1", type = "graph", pos = [300, 200] },

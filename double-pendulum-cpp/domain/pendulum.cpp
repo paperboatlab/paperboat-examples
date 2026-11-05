@@ -33,8 +33,14 @@ constexpr double kCartWidth = 0.6, kCartHeight = 0.3, kCartDepth = 0.4;
 constexpr double kPivotY = kCartHeight / 2;
 
 // The known part of the model, shared by the story blocks. The payload is the only
-// parameter the flow does not know: it starts from `payload0` and is estimated.
-Params known_model() { return Params{}; }
+// parameter the flow does not know: it starts from `payload0` and is estimated. The link
+// lengths come from the descriptor's variables (l1, l2), so one edit reaches every block.
+Params known_model(double l1 = 0.5, double l2 = 0.5) {
+  Params p{};
+  p.link1_length = l1;
+  p.link2_length = l2;
+  return p;
+}
 
 State6 state_of(const Values& in) {
   State6 state{};
@@ -130,7 +136,9 @@ class Identify final : public Block {
         covariance_(get_or(p, "covariance0", 1.0)),
         forgetting_(get_or(p, "forgetting", 0.999)),
         drive_(get_or(p, "drive", 8.0)),
-        frequency_(get_or(p, "frequency", 0.7)) {}
+        frequency_(get_or(p, "frequency", 0.7)),
+        link1_length_(get_or(p, "l1", 0.5)),
+        link2_length_(get_or(p, "l2", 0.5)) {}
 
   Values step(const Context& ctx, const Values& in) override {
     const State6 x = state_of(in);
@@ -154,14 +162,14 @@ class Identify final : public Block {
     const double a1 = (x[4] - p[4]) / dt;
     const double a2 = (x[5] - p[5]) / dt;
 
-    Params known = known_model();
+    Params known = known_model(link1_length_, link2_length_);
     known.payload = 0.0;  // the part already accounted for
     const Consts c = constants(known);
     const double base = c.total * ax + c.a1 * std::cos(p[1]) * a1 - c.a1 * std::sin(p[1]) * p[4] * p[4] +
                         c.a2 * std::cos(p[2]) * a2 - c.a2 * std::sin(p[2]) * p[5] * p[5] + known.cart_damping * p[3];
     const double y = previous_force_ - base;
-    const double regressor = ax + known.link1_length * (std::cos(p[1]) * a1 - std::sin(p[1]) * p[4] * p[4]) +
-                             known.link2_length * (std::cos(p[2]) * a2 - std::sin(p[2]) * p[5] * p[5]);
+    const double regressor = ax + link1_length_ * (std::cos(p[1]) * a1 - std::sin(p[1]) * p[4] * p[4]) +
+                             link2_length_ * (std::cos(p[2]) * a2 - std::sin(p[2]) * p[5] * p[5]);
 
     const double gain = covariance_ * regressor / (forgetting_ + regressor * regressor * covariance_);
     payload_ += gain * (y - regressor * payload_);
@@ -170,6 +178,7 @@ class Identify final : public Block {
   }
 
   double payload_, covariance_, forgetting_, drive_, frequency_;
+  double link1_length_, link2_length_;
   State6 previous_{};
   double previous_force_ = 0.0;
   bool have_previous_ = false;
@@ -185,10 +194,12 @@ class Swing final : public Block {
         k_x_(get_or(p, "k_x", 1.0)),
         k_v_(get_or(p, "k_v", 2.0)),
         max_force_(get_or(p, "max_force", 80.0)),
-        park_limit_(get_or(p, "park_limit", 10.0)) {}
+        park_limit_(get_or(p, "park_limit", 10.0)),
+        link1_length_(get_or(p, "l1", 0.5)),
+        link2_length_(get_or(p, "l2", 0.5)) {}
 
   Values step(const Context& ctx, const Values& in) override {
-    Params p = known_model();
+    Params p = known_model(link1_length_, link2_length_);
     p.payload = std::max(0.01, get_or(in, "m_hat", 0.05));
     const State6 x = state_of(in);
     if (start_ < 0) start_ = ctx.t;
@@ -204,6 +215,7 @@ class Swing final : public Block {
 
  private:
   double k_energy_, u_max_, k_x_, k_v_, max_force_, park_limit_;
+  double link1_length_, link2_length_;
   double start_ = -1.0;
   bool parked_ = false;
 };
@@ -216,12 +228,13 @@ class Swing final : public Block {
 class Catch final : public Block {
  public:
   explicit Catch(const Values& p)
-      : max_force_(get_or(p, "max_force", 80.0)), horizon_(get_or(p, "horizon", 2.0)) {}
+      : max_force_(get_or(p, "max_force", 80.0)), horizon_(get_or(p, "horizon", 2.0)),
+        link1_length_(get_or(p, "l1", 0.5)), link2_length_(get_or(p, "l2", 0.5)) {}
 
   Values step(const Context& ctx, const Values& in) override {
     const double mass = std::max(0.01, get_or(in, "m_hat", 0.05));
     if (mass != cached_mass_) {
-      gain_ = lqr_gain(known_model(), mass);
+      gain_ = lqr_gain(known_model(link1_length_, link2_length_), mass);
       cached_mass_ = mass;
     }
     const State6 x = state_of(in);
@@ -229,25 +242,28 @@ class Catch final : public Block {
     if (std::abs(x[0]) > 3.0 || std::abs(wrap(x[1])) > 1.2 || std::abs(wrap(x[2])) > 1.2 ||
         std::abs(x[3]) > 15.0 || std::abs(x[4]) > 15.0 || std::abs(x[5]) > 15.0)
       return {{"near", 0.0}};
-    Params p = known_model();
+    Params p = known_model(link1_length_, link2_length_);
     p.payload = mass;
     return {{"near", catch_ok(p, x, gain_, max_force_, horizon_, ctx.dt > 0 ? ctx.dt : 0.01) ? 1.0 : 0.0}};
   }
 
  private:
   double max_force_, horizon_;
+  double link1_length_, link2_length_;
   double cached_mass_ = -1.0;
   std::array<double, 6> gain_{};
 };
 
 class Balance final : public Block {
  public:
-  explicit Balance(const Values& p) : max_force_(get_or(p, "max_force", 80.0)) {}
+  explicit Balance(const Values& p)
+      : max_force_(get_or(p, "max_force", 80.0)),
+        link1_length_(get_or(p, "l1", 0.5)), link2_length_(get_or(p, "l2", 0.5)) {}
 
   Values step(const Context&, const Values& in) override {
     const double mass = std::max(0.01, get_or(in, "m_hat", 0.05));
     if (mass != cached_mass_) {
-      gain_ = lqr_gain(known_model(), mass);
+      gain_ = lqr_gain(known_model(link1_length_, link2_length_), mass);
       cached_mass_ = mass;
     }
     const State6 e = wrap_angles(state_of(in));
@@ -258,6 +274,7 @@ class Balance final : public Block {
 
  private:
   double max_force_;
+  double link1_length_, link2_length_;
   double cached_mass_ = -1.0;
   std::array<double, 6> gain_{};
 };
@@ -312,7 +329,9 @@ void register_pendulum(paperboat::Registry& registry) {
                   {.id = "covariance0", .default_value = 1.0},
                   {.id = "forgetting", .default_value = 0.999},
                   {.id = "drive", .default_value = 8.0, .unit = "N"},
-                  {.id = "frequency", .default_value = 0.7, .unit = "Hz"}},
+                  {.id = "frequency", .default_value = 0.7, .unit = "Hz"},
+                  {.id = "l1", .default_value = 0.5, .unit = "m"},
+                  {.id = "l2", .default_value = 0.5, .unit = "m"}},
        .description = "Gray-box RLS: the payload mass from the cart equation."}));
 
   registry.add(paperboat::define_block<Swing>(
@@ -330,7 +349,9 @@ void register_pendulum(paperboat::Registry& registry) {
                   {.id = "k_x", .default_value = 1.0},
                   {.id = "k_v", .default_value = 2.0},
                   {.id = "max_force", .default_value = 80.0, .unit = "N"},
-                  {.id = "park_limit", .default_value = 10.0, .unit = "s"}},
+                  {.id = "park_limit", .default_value = 10.0, .unit = "s"},
+                  {.id = "l1", .default_value = 0.5, .unit = "m"},
+                  {.id = "l2", .default_value = 0.5, .unit = "m"}},
        .description = "Energy shaping: pump the links up to upright energy, then hold the cart."}));
 
   registry.add(paperboat::define_block<Catch>(
@@ -344,7 +365,9 @@ void register_pendulum(paperboat::Registry& registry) {
        }(),
        .outputs = {{"near", "signal"}},
        .params = {{.id = "max_force", .default_value = 80.0, .unit = "N"},
-                  {.id = "horizon", .default_value = 2.0, .unit = "s"}},
+                  {.id = "horizon", .default_value = 2.0, .unit = "s"},
+                  {.id = "l1", .default_value = 0.5, .unit = "m"},
+                  {.id = "l2", .default_value = 0.5, .unit = "m"}},
        .description = "Simulates the LQR for 2 s; 1 when the balance story can take over."}));
 
   registry.add(paperboat::define_block<Balance>(
@@ -357,7 +380,9 @@ void register_pendulum(paperboat::Registry& registry) {
          return ports;
        }(),
        .outputs = {{"force", "signal", "N"}},
-       .params = {{.id = "max_force", .default_value = 80.0, .unit = "N"}},
+       .params = {{.id = "max_force", .default_value = 80.0, .unit = "N"},
+                  {.id = "l1", .default_value = 0.5, .unit = "m"},
+                  {.id = "l2", .default_value = 0.5, .unit = "m"}},
        .description = "LQR at upright, with the gain from the estimated payload."}));
 }
 
