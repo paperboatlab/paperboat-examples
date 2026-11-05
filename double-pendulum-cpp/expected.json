@@ -1,0 +1,10 @@
+{
+  "$comment": "What `--run` (the starter, headless) must produce; checked by protocol/golden.py.",
+  "status": "done",
+  "run": "build/paperboat-double-pendulum",
+  "signals": {
+    "graph-mass": [0.24804137684372626, 0.00001],
+    "graph-x": [0.0, 0.000001],
+    "graph-theta1": [0.0, 0.000001]
+  }
+}
