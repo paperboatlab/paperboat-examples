@@ -1,0 +1,103 @@
+# A double pendulum on a cart with an unknown payload mass. Three stories run in order:
+# identify the load (gray-box RLS), swing it up (energy shaping), balance it (LQR). Served
+# by domain/, next to this file; the story sequence is the Flow page.
+domain = "double-pendulum"
+
+# step: the stories run as a sequence. math: the force sum. dashboard: the monitors. The
+# domain's own station object and blocks are in code (domain/), so they need no import.
+import = ["step", "math", "dashboard"]
+
+[[blocks]]
+use = "math/sum"
+label = "Force (one story at a time)"
+defaults = { signs = "+++" }
+
+# Starter station: the cart and its two links. Every field except `payload` is known to the
+# controllers; `payload` is what the first story estimates (and what the real plant has).
+[station]
+[[station.objects]]
+id = "dip-1"
+type = "double-pendulum"
+pos = [0, 0]
+[station.objects.props]
+cart_mass = 1.0
+link1_mass = 0.3
+link1_length = 0.5
+link2_mass = 0.2
+link2_length = 0.5
+payload = 0.25
+cart_damping = 0.1
+joint1_damping = 0.002
+joint2_damping = 0.002
+max_force = 80
+x0 = 0
+v0 = 0
+theta1_0 = 3.191592653589793
+theta2_0 = 3.111592653589793
+omega1_0 = 0
+omega2_0 = 0
+
+# The Flow page: Start → Identify the payload → Swing up → Balance. The plant and the
+# catch gate sit outside the stories; the plant always runs, the gate ends the swing when
+# the links are close enough for the balance controller to take over.
+[graph]
+nodes = [
+  { id = "start", type = "start", pos = [-460, 160] },
+
+  { id = "dip-1", type = "double-pendulum", pos = [-460, 420] },
+  { id = "sum", type = "sum", pos = [-200, 420] },
+  { id = "identify", type = "identify", pos = [-200, 40] },
+  { id = "swing", type = "swing", pos = [-200, 200] },
+  { id = "catch", type = "catch", pos = [60, 300] },
+  { id = "balance", type = "balance", pos = [-200, 600] },
+
+  { id = "graph-mass", type = "graph", pos = [300, 40] },
+  { id = "graph-theta1", type = "graph", pos = [300, 200] },
+  { id = "graph-x", type = "graph", pos = [300, 360] },
+  { id = "show-mass", type = "display", pos = [300, 520] },
+  { id = "show-state", type = "display", pos = [300, 680] },
+]
+
+edges = [
+  { from = ["start", "next"], to = ["identify the payload", "in"] },
+  { from = ["identify the payload", "next"], to = ["swing up", "in"] },
+  { from = ["swing up", "next"], to = ["balance story", "in"] },
+  { from = ["catch", "near"], to = ["swing up", "until"] },
+
+  # One vector carries the whole state to each consumer: fewer wires, but still a generic
+  # ordered value. Scalar outputs remain available for the Board and other consumers.
+  { from = ["dip-1", "state"], to = ["identify", "state"] },
+  { from = ["dip-1", "state"], to = ["swing", "state"] },
+  { from = ["dip-1", "state"], to = ["catch", "state"] },
+  { from = ["dip-1", "state"], to = ["balance", "state"] },
+
+  # The estimate travels from story 1 to stories 2 and 3 (and the catch gate).
+  { from = ["identify", "m_hat"], to = ["swing", "m_hat"] },
+  { from = ["identify", "m_hat"], to = ["catch", "m_hat"] },
+  { from = ["identify", "m_hat"], to = ["balance", "m_hat"] },
+
+  # One force per story; the sum lets the inactive stories read as zero. The estimator also
+  # sees the force the engine actually applied, so its finite differences stay honest.
+  { from = ["identify", "drive"], to = ["sum", "a"] },
+  { from = ["swing", "force"], to = ["sum", "b"] },
+  { from = ["balance", "force"], to = ["sum", "c"] },
+  { from = ["sum", "y"], to = ["dip-1", "force"] },
+  { from = ["sum", "y"], to = ["identify", "force"] },
+
+  # Monitors.
+  { from = ["identify", "m_hat"], to = ["graph-mass", "in"] },
+  { from = ["dip-1", "theta1"], to = ["graph-theta1", "in"] },
+  { from = ["dip-1", "x"], to = ["graph-x", "in"] },
+  { from = ["identify", "m_hat"], to = ["show-mass", "in"] },
+  { from = ["dip-1", "state"], to = ["show-state", "in"] },
+]
+
+# Stories are runs of blocks. `release` drops a story's force output when the story leaves,
+# so the next controller takes over cleanly; the estimate (m_hat) is not released and is
+# read by the later stories. `until` (wired from catch.near) ends the swing; `seconds` is
+# then a safety limit. Balance runs to the end of the run.
+groups = [
+  { id = "identify the payload", kind = "story", nodes = ["identify"], params = { seconds = 6 }, release = [["identify", "drive"]] },
+  { id = "swing up", kind = "story", nodes = ["swing"], params = { seconds = 30 }, release = [["swing", "force"]] },
+  { id = "balance story", kind = "story", nodes = ["balance"], params = { seconds = 60 } },
+]
