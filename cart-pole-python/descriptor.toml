@@ -1,0 +1,24 @@
+# Cart on a pole, balanced by a PID controller. Served by examples/backends/cart-pole-python.
+domain = "cart-pole"
+
+import = ["base", "signal", "math", "dashboard"]
+
+[[blocks]]
+use = "math/gain"
+defaults = { k = -1 }
+
+[graph]
+nodes = [
+  { id = "ctrl-1", type = "Controller", pos = [0, 0] },
+  { id = "force-1", type = "Force", pos = [0, 80] },
+  { id = "probe-1", type = "P1", pos = [0, 160] },
+  { id = "graph-x", type = "graph", pos = [260, 0] },
+  { id = "graph-theta", type = "graph", pos = [260, 160] },
+]
+edges = [
+  { from = ["ctrl-1", "force"], to = ["force-1", "force"] },
+  { from = ["probe-1", "theta"], to = ["ctrl-1", "theta"] },
+  { from = ["probe-1", "omega"], to = ["ctrl-1", "omega"] },
+  { from = ["probe-1", "theta"], to = ["graph-theta", "in"] },
+  { from = ["probe-1", "x"], to = ["graph-x", "in"] },
+]
