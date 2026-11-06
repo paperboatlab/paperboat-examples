@@ -7,19 +7,24 @@
 // are the toolkit's opencv package; the photo is an Image station object.
 
 #include <paperboat/sdk.hpp>
-#include <paperboat/toolkit/opencv.hpp>
 
+#ifdef PAPERBOAT_HAS_OPENCV
+#include <paperboat/toolkit/opencv.hpp>
 #include "domain/parts.hpp"
+#endif
 
 int main(int argc, char** argv) {
   // Static: catalog entries point into the registry, so both live as long as the server.
   static const paperboat::Registry registry = [] {
     paperboat::Registry r = paperboat::builtins();
+#ifdef PAPERBOAT_HAS_OPENCV
     paperboat::toolkit::opencv::register_opencv(r);
     parts::register_parts(r);
+#endif
     return r;
   }();
-  static const paperboat::Catalog catalog = paperboat::load_descriptor_file(PAPERBOAT_DESCRIPTOR, registry);
+  static const paperboat::Catalog catalog =
+      paperboat::load_descriptor_file(PAPERBOAT_DESCRIPTOR, registry, {.optional_imports = {"opencv"}});
   const paperboat::Backend backend{
       .engine = "cpp-parts",
       .catalog = &catalog,

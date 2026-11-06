@@ -1,0 +1,5 @@
+# This backend imports the optional OpenCV toolkit. run_backend.py asks once before
+# fetching any missing requirements, then configures and builds this backend.
+[[toolkits]]
+name = "opencv"
+repo = "https://github.com/cyythanapong-netizen/paperboat-toolkit-opencv"
