@@ -15,6 +15,7 @@ framework: every one must pass the protocol smoke test and its own golden result
 | `parts-cpp/` | 8770 | Image processing with OpenCV: count bolts, nuts and washers in a photo |
 | `chain-python/` | 8771 | A structure built on the Station as a graph, tested from the Flow in stories |
 | `supply-python/` | 8772 | No physics: a supply network on the Station graph, an ordering policy on the Flow |
+| `double-pendulum-cpp/` | 8773 | A double pendulum on a cart: identify payload, swing-up by energy shaping, balance by LQR |
 
 ## Set up
 

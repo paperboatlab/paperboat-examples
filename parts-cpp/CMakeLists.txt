@@ -20,10 +20,19 @@ if(NOT PAPERBOAT_ENGINE_DIR)
   message(FATAL_ERROR "No Paperboat engine: clone paperboat next to paperboat-examples, or set PAPERBOAT_ENGINE_DIR")
 endif()
 set(PAPERBOAT_ENGINE_DIR "${PAPERBOAT_ENGINE_DIR}" CACHE PATH "Paperboat engine sources")
-set(PAPERBOAT_WITH_OPENCV ON CACHE BOOL "" FORCE)
 add_subdirectory(${PAPERBOAT_ENGINE_DIR} paperboat EXCLUDE_FROM_ALL)
 
-add_executable(paperboat-parts main.cpp domain/count.cpp)
-target_link_libraries(paperboat-parts PRIVATE paperboat::core paperboat::toolkit_opencv paperboat_warnings)
+set(PARTS_SOURCES main.cpp)
+if(TARGET paperboat::toolkit_opencv)
+  list(APPEND PARTS_SOURCES domain/count.cpp)
+endif()
+
+add_executable(paperboat-parts ${PARTS_SOURCES})
+target_link_libraries(paperboat-parts PRIVATE paperboat::core paperboat_warnings)
 target_compile_definitions(paperboat-parts PRIVATE
   PAPERBOAT_DESCRIPTOR="${CMAKE_CURRENT_SOURCE_DIR}/descriptor.toml")
+
+if(TARGET paperboat::toolkit_opencv)
+  target_link_libraries(paperboat-parts PRIVATE paperboat::toolkit_opencv)
+  target_compile_definitions(paperboat-parts PRIVATE PAPERBOAT_HAS_OPENCV=1)
+endif()
