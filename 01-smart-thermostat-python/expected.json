@@ -3,7 +3,7 @@
   "status": "done",
   "run": "server.py",
   "signals": {
-    "display-room": [21.02, 0.5]
+    "scope-1": [21.02, 0.5]
   },
   "logs": [
     "final T_room = 21.02 °C"

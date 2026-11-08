@@ -57,23 +57,23 @@ class RoomThermostat(DomainState):
         return [
             # Room floor (dark charcoal wood parquet)
             {"id": "floor", "shape": "box", "pos": [0, -1.5, 0], "size": [6.0, 0.2, 4.0], "color": "#2a2d32"},
-            # Interior back wall (matte architectural slate)
-            {"id": "back_wall", "shape": "box", "pos": [0, 0.5, -2.0], "size": [6.0, 3.8, 0.2], "color": "#1e2124"},
-            # Left exterior window wall solid framing
-            {"id": "wall_left_bottom", "shape": "box", "pos": [-2.95, -1.05, 0], "size": [0.1, 0.7, 3.6], "color": "#1e2124"},
-            {"id": "wall_left_top", "shape": "box", "pos": [-2.95, 1.85, 0], "size": [0.1, 0.9, 3.6], "color": "#1e2124"},
-            {"id": "wall_left_back", "shape": "box", "pos": [-2.95, 0.4, -1.3], "size": [0.1, 2.0, 1.0], "color": "#1e2124"},
-            {"id": "wall_left_front", "shape": "box", "pos": [-2.95, 0.4, 1.3], "size": [0.1, 2.0, 1.0], "color": "#1e2124"},
-            # Window outer frame & sill
-            {"id": "window_sill", "shape": "box", "pos": [-2.9, -0.65, 0], "size": [0.22, 0.08, 1.8], "color": "#334155"},
-            {"id": "window_lintel", "shape": "box", "pos": [-2.9, 1.45, 0], "size": [0.22, 0.08, 1.8], "color": "#334155"},
-            {"id": "window_jamb_back", "shape": "box", "pos": [-2.9, 0.4, -0.85], "size": [0.22, 2.02, 0.08], "color": "#334155"},
-            {"id": "window_jamb_front", "shape": "box", "pos": [-2.9, 0.4, 0.85], "size": [0.22, 2.02, 0.08], "color": "#334155"},
-            # Deep winter dusk exterior backdrop outside
-            {"id": "window_backdrop", "shape": "box", "pos": [-3.2, 0.4, 0], "size": [0.05, 2.1, 1.9], "color": "#0b132b"},
-            # Baseboard convection heater housing
+            # Solid interior left wall behind the baseboard radiator
+            {"id": "left_wall", "shape": "box", "pos": [-2.95, 0.4, 0], "size": [0.1, 3.8, 4.0], "color": "#1e2124"},
+            # Back wall structural panels framing the scenic window and thermostat
+            {"id": "back_wall_top", "shape": "box", "pos": [-1.2, 1.85, -1.95], "size": [1.8, 0.9, 0.1], "color": "#1e2124"},
+            {"id": "back_wall_bottom", "shape": "box", "pos": [-1.2, -1.05, -1.95], "size": [1.8, 0.7, 0.1], "color": "#1e2124"},
+            {"id": "back_wall_left", "shape": "box", "pos": [-2.55, 0.4, -1.95], "size": [0.9, 3.8, 0.1], "color": "#1e2124"},
+            {"id": "back_wall_right", "shape": "box", "pos": [1.35, 0.4, -1.95], "size": [3.3, 3.8, 0.1], "color": "#1e2124"},
+            # Window outer frame & sill (centered at x=-1.2 on back wall)
+            {"id": "window_sill", "shape": "box", "pos": [-1.2, -0.65, -1.90], "size": [1.8, 0.08, 0.22], "color": "#334155"},
+            {"id": "window_lintel", "shape": "box", "pos": [-1.2, 1.45, -1.90], "size": [1.8, 0.08, 0.22], "color": "#334155"},
+            {"id": "window_jamb_left", "shape": "box", "pos": [-2.05, 0.4, -1.90], "size": [0.08, 2.02, 0.22], "color": "#334155"},
+            {"id": "window_jamb_right", "shape": "box", "pos": [-0.35, 0.4, -1.90], "size": [0.08, 2.02, 0.22], "color": "#334155"},
+            # Deep winter dusk exterior backdrop outside the window
+            {"id": "window_backdrop", "shape": "box", "pos": [-1.2, 0.4, -2.15], "size": [2.0, 2.2, 0.05], "color": "#0b132b"},
+            # Baseboard convection heater housing (on left wall)
             {"id": "heater_unit", "shape": "box", "pos": [-2.4, -1.3, 0], "size": [0.4, 0.3, 2.4], "color": "#3f464d"},
-            # Thermostat wall plate
+            # Thermostat wall plate (on right side of back wall)
             {"id": "thermostat_plate", "shape": "box", "pos": [1.2, 0.3, -1.88], "size": [0.6, 0.6, 0.06], "color": "#16181a"},
             *self.patch(),
         ]
@@ -85,17 +85,17 @@ class RoomThermostat(DomainState):
         plume_scale = 1.0 if heater_active else 0.05
         dial_color = "#38bdf8" if self.t_room < 20.5 else ("#22c55e" if self.t_room <= 22.0 else "#f97316")
 
-        # 3D Window sash opening kinematics (hinged at x=-2.85, z=-0.80)
+        # 3D Window sash opening kinematics (hinged at left jamb x=-2.0, z=-1.90)
         theta = 1.25 * self.window_opening
-        xh, zh = -2.85, -0.80
+        xh, zh = -2.0, -1.90
         radius = 0.80
-        wx = xh + radius * math.sin(theta)
-        wz = zh + radius * math.cos(theta)
+        wx = xh + radius * math.cos(theta)
+        wz = zh + radius * math.sin(theta)
 
         # Freezing cold draft gust entering through window (pulsing wind)
         gust_pulse = 0.85 + 0.15 * math.sin(8.0 * self.sim_time)
         draft_scale = max(0.001, self.window_opening * gust_pulse)
-        draft_pos_x = -2.5 + 0.7 * self.window_opening
+        draft_pos_z = -1.90 + 0.6 * self.window_opening
 
         return [
             # Baseboard heater active glow element
@@ -105,10 +105,10 @@ class RoomThermostat(DomainState):
             # Digital thermostat dial face
             {"id": "thermostat_dial", "shape": "box", "pos": [1.2, 0.3, -1.82], "size": [0.4, 0.4, 0.08], "color": dial_color},
             # Operable 3D window sash & glass pane
-            {"id": "window_sash", "shape": "box", "pos": [round(wx, 4), 0.4, round(wz, 4)], "size": [0.06, 1.92, 1.62], "rot": [0.0, round(theta, 4), 0.0], "color": "#475569"},
-            {"id": "window_glass", "shape": "box", "pos": [round(wx, 4), 0.4, round(wz, 4)], "size": [0.04, 1.80, 1.50], "rot": [0.0, round(theta, 4), 0.0], "color": "#38bdf8"},
+            {"id": "window_sash", "shape": "box", "pos": [round(wx, 4), 0.4, round(wz, 4)], "size": [1.62, 1.92, 0.06], "rot": [0.0, -round(theta, 4), 0.0], "color": "#475569"},
+            {"id": "window_glass", "shape": "box", "pos": [round(wx, 4), 0.4, round(wz, 4)], "size": [1.50, 1.80, 0.04], "rot": [0.0, -round(theta, 4), 0.0], "color": "#38bdf8"},
             # Inflowing freezing outdoor breeze draft
-            {"id": "cold_draft", "shape": "box", "pos": [round(draft_pos_x, 3), 0.4, 0.0], "size": [1.3, 0.9, 1.2], "scale": [round(draft_scale, 3), round(draft_scale, 3), round(draft_scale, 3)], "color": "#a5f3fc"},
+            {"id": "cold_draft", "shape": "box", "pos": [-1.2, 0.4, round(draft_pos_z, 3)], "size": [1.2, 0.9, 1.1], "scale": [round(draft_scale, 3), round(draft_scale, 3), round(draft_scale, 3)], "color": "#a5f3fc"},
         ]
 
     def summary(self) -> str:

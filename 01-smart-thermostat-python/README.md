@@ -40,13 +40,15 @@ Paperboat opens in **Navigator Mode**, designed for clean signal flow observatio
    - `Subtract`: Computes error $e = T_{\text{target}} - T_{\text{room}}$.
    - `Threshold`: Evaluates if $e > 0$, outputting $1.0$ (ON) or $0.0$ (OFF).
    - `Heater`: Actuates the physical baseboard radiator.
+   - `Scope`: 3-channel real-time oscilloscope tracking target setpoint (channel A), heater relay state (channel B), and room temperature (channel C).
 2. **Station 3D View**:
    - Left-click and drag to orbit around the room.
-   - Observe the baseboard heater on the left wall: when the heater activates, it glows bright orange (`#f97316`) and convective heat plumes rise along the glass wall.
-   - The round thermostat dial mounted on the back wall glows emerald green when within target comfort bounds.
-3. **Board Telemetry**:
-   - The **Wave Plot** graphs room temperature in real time.
-   - The **Display Readout** shows the exact current temperature chip.
+   - Observe the baseboard heater on the left wall: when the heater activates, it glows bright orange (`#f97316`) and convective heat plumes rise.
+   - The scenic window and round thermostat dial are mounted along the back wall. The dial glows emerald green when within comfort bounds.
+3. **Dashboard Telemetry**:
+   - The **Scope** instrument graphs setpoint, control signal, and indoor temperature together.
+   - The **Target Label** readout displays the current target setpoint.
+   - The **Console** pane displays real-time execution logs.
 4. **Floating Run Dock Controls**:
    - Toggle **`open_window`** in the bottom floating dock to swing open the 3D living room window! Freezing outdoor air rushes into the room, causing thermal heat losses to jump ($140\,\text{W/K}$) and forcing the thermostat heater into overdrive.
    - Adjust **`target_temp`** slider in the dock or Variables panel (`Alt+V`).
