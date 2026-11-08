@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 550" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad7" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c0e12" />
+      <stop offset="100%" stop-color="#141820" />
+    </linearGradient>
+    <linearGradient id="cfdStreamGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.2" />
+      <stop offset="40%" stop-color="#38bdf8" stop-opacity="0.8" />
+      <stop offset="70%" stop-color="#10b981" stop-opacity="0.7" />
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.3" />
+    </linearGradient>
+    <linearGradient id="highSpeedGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0284c7" stop-opacity="0.0" />
+      <stop offset="50%" stop-color="#38bdf8" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#34d399" stop-opacity="0.0" />
+    </linearGradient>
+    <pattern id="lbmGrid" width="16" height="16" patternUnits="userSpaceOnUse">
+      <path d="M 16 0 L 0 0 0 16" fill="none" stroke="#162230" stroke-width="0.8" />
+      <circle cx="8" cy="8" r="0.8" fill="#203045" />
+    </pattern>
+    <marker id="streamArrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="#38bdf8" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="550" fill="url(#bgGrad7)" />
+
+  <!-- Station Viewport Frame (Wind Tunnel Test Section) -->
+  <rect x="25" y="45" width="850" height="455" rx="6" fill="#0d131a" stroke="#263140" stroke-width="1.5" />
+  <rect x="26" y="80" width="848" height="389" fill="url(#lbmGrid)" />
+
+  <!-- Header Bar -->
+  <rect x="25" y="45" width="850" height="34" rx="6" fill="#18202b" stroke="#263140" stroke-width="1" />
+  <circle cx="45" cy="62" r="5" fill="#10b981" />
+  <text x="60" y="66" fill="#f1f5f9" font-family="'JetBrains Mono', 'Segoe UI', monospace" font-size="12" font-weight="700" letter-spacing="1">STATION // 07-AIRFOIL-CFD-PYTHON [D2Q9 LBM]</text>
+  <rect x="420" y="53" width="115" height="18" rx="3" fill="#0f172a" stroke="#334155" stroke-width="1" />
+  <text x="428" y="66" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">SOLVER: D2Q9-LBM</text>
+  <rect x="545" y="53" width="125" height="18" rx="3" fill="#0f172a" stroke="#334155" stroke-width="1" />
+  <text x="553" y="66" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">VIEW: 2D TUNNEL</text>
+  <text x="800" y="66" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="11">PORT: 8771</text>
+
+  <!-- Wind Tunnel Wall Boundaries -->
+  <line x1="26" y1="80" x2="874" y2="80" stroke="#475569" stroke-width="3" stroke-dasharray="8 4" />
+  <line x1="26" y1="469" x2="874" y2="469" stroke="#475569" stroke-width="3" stroke-dasharray="8 4" />
+  <text x="35" y="98" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="9">UPPER TUNNEL SLIP WALL</text>
+  <text x="35" y="460" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="9">LOWER TUNNEL SLIP WALL</text>
+
+  <!-- Flow Inflow Velocity Vectors (Left) -->
+  <g transform="translate(45, 120)">
+    <line x1="0" y1="40" x2="40" y2="40" stroke="#38bdf8" stroke-width="2" marker-end="url(#streamArrow)" />
+    <line x1="0" y1="100" x2="40" y2="100" stroke="#38bdf8" stroke-width="2" marker-end="url(#streamArrow)" />
+    <line x1="0" y1="160" x2="40" y2="160" stroke="#38bdf8" stroke-width="2" marker-end="url(#streamArrow)" />
+    <line x1="0" y1="220" x2="40" y2="220" stroke="#38bdf8" stroke-width="2" marker-end="url(#streamArrow)" />
+    <text x="50" y="104" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700">U_inf = 25.0 m/s</text>
+  </g>
+
+  <!-- Streamlines flowing around Airfoil -->
+  <g fill="none" stroke-width="1.5">
+    <!-- Upper Streamlines (Accelerated suction flow) -->
+    <path d="M 120,160 C 260,160 340,140 430,130 C 520,120 620,150 820,165" stroke="#38bdf8" opacity="0.6" />
+    <path d="M 120,195 C 240,195 330,175 420,160 C 500,145 610,185 820,205" stroke="#34d399" opacity="0.75" />
+    <path d="M 120,230 C 230,230 320,210 400,200 C 470,190 560,225 820,245" stroke="#34d399" opacity="0.9" />
+    
+    <!-- Stagnation Streamline -->
+    <path d="M 120,270 C 240,270 310,265 330,265" stroke="#f59e0b" stroke-width="2" />
+    
+    <!-- Lower Streamlines (Higher pressure, slower flow) -->
+    <path d="M 120,305 C 230,305 320,320 420,335 C 520,345 640,325 820,315" stroke="#38bdf8" opacity="0.6" />
+    <path d="M 120,345 C 240,345 340,360 450,370 C 560,375 660,355 820,350" stroke="#38bdf8" opacity="0.4" />
+  </g>
+
+  <!-- High-Speed Suction Bubble Contour (Upper surface glow) -->
+  <ellipse cx="440" cy="200" rx="90" ry="35" fill="url(#highSpeedGrad)" transform="rotate(-6, 440, 200)" />
+
+  <!-- NACA 0012 Airfoil Profile at alpha = +6 deg -->
+  <g transform="translate(340, 260) rotate(-6)">
+    <!-- Chord Reference Line -->
+    <line x1="0" y1="0" x2="260" y2="0" stroke="#475569" stroke-width="1" stroke-dasharray="4 4" />
+    <text x="265" y="3" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="8">CHORD c = 1.0 m</text>
+
+    <!-- NACA Airfoil Body Curve (Foil shape) -->
+    <path d="M 0,0 
+             C 10,-24 50,-38 100,-35 
+             C 160,-32 210,-15 260,0 
+             C 210,12 160,22 100,25 
+             C 50,26 10,16 0,0 Z" 
+          fill="#1e293b" stroke="#f1f5f9" stroke-width="2" />
+
+    <!-- Leading Edge Radius Marker -->
+    <circle cx="12" cy="0" r="8" fill="none" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2 2" />
+    <circle cx="0" cy="0" r="3" fill="#ef4444" /> <!-- Stagnation Point -->
+    <text x="-4" y="-12" fill="#ef4444" font-family="'JetBrains Mono', monospace" font-size="8" font-weight="700">STAG</text>
+
+    <!-- Surface Pressure Taps (Cp sensors) -->
+    <circle cx="50" cy="-33" r="2.5" fill="#38bdf8" />
+    <circle cx="100" cy="-35" r="2.5" fill="#38bdf8" />
+    <circle cx="150" cy="-28" r="2.5" fill="#38bdf8" />
+    <circle cx="200" cy="-16" r="2.5" fill="#38bdf8" />
+
+    <circle cx="50" cy="23" r="2.5" fill="#f59e0b" />
+    <circle cx="100" cy="25" r="2.5" fill="#f59e0b" />
+    <circle cx="150" cy="20" r="2.5" fill="#f59e0b" />
+
+    <!-- Trailing Edge Detached Wake Eddies -->
+    <g transform="translate(265, -5)" stroke="#f59e0b" fill="none" opacity="0.7">
+      <ellipse cx="20" cy="-5" rx="8" ry="4" stroke-width="1.2" />
+      <ellipse cx="45" cy="5" rx="12" ry="6" stroke-width="1" />
+      <ellipse cx="75" cy="-8" rx="16" ry="8" stroke-width="0.8" />
+    </g>
+  </g>
+
+  <!-- Angle of Attack Protractor Arc Callout -->
+  <g transform="translate(340, 260)">
+    <line x1="-30" y1="0" x2="50" y2="0" stroke="#64748b" stroke-width="1" stroke-dasharray="3 3" />
+    <path d="M 40,0 A 40 40 0 0 0 38,-6" fill="none" stroke="#facc15" stroke-width="1.5" />
+    <text x="55" y="-10" fill="#facc15" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700">α = +6.0°</text>
+  </g>
+
+  <!-- Aerodynamic Coefficients Polar Box (Top-Right) -->
+  <g transform="translate(680, 100)">
+    <rect x="0" y="0" width="170" height="95" rx="4" fill="#0f172a" stroke="#334155" stroke-width="1.5" />
+    <text x="12" y="20" fill="#f1f5f9" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700">AERODYNAMIC POLAR</text>
+    <line x1="12" y1="26" x2="158" y2="26" stroke="#1e293b" stroke-width="1" />
+    
+    <text x="12" y="44" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="9">LIFT C_L:</text>
+    <text x="110" y="44" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700">+0.624</text>
+
+    <text x="12" y="62" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="9">DRAG C_D:</text>
+    <text x="110" y="62" fill="#f59e0b" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700">+0.038</text>
+
+    <text x="12" y="80" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="9">GLIDE L/D:</text>
+    <text x="110" y="80" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700">16.33</text>
+  </g>
+
+  <!-- Station HUD / Telemetry Bottom Ribbon -->
+  <rect x="25" y="470" width="850" height="30" rx="4" fill="#141a24" stroke="#263140" stroke-width="1" />
+  <g transform="translate(45, 490)">
+    <text x="0" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">PROFILE:</text>
+    <text x="60" y="0" fill="#f8fafc" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">NACA 0012</text>
+
+    <text x="160" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">ALPHA:</text>
+    <text x="210" y="0" fill="#facc15" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">+6.0°</text>
+
+    <text x="290" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">LIFT C_L:</text>
+    <text x="360" y="0" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">0.624</text>
+
+    <text x="440" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">DRAG C_D:</text>
+    <text x="515" y="0" fill="#f59e0b" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">0.0382</text>
+
+    <text x="610" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">LBM_LATTICE:</text>
+    <text x="710" y="0" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">D2Q9 [256x128]</text>
+  </g>
+</svg>

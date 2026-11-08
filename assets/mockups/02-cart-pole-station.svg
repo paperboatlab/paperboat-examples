@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 550" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c0e12" />
+      <stop offset="100%" stop-color="#141820" />
+    </linearGradient>
+    <linearGradient id="railGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="cartGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="40%" stop-color="#334155" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="poleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="50%" stop-color="#e2e8f0" />
+      <stop offset="100%" stop-color="#64748b" />
+    </linearGradient>
+    <linearGradient id="forceGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f97316" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#f97316" stop-opacity="0.9" />
+    </linearGradient>
+    <pattern id="gridBackdrop" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#18202c" stroke-width="1" />
+    </pattern>
+    <marker id="forceArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <polygon points="0 0, 8 4, 0 8" fill="#f97316" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="550" fill="url(#bgGrad2)" />
+
+  <!-- Station Viewport Frame -->
+  <rect x="25" y="45" width="850" height="455" rx="6" fill="#10141b" stroke="#263140" stroke-width="1.5" />
+  <rect x="26" y="80" width="848" height="389" fill="url(#gridBackdrop)" />
+
+  <!-- Header Bar -->
+  <rect x="25" y="45" width="850" height="34" rx="6" fill="#18202b" stroke="#263140" stroke-width="1" />
+  <circle cx="45" cy="62" r="5" fill="#10b981" />
+  <text x="60" y="66" fill="#f1f5f9" font-family="'JetBrains Mono', 'Segoe UI', monospace" font-size="12" font-weight="700" letter-spacing="1">STATION // 02-CART-POLE-CPP</text>
+  <rect x="330" y="53" width="95" height="18" rx="3" fill="#0f172a" stroke="#334155" stroke-width="1" />
+  <text x="338" y="66" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">SOLVER: RK4</text>
+  <rect x="435" y="53" width="125" height="18" rx="3" fill="#0f172a" stroke="#334155" stroke-width="1" />
+  <text x="443" y="66" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">VIEW: FRONT ORTHO</text>
+  <text x="800" y="66" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="11">PORT: 8766</text>
+
+  <!-- Center Target Equilibrium Line (x = 0) -->
+  <line x1="450" y1="90" x2="450" y2="400" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="4 4" opacity="0.6" />
+  <text x="455" y="105" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="10">x = 0.00 m (SETPOINT)</text>
+
+  <!-- Precision Linear Guide Rail System -->
+  <g transform="translate(450, 360)">
+    <!-- Rail Support Extrusion -->
+    <rect x="-350" y="15" width="700" height="24" rx="2" fill="#1e293b" stroke="#334155" stroke-width="1" />
+    <!-- Ground Precision Steel Rail -->
+    <rect x="-350" y="5" width="700" height="10" rx="1" fill="url(#railGrad)" stroke="#475569" stroke-width="1" />
+    
+    <!-- End-Stops & Rubber Bumpers -->
+    <rect x="-365" y="-5" width="15" height="44" rx="2" fill="#e11d48" stroke="#9f1239" stroke-width="1" />
+    <rect x="-350" y="2" width="8" height="24" rx="1" fill="#475569" />
+    <text x="-365" y="55" fill="#f43f5e" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">-1.50 m</text>
+
+    <rect x="350" y="-5" width="15" height="44" rx="2" fill="#e11d48" stroke="#9f1239" stroke-width="1" />
+    <rect x="342" y="2" width="8" height="24" rx="1" fill="#475569" />
+    <text x="365" y="55" fill="#f43f5e" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">+1.50 m</text>
+
+    <!-- Rail Measurement Scale Ticks -->
+    <g stroke="#64748b" stroke-width="1">
+      <line x1="-300" y1="5" x2="-300" y2="12" /><text x="-300" y="28" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="8" text-anchor="middle">-1.0m</text>
+      <line x1="-150" y1="5" x2="-150" y2="12" /><text x="-150" y="28" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="8" text-anchor="middle">-0.5m</text>
+      <line x1="0" y1="5" x2="0" y2="14" stroke="#38bdf8" stroke-width="1.5" /><text x="0" y="28" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="8" text-anchor="middle">0.0m</text>
+      <line x1="150" y1="5" x2="150" y2="12" /><text x="150" y="28" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="8" text-anchor="middle">+0.5m</text>
+      <line x1="300" y1="5" x2="300" y2="12" /><text x="300" y="28" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="8" text-anchor="middle">+1.0m</text>
+    </g>
+
+    <!-- Cart & Pendulum Assembly (offset by x = +0.14m -> +42px on scale) -->
+    <g transform="translate(42, 0)">
+      <!-- Actuation Force Vector Arrow (F_cmd = -14.2 N -> points left) -->
+      <g transform="translate(0, -18)">
+        <line x1="0" y1="0" x2="-80" y2="0" stroke="#f97316" stroke-width="3" marker-end="url(#forceArrow)" />
+        <rect x="-105" y="-22" width="75" height="16" rx="2" fill="#451a03" stroke="#f97316" stroke-width="1" />
+        <text x="-67" y="-10" fill="#fdba74" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">F = -14.2 N</text>
+      </g>
+
+      <!-- Cart Wheels -->
+      <circle cx="-32" cy="5" r="9" fill="#0f172a" stroke="#64748b" stroke-width="2" />
+      <circle cx="-32" cy="5" r="3" fill="#cbd5e1" />
+      <circle cx="32" cy="5" r="9" fill="#0f172a" stroke="#64748b" stroke-width="2" />
+      <circle cx="32" cy="5" r="3" fill="#cbd5e1" />
+
+      <!-- Machined Aluminum Cart Chassis -->
+      <rect x="-48" y="-32" width="96" height="32" rx="4" fill="url(#cartGrad)" stroke="#64748b" stroke-width="1.5" />
+      <rect x="-44" y="-28" width="88" height="6" fill="#1e293b" />
+      <!-- Cart Engraved Label -->
+      <text x="0" y="-12" fill="#cbd5e1" font-family="'JetBrains Mono', monospace" font-size="8" font-weight="700" text-anchor="middle">CART M = 1.0 kg</text>
+
+      <!-- Center Axle Pivot Housing & Protractor -->
+      <g transform="translate(0, -32)">
+        <!-- Angle Scale Protractor Arc -->
+        <path d="M -45,-15 A 48 48 0 0 1 45,-15" fill="none" stroke="#475569" stroke-width="1" stroke-dasharray="3 3" />
+        <line x1="0" y1="0" x2="0" y2="-45" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2 2" />
+        
+        <!-- Rotating Inverted Pendulum (theta = +2.4 deg = +0.042 rad) -->
+        <g transform="rotate(2.4)">
+          <!-- Carbon Fiber Pole -->
+          <rect x="-3" y="-180" width="6" height="180" rx="2" fill="url(#poleGrad)" stroke="#334155" stroke-width="1" />
+          
+          <!-- Pole Tip Brass Bob Mass -->
+          <rect x="-8" y="-196" width="16" height="16" rx="3" fill="#eab308" stroke="#ca8a04" stroke-width="1.5" />
+          <circle cx="0" cy="-188" r="3" fill="#fef08a" />
+          
+          <text x="14" y="-185" fill="#fde047" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="600">m = 0.1 kg (L=0.6m)</text>
+
+          <!-- Pole Velocity Vector Arc -->
+          <path d="M 0,-150 A 150 150 0 0 0 -22,-148" fill="none" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#forceArrow)" />
+        </g>
+
+        <!-- Bearing Outer Ring & Hub -->
+        <circle cx="0" cy="0" r="10" fill="#0f172a" stroke="#0ea5e9" stroke-width="2" />
+        <circle cx="0" cy="0" r="4" fill="#38bdf8" />
+        
+        <!-- Angle Readout Badge -->
+        <rect x="22" y="-40" width="80" height="18" rx="3" fill="#0f172a" stroke="#0ea5e9" stroke-width="1" />
+        <text x="62" y="-27" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" text-anchor="middle">θ = +2.4°</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Station HUD / Telemetry Bottom Ribbon -->
+  <rect x="25" y="470" width="850" height="30" rx="4" fill="#141a24" stroke="#263140" stroke-width="1" />
+  <g transform="translate(45, 490)">
+    <text x="0" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">X_POS:</text>
+    <text x="50" y="0" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">+0.14 m</text>
+
+    <text x="135" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">X_VEL:</text>
+    <text x="185" y="0" fill="#cbd5e1" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">-0.05 m/s</text>
+
+    <text x="275" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">THETA:</text>
+    <text x="325" y="0" fill="#facc15" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">+2.4° (+0.042 rad)</text>
+
+    <text x="480" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">THETA_DOT:</text>
+    <text x="560" y="0" fill="#cbd5e1" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">-0.15 rad/s</text>
+
+    <text x="660" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">CONTROL:</text>
+    <text x="730" y="0" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">PID [ACTIVE]</text>
+  </g>
+</svg>

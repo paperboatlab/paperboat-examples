@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 550" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad10" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c0e12" />
+      <stop offset="100%" stop-color="#141820" />
+    </linearGradient>
+    <linearGradient id="trainRoof" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="pantoArm" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#dc2626" />
+      <stop offset="50%" stop-color="#ef4444" />
+      <stop offset="100%" stop-color="#991b1b" />
+    </linearGradient>
+    <marker id="forceArrow10" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <polygon points="0 0, 8 4, 0 8" fill="#38bdf8" />
+    </marker>
+    <marker id="aeroArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <polygon points="0 0, 8 4, 0 8" fill="#facc15" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="550" fill="url(#bgGrad10)" />
+
+  <!-- Station Viewport Frame -->
+  <rect x="25" y="45" width="850" height="455" rx="6" fill="#10141b" stroke="#263140" stroke-width="1.5" />
+
+  <!-- Header Bar -->
+  <rect x="25" y="45" width="850" height="34" rx="6" fill="#18202b" stroke="#263140" stroke-width="1" />
+  <circle cx="45" cy="62" r="5" fill="#10b981" />
+  <text x="60" y="66" fill="#f1f5f9" font-family="'JetBrains Mono', 'Segoe UI', monospace" font-size="12" font-weight="700" letter-spacing="1">STATION // 10-TRAIN-PANTOGRAPH-CPP [SQUERO-OM]</text>
+  <rect x="425" y="53" width="95" height="18" rx="3" fill="#0f172a" stroke="#334155" stroke-width="1" />
+  <text x="433" y="66" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">SOLVER: IDA/RK4</text>
+  <rect x="530" y="53" width="145" height="18" rx="3" fill="#0f172a" stroke="#334155" stroke-width="1" />
+  <text x="538" y="66" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">MODELICA DAE DYNAMICS</text>
+  <text x="800" y="66" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="11">PORT: 8774</text>
+
+  <!-- Overhead Catenary Suspension System (Top) -->
+  <g transform="translate(25, 90)">
+    <!-- Catenary Support Mast & Cantilever Bracket (Right) -->
+    <g transform="translate(760, 0)">
+      <rect x="0" y="0" width="16" height="360" fill="#1e293b" stroke="#334155" stroke-width="1" />
+      <!-- Cantilever Arm -->
+      <line x1="0" y1="40" x2="-220" y2="40" stroke="#475569" stroke-width="3" />
+      <line x1="0" y1="70" x2="-220" y2="40" stroke="#334155" stroke-width="2" />
+      <!-- Ceramic High-Voltage Insulators -->
+      <rect x="-185" y="32" width="22" height="16" rx="2" fill="#d97706" stroke="#b45309" stroke-width="1" />
+    </g>
+
+    <!-- Messenger Wire (Sagging Parabola Curve) -->
+    <path d="M 0,35 Q 400,65 850,35" fill="none" stroke="#64748b" stroke-width="1.5" />
+    <text x="250" y="45" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="8">MESSENGER WIRE</text>
+
+    <!-- Vertical Dropper Wires connecting to Contact Wire -->
+    <g stroke="#475569" stroke-width="1">
+      <line x1="80" y1="40" x2="80" y2="85" />
+      <line x1="180" y1="48" x2="180" y2="85" />
+      <line x1="280" y1="56" x2="280" y2="85" />
+      <line x1="380" y1="62" x2="380" y2="85" />
+      <line x1="480" y1="62" x2="480" y2="85" />
+      <line x1="580" y1="56" x2="580" y2="85" />
+      <line x1="680" y1="48" x2="680" y2="85" />
+    </g>
+
+    <!-- Copper Contact Wire (Nominal Height 5.3m, with dynamic contact wave uplift) -->
+    <path d="M 0,85 Q 380,85 440,78 Q 470,74 500,78 Q 560,85 850,85" fill="none" stroke="#f59e0b" stroke-width="2.5" />
+    <text x="120" y="105" fill="#f59e0b" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700">CONTACT WIRE (25 kV AC)</text>
+  </g>
+
+  <!-- High-Speed Train Roofline (Bottom) -->
+  <g transform="translate(25, 360)">
+    <!-- Aerodynamic Roof Silhouette -->
+    <path d="M 0,90 Q 250,55 500,55 L 850,55 L 850,95 L 0,95 Z" fill="url(#trainRoof)" stroke="#475569" stroke-width="1.5" />
+    <!-- High-Speed Train Cowling Stripe -->
+    <path d="M 0,90 Q 250,55 500,55 L 850,55" fill="none" stroke="#38bdf8" stroke-width="2" />
+    <text x="680" y="82" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700">HIGH-SPEED TRAIN ROOF (300 km/h)</text>
+
+    <!-- Train Forward Velocity Vector -->
+    <line x1="780" y1="35" x2="700" y2="35" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#forceArrow10)" />
+    <text x="740" y="25" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">v = 300 km/h</text>
+  </g>
+
+  <!-- Articulated Single-Arm Pantograph Mechanism -->
+  <g transform="translate(380, 415)">
+    <!-- Base Mounting Frame & 4 Ceramic Insulators -->
+    <rect x="-80" y="-12" width="160" height="12" rx="2" fill="#1e293b" stroke="#475569" stroke-width="1.5" />
+    <rect x="-70" y="0" width="18" height="10" rx="1" fill="#d97706" />
+    <rect x="-30" y="0" width="18" height="10" rx="1" fill="#d97706" />
+    <rect x="12" y="0" width="18" height="10" rx="1" fill="#d97706" />
+    <rect x="52" y="0" width="18" height="10" rx="1" fill="#d97706" />
+
+    <!-- Pneumatic Actuator Cylinder (Pushes lower arm up) -->
+    <line x1="-20" y1="-12" x2="25" y2="-65" stroke="#64748b" stroke-width="6" stroke-linecap="round" />
+    <line x1="25" y1="-65" x2="45" y2="-90" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round" />
+
+    <!-- Lower Arm (Reaching forward & up from rear pivot) -->
+    <!-- Pivot joint at x = -50, y = -12 -->
+    <g transform="translate(-50, -12)">
+      <circle cx="0" cy="0" r="7" fill="#0f172a" stroke="#dc2626" stroke-width="2" />
+      
+      <!-- Lower Arm Tube (Length ~170px, Angle ~ -52 deg) -->
+      <g transform="rotate(-52)">
+        <rect x="-6" y="-165" width="12" height="165" rx="3" fill="url(#pantoArm)" stroke="#7f1d1d" stroke-width="1" />
+        
+        <!-- Knee Joint Assembly (at tip of lower arm) -->
+        <g transform="translate(0, -165) rotate(52)">
+          <circle cx="0" cy="0" r="8" fill="#0f172a" stroke="#dc2626" stroke-width="2" />
+          <circle cx="0" cy="0" r="3" fill="#cbd5e1" />
+          
+          <!-- Upper Arm Tube (Reaching backward & up towards wire) -->
+          <g transform="rotate(78)">
+            <rect x="-4" y="-140" width="8" height="140" rx="2" fill="url(#pantoArm)" stroke="#7f1d1d" stroke-width="1" />
+            
+            <!-- Collector Head / Panhead Assembly -->
+            <g transform="translate(0, -140) rotate(-78)">
+              <!-- Panhead Spring Suspension Horns -->
+              <polygon points="-40,0 40,0 48,-6 -48,-6" fill="#334155" stroke="#94a3b8" stroke-width="1" />
+              <!-- Carbon Contact Wear Strip -->
+              <rect x="-35" y="-10" width="70" height="4" rx="1" fill="#1e293b" stroke="#cbd5e1" stroke-width="1" />
+
+              <!-- Contact Force Callout & Arc Spark Alert -->
+              <g transform="translate(0, -10)">
+                <!-- Upward Contact Force Vector (Fc = 118 N) -->
+                <line x1="0" y1="0" x2="0" y2="-45" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#forceArrow10)" />
+                <rect x="8" y="-48" width="85" height="18" rx="2" fill="#0f172a" stroke="#38bdf8" stroke-width="1" />
+                <text x="50" y="-35" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">Fc = 118.4 N</text>
+
+                <!-- Aerodynamic Uplift Force Vector (Faero = 32 N) -->
+                <line x1="-20" y1="0" x2="-20" y2="-30" stroke="#facc15" stroke-width="1.5" marker-end="url(#aeroArrow)" />
+                <text x="-20" y="-36" fill="#facc15" font-family="'JetBrains Mono', monospace" font-size="8" text-anchor="middle">F_aero</text>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- Squero Studio OM Modelica Integration Callout (Top-Left) -->
+  <g transform="translate(60, 95)">
+    <rect x="0" y="0" width="185" height="70" rx="4" fill="#0f172a" stroke="#334155" stroke-width="1" />
+    <text x="12" y="18" fill="#f8fafc" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700">SQUERO STUDIO OM DAE</text>
+    <line x1="12" y1="24" x2="173" y2="24" stroke="#1e293b" stroke-width="1" />
+    <text x="12" y="40" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="8">MULTIBODY: 4 RIGID LINKS</text>
+    <text x="12" y="52" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="8">CONTACT: HERTZIAN COMPLIANCE</text>
+    <text x="12" y="64" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="8" font-weight="700">ARC SEPARATION: 0% [NOMINAL]</text>
+  </g>
+
+  <!-- Station HUD / Telemetry Bottom Ribbon -->
+  <rect x="25" y="470" width="850" height="30" rx="4" fill="#141a24" stroke="#263140" stroke-width="1" />
+  <g transform="translate(45, 490)">
+    <text x="0" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">SPEED:</text>
+    <text x="50" y="0" fill="#f8fafc" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">300.0 km/h</text>
+
+    <text x="170" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">CONTACT_FORCE:</text>
+    <text x="280" y="0" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">118.4 N [NOMINAL]</text>
+
+    <text x="440" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">BAND:</text>
+    <text x="480" y="0" fill="#cbd5e1" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">90 - 140 N</text>
+
+    <text x="580" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">UPLIFT:</text>
+    <text x="635" y="0" fill="#facc15" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">38.2 mm</text>
+
+    <text x="710" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">ARCING:</text>
+    <text x="765" y="0" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">NOMINAL</text>
+  </g>
+</svg>
