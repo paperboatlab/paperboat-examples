@@ -1,0 +1,12 @@
+[backend]
+format = 0
+name = "cart-pole"
+version = "0.1.0"
+engine = ">=0.1"
+language = "cpp"
+run = "build/paperboat-cart-pole"
+port = 8766
+descriptor = "descriptor.toml"
+
+[test]
+golden = "expected.json"

@@ -1,0 +1,12 @@
+[backend]
+format = 0
+name = "mass-spring"
+version = "0.1.0"
+engine = ">=0.1"
+language = "python"
+run = "server.py"
+port = 8765
+descriptor = "descriptor.toml"
+
+[test]
+golden = "expected.json"
