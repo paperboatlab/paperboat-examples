@@ -1,0 +1,13 @@
+[backend]
+format = 0
+name = "02-cart-pole-cpp"
+version = "0.2.0"
+engine = ">=0.1"
+language = "cpp"
+run = "build/paperboat-cart-pole"
+port = 8766
+descriptor = "descriptor.toml"
+solver = "rk4"
+
+[test]
+golden = "expected.json"

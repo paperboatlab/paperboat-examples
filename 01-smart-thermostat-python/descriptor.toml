@@ -1,0 +1,70 @@
+# 01-smart-thermostat-python: Home Thermal Comfort & Bang-Bang Hysteresis
+domain = "thermostat"
+
+# Toolkit packages imported into the Flow palette
+import = ["base", "signal", "math", "control", "dashboard"]
+
+[[blocks]]
+use = "base/constant"
+defaults = { value = 21.0 }
+
+[[blocks]]
+use = "math/arithmetic"
+type = "subtract"
+defaults = { op = "-" }
+
+[[blocks]]
+use = "math/threshold"
+defaults = { level = 0.0 }
+
+# Project variables (Variables sheet Alt+V)
+[[variables]]
+name = "target_temp"
+value = 21.0
+unit = "°C"
+min = 16.0
+max = 28.0
+step = 0.5
+group = "Thermostat"
+note = "Target indoor comfort temperature"
+tunable = true
+dock = true
+
+[[variables]]
+name = "open_window"
+value = false
+group = "Room Environment"
+note = "Open living room window to let freezing outdoor air rush in"
+tunable = true
+dock = true
+
+# Starter Flow graph: Sensor -> Error (Setpoint - RoomTemp) -> Threshold -> Heater + 3-channel Scope
+[graph]
+nodes = [
+  { id = "sensor-1", type = "room_sensor", pos = [0, 118] },
+  { id = "setpoint-1", type = "constant", params = { value = { var = "target_temp" } }, pos = [122, -13] },
+  { id = "sub-1", type = "subtract", params = { op = "-" }, pos = [334, 66] },
+  { id = "thresh-1", type = "threshold", params = { level = 0.0 }, pos = [516, 98] },
+  { id = "heater-1", type = "heater", pos = [628, 52] },
+  { id = "scope-1", type = "scope", params = { inputs = 3 }, ports = { left = ["a", "c"], right = ["b"] }, pos = [628, 147] },
+]
+edges = [
+  { from = ["setpoint-1", "y"], to = ["sub-1", "a"] },
+  { from = ["sensor-1", "t_room"], to = ["sub-1", "b"] },
+  { from = ["sub-1", "y"], to = ["thresh-1", "u"] },
+  { from = ["thresh-1", "y"], to = ["heater-1", "cmd"] },
+  { from = ["setpoint-1", "y"], to = ["scope-1", "a"] },
+  { from = ["thresh-1", "y"], to = ["scope-1", "b"] },
+  { from = ["sensor-1", "t_room"], to = ["scope-1", "c"] },
+]
+
+# Starter Dashboard layout
+[dashboard]
+columns = 6
+instruments = [
+  { block = "scope-1", size = "xlarge", at = [1, 0] },
+]
+decorations = [
+  { kind = "label", text = "Target: {target_temp} degree C", at = [0, 0], span = [1, 1] },
+  { kind = "console", at = [4, 0], span = [2, 3] },
+]
