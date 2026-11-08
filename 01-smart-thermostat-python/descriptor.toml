@@ -1,0 +1,48 @@
+# 01-smart-thermostat-python: Home Thermal Comfort & Bang-Bang Hysteresis
+domain = "thermostat"
+
+# Toolkit packages imported into the Flow palette
+import = ["base", "signal", "math", "control", "dashboard"]
+
+[[blocks]]
+use = "base/constant"
+defaults = { value = 21.0 }
+
+[[blocks]]
+use = "math/arithmetic"
+type = "subtract"
+defaults = { op = "-" }
+
+[[blocks]]
+use = "math/threshold"
+defaults = { level = 0.0 }
+
+# Project variables (Variables sheet Alt+V)
+[[variables]]
+name = "target_temp"
+value = 21.0
+unit = "°C"
+min = 16.0
+max = 28.0
+group = "Thermostat Setpoint"
+note = "Target indoor comfort temperature"
+
+# Starter Flow graph: Sensor -> Error (Setpoint - RoomTemp) -> Threshold -> Heater
+[graph]
+nodes = [
+  { id = "sensor-1", type = "room_sensor", pos = [0, 80] },
+  { id = "setpoint-1", type = "constant", pos = [0, 220] },
+  { id = "sub-1", type = "subtract", pos = [200, 150] },
+  { id = "thresh-1", type = "threshold", pos = [360, 150] },
+  { id = "heater-1", type = "heater", pos = [520, 150] },
+  { id = "graph-room", type = "graph", pos = [280, 290] },
+  { id = "display-room", type = "display", pos = [280, 10] },
+]
+edges = [
+  { from = ["setpoint-1", "y"], to = ["sub-1", "a"] },
+  { from = ["sensor-1", "t_room"], to = ["sub-1", "b"] },
+  { from = ["sub-1", "y"], to = ["thresh-1", "u"] },
+  { from = ["thresh-1", "y"], to = ["heater-1", "cmd"] },
+  { from = ["sensor-1", "t_room"], to = ["graph-room", "in"] },
+  { from = ["sensor-1", "t_room"], to = ["display-room", "in"] },
+]

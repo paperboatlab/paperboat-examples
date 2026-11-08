@@ -1,0 +1,85 @@
+# 02-cart-pole-cpp: Modernized Inverted Pendulum Benchmark
+domain = "cart-pole"
+
+# Toolkit packages imported into the Flow palette
+import = ["signal", "math", "control", "dashboard"]
+
+[[blocks]]
+use = "signal/sine"
+defaults = { amplitude = 2, frequency = 0.3 }
+
+[[blocks]]
+use = "signal/step"
+defaults = { value = 2 }
+
+[[blocks]]
+use = "math/gain"
+defaults = { k = -1 }
+
+# Variables sheet formula definitions (Alt+V)
+[[variables]]
+name = "pole_length"
+value = 1.0
+unit = "m"
+min = 0.2
+max = 3.0
+group = "Cart-pole"
+note = "Pivot to the centre of the bob"
+
+[[variables]]
+name = "kp_theta"
+value = 45.0
+unit = "N/rad"
+min = 0.0
+max = 100.0
+group = "Controller"
+note = "Proportional stiffness on pendulum angle"
+
+[[variables]]
+name = "kd_theta"
+expr = "kp_theta / 5"
+unit = "N·s/rad"
+group = "Controller"
+note = "Angular velocity damping (kp / 5)"
+
+[[variables]]
+name = "kp_x"
+value = 2.5
+unit = "N/m"
+min = 0.0
+max = 20.0
+group = "Controller"
+note = "Cart centering proportional gain"
+
+[[variables]]
+name = "kd_x"
+expr = "kp_x / 2"
+unit = "N·s/m"
+group = "Controller"
+note = "Cart velocity damping (kp / 2)"
+
+# Starter station (station.load)
+[station]
+objects = [
+  { id = "cart-pole-1", type = "cart-pole", props = { cart_mass = 1.0, pole_mass = 0.1, pole_length = { var = "pole_length" }, max_force = 25.0, x0 = 0.0, theta0 = 0.12 } },
+]
+
+# Starter Flow graph (graph.load)
+[graph]
+nodes = [
+  { id = "cart-pole-1", type = "cart-pole", pos = [0, 120] },
+  { id = "pid-theta", type = "pid", params = { kp = { var = "kp_theta" }, ki = 0, kd = { var = "kd_theta" } }, pos = [260, 0] },
+  { id = "pid-x", type = "pid", params = { kp = { var = "kp_x" }, ki = 0, kd = { var = "kd_x" } }, pos = [260, 200] },
+  { id = "sum-1", type = "sum", pos = [520, 100] },
+  { id = "graph-theta", type = "graph", pos = [260, 400] },
+  { id = "graph-x", type = "graph", pos = [520, 400] },
+]
+edges = [
+  { from = ["cart-pole-1", "theta"], to = ["pid-theta", "e"] },
+  { from = ["cart-pole-1", "x"], to = ["pid-x", "e"] },
+  { from = ["pid-theta", "u"], to = ["sum-1", "a"] },
+  { from = ["pid-x", "u"], to = ["sum-1", "b"] },
+  { from = ["sum-1", "y"], to = ["cart-pole-1", "force"] },
+  { from = ["cart-pole-1", "theta"], to = ["graph-theta", "in"] },
+  { from = ["cart-pole-1", "x"], to = ["graph-x", "in"] },
+]
