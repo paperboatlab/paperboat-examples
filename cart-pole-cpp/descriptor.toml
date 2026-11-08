@@ -5,7 +5,7 @@ domain = "cart-pole"
 # is this domain's own (domain/cart_pole.cpp), so it needs no import: add one or more on
 # the Station page, set their properties and initial conditions there, and each spawns a
 # linked Cart-pole block on the Flow page (force in; x, v, theta, omega out).
-import = ["signal", "math", "control", "dashboard"]
+import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
 
 # Toolkit templates with this domain's defaults (they replace the imported ones).
 [[blocks]]

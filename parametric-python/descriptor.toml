@@ -1,7 +1,9 @@
 # Parametric geometry, no simulation: a run evaluates the graph once and wires carry
-# lists. Served by server.py next to this file. No toolkit packages: the toolkit has no
-# list-valued blocks yet.
+# lists. Served by server.py next to this file.
 domain = "parametric"
+
+# Toolkit packages imported into the Flow palette
+import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
 
 # Every block is the domain's own, defined in code (domain/blocks.py): Grid, Wave,
 # Attractor, Add lists, Scale list, Boxes → scene and Graph (by index).
