@@ -2,7 +2,7 @@
 domain = "cart-pole"
 
 # Toolkit packages imported into the Flow palette
-import = ["signal", "math", "control", "dashboard"]
+import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
 
 [[blocks]]
 use = "signal/sine"

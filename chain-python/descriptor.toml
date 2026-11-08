@@ -5,7 +5,7 @@ domain = "chain"
 # Toolkit packages for the test logic (step: the test runs as a sequence of stories). The
 # domain's own station objects (Wall, Mass, Spring, Damper) are defined in code,
 # domain/objects.py.
-import = ["step", "signal", "math", "dashboard"]
+import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
 
 [[blocks]]
 use = "signal/step"

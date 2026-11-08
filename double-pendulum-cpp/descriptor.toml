@@ -5,7 +5,7 @@ domain = "double-pendulum"
 
 # step: the stories run as a sequence. math: the force sum. dashboard: the monitors. The
 # domain's own station object and blocks are in code (domain/), so they need no import.
-import = ["step", "math", "dashboard"]
+import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
 
 [[blocks]]
 use = "math/sum"
