@@ -24,14 +24,25 @@ value = 21.0
 unit = "°C"
 min = 16.0
 max = 28.0
-group = "Thermostat Setpoint"
+step = 0.5
+group = "Thermostat"
 note = "Target indoor comfort temperature"
+tunable = true
+dock = true
+
+[[variables]]
+name = "open_window"
+value = false
+group = "Room Environment"
+note = "Open living room window to let freezing outdoor air rush in"
+tunable = true
+dock = true
 
 # Starter Flow graph: Sensor -> Error (Setpoint - RoomTemp) -> Threshold -> Heater
 [graph]
 nodes = [
   { id = "sensor-1", type = "room_sensor", pos = [0, 80] },
-  { id = "setpoint-1", type = "constant", pos = [0, 220] },
+  { id = "setpoint-1", type = "constant", params = { value = { var = "target_temp" } }, pos = [0, 220] },
   { id = "sub-1", type = "subtract", pos = [200, 150] },
   { id = "thresh-1", type = "threshold", pos = [360, 150] },
   { id = "heater-1", type = "heater", pos = [520, 150] },

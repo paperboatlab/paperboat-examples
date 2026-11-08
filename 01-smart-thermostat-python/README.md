@@ -47,7 +47,9 @@ Paperboat opens in **Navigator Mode**, designed for clean signal flow observatio
 3. **Board Telemetry**:
    - The **Wave Plot** graphs room temperature in real time.
    - The **Display Readout** shows the exact current temperature chip.
-4. **Run Controls (`Space`)**:
+4. **Floating Run Dock Controls**:
+   - Toggle **`open_window`** in the bottom floating dock to swing open the 3D living room window! Freezing outdoor air rushes into the room, causing thermal heat losses to jump ($140\,\text{W/K}$) and forcing the thermostat heater into overdrive.
+   - Adjust **`target_temp`** slider in the dock or Variables panel (`Alt+V`).
    - Press `Space` to pause and resume simulation.
    - Adjust execution time scale in the bottom Run Dock (`1×`, `2×`, `5×`).
 
