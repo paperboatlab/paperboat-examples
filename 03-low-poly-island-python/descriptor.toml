@@ -1,0 +1,69 @@
+# Tutorial 03: 03-low-poly-island-python
+# Procedural low-poly archipelago terrain generation with one-shot static evaluation.
+domain = "island"
+
+# Toolkit packages imported into the Flow palette
+import = ["base", "signal", "math", "dashboard"]
+
+# Project variables (Variables sheet Alt+V)
+[[variables]]
+name = "seed"
+value = 42
+unit = ""
+min = 1
+max = 99999
+group = "Terrain Generator"
+note = "Procedural random seed for 2D simplex noise harmonics"
+
+[[variables]]
+name = "octaves"
+value = 4
+unit = ""
+min = 1
+max = 8
+group = "Terrain Generator"
+note = "Noise harmonics octave layers"
+
+[[variables]]
+name = "scale"
+value = 3.0
+unit = ""
+min = 0.5
+max = 10.0
+group = "Terrain Generator"
+note = "Horizontal feature scale of procedural terrain"
+
+[[variables]]
+name = "sea_level"
+value = 0.25
+unit = "m"
+min = 0.0
+max = 2.0
+group = "Environment"
+note = "Ocean water level threshold for island formation"
+
+# Starter Flow graph (Static pipeline evaluation):
+# Grid -> NoiseHarmonics -> RadialFalloff -> ErosionFilter -> IslandScene
+#                                         \-> TreePlacer  -/
+[graph]
+nodes = [
+  { id = "grid-1", type = "grid", pos = [40, 140] },
+  { id = "noise-1", type = "noise", pos = [260, 140] },
+  { id = "falloff-1", type = "falloff", pos = [500, 140] },
+  { id = "erosion-1", type = "erosion", pos = [740, 140] },
+  { id = "trees-1", type = "trees", pos = [740, 320] },
+  { id = "island-1", type = "island_scene", pos = [980, 200] },
+  { id = "display-elev", type = "display", pos = [980, 60] },
+]
+edges = [
+  { from = ["grid-1", "points"], to = ["noise-1", "points"] },
+  { from = ["grid-1", "points"], to = ["falloff-1", "points"] },
+  { from = ["noise-1", "heights"], to = ["falloff-1", "heights"] },
+  { from = ["falloff-1", "heights"], to = ["erosion-1", "heights"] },
+  { from = ["grid-1", "points"], to = ["trees-1", "points"] },
+  { from = ["erosion-1", "heights"], to = ["trees-1", "heights"] },
+  { from = ["grid-1", "points"], to = ["island-1", "points"] },
+  { from = ["erosion-1", "heights"], to = ["island-1", "heights"] },
+  { from = ["trees-1", "trees"], to = ["island-1", "trees"] },
+  { from = ["island-1", "max_elevation"], to = ["display-elev", "in"] },
+]

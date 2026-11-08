@@ -1,0 +1,13 @@
+[backend]
+format = 0
+name = "03-low-poly-island-python"
+version = "0.1.0"
+engine = ">=0.1"
+language = "python"
+run = "server.py"
+port = 8767
+descriptor = "descriptor.toml"
+solver = "discrete"
+
+[test]
+golden = "expected.json"
