@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 550" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad8" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c0e12" />
+      <stop offset="100%" stop-color="#141820" />
+    </linearGradient>
+    <linearGradient id="tableSurface" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1d4ed8" />
+      <stop offset="100%" stop-color="#1e3a8a" />
+    </linearGradient>
+    <linearGradient id="camFrustum" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.05" />
+    </linearGradient>
+    <pattern id="roomGrid8" width="40" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 0 12 L 20 0 L 40 12 L 20 24 Z" fill="none" stroke="#1a222e" stroke-width="0.8" />
+    </pattern>
+    <marker id="camArrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="#38bdf8" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="550" fill="url(#bgGrad8)" />
+
+  <!-- Station Viewport Frame -->
+  <rect x="25" y="45" width="850" height="455" rx="6" fill="#10141b" stroke="#263140" stroke-width="1.5" />
+
+  <!-- Header Bar -->
+  <rect x="25" y="45" width="850" height="34" rx="6" fill="#18202b" stroke="#263140" stroke-width="1" />
+  <circle cx="45" cy="62" r="5" fill="#10b981" />
+  <text x="60" y="66" fill="#f1f5f9" font-family="'JetBrains Mono', 'Segoe UI', monospace" font-size="12" font-weight="700" letter-spacing="1">STATION // 08-PING-PONG-TRACKER-CPP [OPENCV]</text>
+  <rect x="425" y="53" width="95" height="18" rx="3" fill="#0f172a" stroke="#334155" stroke-width="1" />
+  <text x="433" y="66" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">SOLVER: RK4</text>
+  <rect x="530" y="53" width="135" height="18" rx="3" fill="#0f172a" stroke="#334155" stroke-width="1" />
+  <text x="538" y="66" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">KIT: OPENCV (C++)</text>
+  <text x="800" y="66" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="11">PORT: 8772</text>
+
+  <!-- Isometric Floor Grid -->
+  <g transform="translate(450, 340)">
+    <polygon points="0,-180 380,20 0,220 -380,20" fill="#0f151e" stroke="#222d3d" stroke-width="1.5" />
+    <polygon points="0,-180 380,20 0,220 -380,20" fill="url(#roomGrid8)" />
+
+    <!-- Table Tennis Table (Regulation Blue) -->
+    <!-- Table Legs (Underneath) -->
+    <g stroke="#334155" stroke-width="3">
+      <line x1="-180" y1="-10" x2="-180" y2="45" />
+      <line x1="-120" y1="20" x2="-120" y2="75" />
+      <line x1="120" y1="20" x2="120" y2="75" />
+      <line x1="180" y1="-10" x2="180" y2="45" />
+    </g>
+
+    <!-- Table Top Surface (Isometric) -->
+    <polygon points="0,-110 240,15 0,140 -240,15" fill="url(#tableSurface)" stroke="#f8fafc" stroke-width="2" />
+    <!-- White Boundary Edges & Center Service Line -->
+    <line x1="0" y1="-110" x2="0" y2="140" stroke="#f8fafc" stroke-width="1.5" />
+    
+    <!-- Table Center Net Assembly -->
+    <g transform="translate(0, 15)">
+      <!-- Net Plane -->
+      <polygon points="-125,-8 125,-8 125,-40 -125,-40" fill="#0f172a" stroke="#cbd5e1" stroke-width="1" fill-opacity="0.8" />
+      <line x1="-125" y1="-40" x2="125" y2="-40" stroke="#f8fafc" stroke-width="2" />
+      <line x1="-125" y1="-8" x2="-125" y2="-45" stroke="#64748b" stroke-width="3" />
+      <line x1="125" y1="-8" x2="125" y2="-45" stroke="#64748b" stroke-width="3" />
+      <text x="0" y="-45" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="8" text-anchor="middle">REGULATION NET (15.25cm)</text>
+    </g>
+
+    <!-- Ball Trajectory Arc Ribbon & Bounce Impact -->
+    <!-- Incoming from left, bounces on left court, clears net, descending right -->
+    <path d="M -210,-45 Q -140,-90 -100,-15" fill="none" stroke="#f97316" stroke-width="2" stroke-dasharray="3 3" opacity="0.6" />
+    <!-- Bounce 1 Impact Point on Table -->
+    <ellipse cx="-100" cy="-15" rx="10" ry="5" fill="none" stroke="#22c55e" stroke-width="2" />
+    <circle cx="-100" cy="-15" r="3" fill="#22c55e" />
+    <text x="-125" y="-22" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="8" font-weight="700">BOUNCE #1 [IN]</text>
+
+    <!-- Post-bounce arc over net -->
+    <path d="M -100,-15 Q -40,-95 40,-45 Q 90,-10 140,25" fill="none" stroke="#f97316" stroke-width="2.5" />
+
+    <!-- Current Ball Position (x = 40, y = -45) in air -->
+    <g transform="translate(40, -45)">
+      <!-- Orange 40mm Table Tennis Ball -->
+      <circle cx="0" cy="0" r="8" fill="#f97316" stroke="#ea580c" stroke-width="1.5" />
+      <circle cx="-2" cy="-2" r="3" fill="#fdba74" />
+      
+      <!-- Velocity Vector -->
+      <line x1="0" y1="0" x2="35" y2="20" stroke="#facc15" stroke-width="2" marker-end="url(#camArrow)" />
+      
+      <!-- Computer Vision Detection Bounding Box -->
+      <rect x="-14" y="-14" width="28" height="28" rx="2" fill="none" stroke="#38bdf8" stroke-width="1.5" />
+      <text x="18" y="-14" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="8" font-weight="700">BALL 99.4%</text>
+      
+      <!-- Ball Shadow on Table -->
+      <ellipse cx="0" cy="45" rx="8" ry="4" fill="#0b1329" opacity="0.6" />
+      <line x1="0" y1="0" x2="0" y2="45" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2 2" opacity="0.5" />
+    </g>
+
+    <!-- Overhead Vision Camera & Optical Frustum Pyramid -->
+    <g transform="translate(40, -220)">
+      <!-- Camera Rig Body -->
+      <rect x="-25" y="-15" width="50" height="24" rx="3" fill="#334155" stroke="#64748b" stroke-width="1.5" />
+      <circle cx="0" cy="9" r="6" fill="#0284c7" stroke="#38bdf8" stroke-width="1.5" />
+      <circle cx="0" cy="9" r="2.5" fill="#f8fafc" />
+      <text x="0" y="-22" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">OVERHEAD CAM (240 FPS)</text>
+
+      <!-- Translucent Cyan Frustum Lines to Table Surface -->
+      <polygon points="0,9 -180,230 180,230" fill="url(#camFrustum)" />
+      <line x1="0" y1="9" x2="-180" y2="230" stroke="#38bdf8" stroke-width="1" stroke-dasharray="3 3" opacity="0.5" />
+      <line x1="0" y1="9" x2="180" y2="230" stroke="#38bdf8" stroke-width="1" stroke-dasharray="3 3" opacity="0.5" />
+    </g>
+  </g>
+
+  <!-- OpenCV Tracking State Card (Top-Left) -->
+  <g transform="translate(60, 95)">
+    <rect x="0" y="0" width="180" height="80" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="1" />
+    <text x="12" y="18" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700">KALMAN FILTER 3D</text>
+    <line x1="12" y1="24" x2="168" y2="24" stroke="#1e293b" stroke-width="1" />
+    <text x="12" y="40" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="9">POS: [+0.65, +0.12, +0.28]m</text>
+    <text x="12" y="56" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="9">VEL: 11.4 m/s (41 km/h)</text>
+    <text x="12" y="72" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700">SPIN: TOPSPIN (32 rps)</text>
+  </g>
+
+  <!-- Station HUD / Telemetry Bottom Ribbon -->
+  <rect x="25" y="470" width="850" height="30" rx="4" fill="#141a24" stroke="#263140" stroke-width="1" />
+  <g transform="translate(45, 490)">
+    <text x="0" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">BALL_XYZ:</text>
+    <text x="75" y="0" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">[0.65, 0.12, 0.28] m</text>
+
+    <text x="245" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">SPEED:</text>
+    <text x="295" y="0" fill="#facc15" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">11.4 m/s (41.0 km/h)</text>
+
+    <text x="475" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">BOUNCE:</text>
+    <text x="535" y="0" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">VALID IN (SIDE B)</text>
+
+    <text x="680" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">TRACKER:</text>
+    <text x="745" y="0" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">KALMAN [240 FPS]</text>
+  </g>
+</svg>

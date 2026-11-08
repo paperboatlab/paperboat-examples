@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 550" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c0e12" />
+      <stop offset="100%" stop-color="#141820" />
+    </linearGradient>
+    <linearGradient id="oceanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0e7490" />
+      <stop offset="100%" stop-color="#083344" />
+    </linearGradient>
+    <marker id="lightArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <polygon points="0 0, 8 4, 0 8" fill="#facc15" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="550" fill="url(#bgGrad3)" />
+
+  <!-- Station Viewport Frame -->
+  <rect x="25" y="45" width="850" height="455" rx="6" fill="#10141b" stroke="#263140" stroke-width="1.5" />
+
+  <!-- Header Bar -->
+  <rect x="25" y="45" width="850" height="34" rx="6" fill="#18202b" stroke="#263140" stroke-width="1" />
+  <circle cx="45" cy="62" r="5" fill="#10b981" />
+  <text x="60" y="66" fill="#f1f5f9" font-family="'JetBrains Mono', 'Segoe UI', monospace" font-size="12" font-weight="700" letter-spacing="1">STATION // 03-LOW-POLY-ISLAND-PYTHON</text>
+  <rect x="365" y="53" width="125" height="18" rx="3" fill="#0f172a" stroke="#334155" stroke-width="1" />
+  <text x="373" y="66" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">SOLVER: DISCRETE</text>
+  <rect x="500" y="53" width="115" height="18" rx="3" fill="#0f172a" stroke="#334155" stroke-width="1" />
+  <text x="508" y="66" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">VIEW: ISO 3D</text>
+  <text x="800" y="66" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="11">PORT: 8767</text>
+
+  <!-- Sun Vector & Lighting Annotation (Top Right) -->
+  <g transform="translate(740, 120)">
+    <circle cx="0" cy="0" r="14" fill="#facc15" opacity="0.2" />
+    <circle cx="0" cy="0" r="8" fill="#facc15" />
+    <line x1="0" y1="0" x2="-45" y2="40" stroke="#facc15" stroke-width="2" marker-end="url(#lightArrow)" />
+    <text x="-65" y="60" fill="#fef08a" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">SUN L = [0.6, -0.7, 0.4]</text>
+  </g>
+
+  <!-- Central Procedural Island Geometry -->
+  <g transform="translate(450, 290)">
+    <!-- Flat Low-Poly Ocean Bounding Hexagon/Base -->
+    <polygon points="0,-140 280,-20 280,120 0,200 -280,120 -280,-20" fill="url(#oceanGrad)" stroke="#155e75" stroke-width="2" />
+    <!-- Water facets / subtle refraction polygons -->
+    <polygon points="0,-140 280,-20 140,-5 0,0" fill="#0c4a6e" opacity="0.4" />
+    <polygon points="280,-20 280,120 120,80 140,-5" fill="#0369a1" opacity="0.3" />
+    <polygon points="280,120 0,200 0,60 120,80" fill="#0284c7" opacity="0.25" />
+    <polygon points="0,200 -280,120 -130,70 0,60" fill="#075985" opacity="0.35" />
+    <polygon points="-280,120 -280,-20 -150,-15 -130,70" fill="#0c4a6e" opacity="0.4" />
+    <polygon points="-280,-20 0,-140 0,0 -150,-15" fill="#082f49" opacity="0.45" />
+
+    <!-- Beach Sand Fringe (Low-poly polygon contours) -->
+    <polygon points="0,-60 140,-10 160,50 40,95 -120,80 -170,10 -80,-50" fill="#ca8a04" stroke="#a16207" stroke-width="1" />
+    <polygon points="0,-60 80,-40 140,-10 60,-5" fill="#eab308" />
+    <polygon points="140,-10 160,50 80,45 60,-5" fill="#facc15" />
+    <polygon points="160,50 40,95 20,40 80,45" fill="#d97706" />
+    <polygon points="40,95 -120,80 -60,35 20,40" fill="#b45309" />
+    <polygon points="-120,80 -170,10 -100,5 -60,35" fill="#ca8a04" />
+    <polygon points="-170,10 -80,-50 -60,-20 -100,5" fill="#eab308" />
+
+    <!-- Tropical Forest Slopes (Lush Green Low-poly triangles) -->
+    <polygon points="-80,-40 20,-50 110,-5 50,40 -50,30 -110,-5" fill="#15803d" stroke="#14532d" stroke-width="1" />
+    <polygon points="-80,-40 0,-70 20,-50" fill="#22c55e" />
+    <polygon points="20,-50 60,-65 110,-5" fill="#16a34a" />
+    <polygon points="110,-5 80,20 50,40" fill="#15803d" />
+    <polygon points="50,40 -10,50 -50,30" fill="#166534" />
+    <polygon points="-50,30 -90,15 -110,-5" fill="#14532d" />
+    <polygon points="-110,-5 -90,-25 -80,-40" fill="#15803d" />
+
+    <!-- High Mountain Ridge & Rock Facets -->
+    <polygon points="0,-120 70,-45 40,0 -40,10 -65,-35" fill="#475569" stroke="#334155" stroke-width="1" />
+    <polygon points="0,-120 70,-45 25,-40" fill="#64748b" />
+    <polygon points="0,-120 25,-40 -20,-50" fill="#94a3b8" />
+    <polygon points="0,-120 -20,-50 -65,-35" fill="#475569" />
+    <polygon points="70,-45 40,0 15,-20 25,-40" fill="#334155" />
+    <polygon points="-65,-35 -40,10 -15,-10 -20,-50" fill="#1e293b" />
+    <polygon points="40,0 -40,10 -15,-10 15,-20" fill="#334155" />
+
+    <!-- Snow-Capped Mountain Peak -->
+    <polygon points="0,-120 25,-85 0,-80 -25,-88" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
+    <polygon points="0,-120 25,-85 8,-90" fill="#ffffff" />
+    <polygon points="0,-120 -25,-88 -8,-95" fill="#cbd5e1" />
+
+    <!-- Low-Poly Coconut Palm Trees (Scattered around shore) -->
+    <!-- Tree 1 -->
+    <g transform="translate(110, 30)">
+      <polygon points="0,0 -2,-20 2,-20" fill="#78350f" />
+      <polygon points="-2,-20 -15,-28 -5,-22" fill="#15803d" />
+      <polygon points="0,-20 12,-30 4,-21" fill="#22c55e" />
+      <polygon points="1,-20 15,-18 5,-17" fill="#16a34a" />
+      <polygon points="-1,-20 -10,-14 -4,-16" fill="#14532d" />
+    </g>
+    <!-- Tree 2 -->
+    <g transform="translate(-130, 20)">
+      <polygon points="0,0 -1,-16 2,-16" fill="#78350f" />
+      <polygon points="-1,-16 -12,-22 -4,-18" fill="#15803d" />
+      <polygon points="1,-16 10,-24 3,-17" fill="#22c55e" />
+      <polygon points="0,-16 12,-14 4,-13" fill="#16a34a" />
+    </g>
+    <!-- Tree 3 -->
+    <g transform="translate(-60, 60)">
+      <polygon points="0,0 -1,-18 2,-18" fill="#78350f" />
+      <polygon points="-1,-18 -14,-25 -4,-20" fill="#15803d" />
+      <polygon points="1,-18 12,-26 4,-19" fill="#22c55e" />
+    </g>
+
+    <!-- Wireframe Mesh Toggle Callout -->
+    <g transform="translate(-230, -80)">
+      <rect x="0" y="0" width="135" height="42" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="1" opacity="0.9" />
+      <text x="10" y="16" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700">WIREFRAME: ENABLED</text>
+      <text x="10" y="32" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="9">Ctrl+/ Bypass Block</text>
+    </g>
+  </g>
+
+  <!-- Station HUD / Telemetry Bottom Ribbon -->
+  <rect x="25" y="470" width="850" height="30" rx="4" fill="#141a24" stroke="#263140" stroke-width="1" />
+  <g transform="translate(45, 490)">
+    <text x="0" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">NOISE_SEED:</text>
+    <text x="80" y="0" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">0x4B9E_2201</text>
+
+    <text x="190" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">VERTICES:</text>
+    <text x="260" y="0" fill="#cbd5e1" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">1,442</text>
+
+    <text x="330" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">TRIANGLES:</text>
+    <text x="410" y="0" fill="#cbd5e1" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">2,756</text>
+
+    <text x="480" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">MAX_ELEVATION:</text>
+    <text x="590" y="0" fill="#facc15" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">412.0 m</text>
+
+    <text x="670" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">EVALUATION:</text>
+    <text x="760" y="0" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">ONE-SHOT</text>
+  </g>
+</svg>

@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 550" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#05070a" />
+      <stop offset="100%" stop-color="#0f141c" />
+    </linearGradient>
+    <linearGradient id="thrusterFlame" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="30%" stop-color="#f97316" />
+      <stop offset="80%" stop-color="#eab308" />
+      <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
+    </linearGradient>
+    <radialGradient id="beaconGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0.0" />
+    </radialGradient>
+    <pattern id="radarGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#162319" stroke-width="1" />
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="550" fill="url(#bgGrad5)" />
+
+  <!-- Station Viewport Frame (Simulating Custom Web Station CRT Cockpit) -->
+  <rect x="25" y="45" width="850" height="455" rx="8" fill="#080e0a" stroke="#1b3823" stroke-width="2" />
+  <rect x="26" y="80" width="848" height="389" fill="url(#radarGrid)" />
+
+  <!-- Header Bar -->
+  <rect x="25" y="45" width="850" height="34" rx="8" fill="#0d1f14" stroke="#1b3823" stroke-width="1" />
+  <circle cx="45" cy="62" r="5" fill="#22c55e" />
+  <text x="60" y="66" fill="#86efac" font-family="'JetBrains Mono', 'Segoe UI', monospace" font-size="12" font-weight="700" letter-spacing="1">STATION // 05-ROVER-LANDER-PYTHON [WEB VIEW]</text>
+  <rect x="420" y="53" width="95" height="18" rx="3" fill="#05140b" stroke="#166534" stroke-width="1" />
+  <text x="428" y="66" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="10">SOLVER: RK4</text>
+  <rect x="525" y="53" width="125" height="18" rx="3" fill="#05140b" stroke="#166534" stroke-width="1" />
+  <text x="533" y="66" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="10">VIEW: WEB/CANVAS</text>
+  <text x="800" y="66" fill="#15803d" font-family="'JetBrains Mono', monospace" font-size="11">PORT: 8769</text>
+
+  <!-- Jagged Lunar Surface & Craters -->
+  <g transform="translate(25, 400)">
+    <!-- Moon Horizon Poly -->
+    <polygon points="0,0 80,-8 160,5 260,-15 350,0 420,-10 480,-10 550,0 640,-20 720,-5 800,-12 850,0 850,70 0,70" fill="#0c1610" stroke="#166534" stroke-width="1.5" />
+    
+    <!-- Design Flat Landing Pad (x: 410 to 490) -->
+    <rect x="400" y="-12" width="100" height="8" rx="1" fill="#14532d" stroke="#22c55e" stroke-width="1.5" />
+    <text x="450" y="10" fill="#86efac" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">TARGET LZ-1</text>
+    
+    <!-- Pulsing Landing Beacons -->
+    <circle cx="400" cy="-12" r="12" fill="url(#beaconGlow)" />
+    <circle cx="400" cy="-12" r="3" fill="#86efac" />
+    <circle cx="500" cy="-12" r="12" fill="url(#beaconGlow)" />
+    <circle cx="500" cy="-12" r="3" fill="#86efac" />
+  </g>
+
+  <!-- Descent Flight Trajectory Projected Ribbon -->
+  <path d="M 420,120 Q 430,220 475,385" fill="none" stroke="#22c55e" stroke-width="1" stroke-dasharray="4 4" opacity="0.5" />
+
+  <!-- Lunar Lander Module (Altitude h = 48.5m, x = 450, y = 230) -->
+  <g transform="translate(450, 230) rotate(3.1)">
+    <!-- Main Thruster Rocket Plume -->
+    <polygon points="-8,22 8,22 0,65" fill="url(#thrusterFlame)" />
+    <polygon points="-4,22 4,22 0,45" fill="#fef08a" />
+
+    <!-- RCS Attitude Thruster Bursts -->
+    <!-- Left RCS firing rightward -->
+    <polygon points="-22,-8 -22,-2 -36,-5" fill="#38bdf8" opacity="0.8" />
+
+    <!-- 4 Articulated Landing Legs -->
+    <line x1="-16" y1="12" x2="-35" y2="35" stroke="#4ade80" stroke-width="2" />
+    <line x1="-35" y1="35" x2="-30" y2="20" stroke="#166534" stroke-width="1.5" />
+    <circle cx="-35" cy="36" r="3" fill="#86efac" /> <!-- Footpad -->
+
+    <line x1="16" y1="12" x2="35" y2="35" stroke="#4ade80" stroke-width="2" />
+    <line x1="35" y1="35" x2="30" y2="20" stroke="#166534" stroke-width="1.5" />
+    <circle cx="35" cy="36" r="3" fill="#86efac" /> <!-- Footpad -->
+
+    <!-- Octagonal Service Module / Fuel Tank Body -->
+    <polygon points="-22,0 -16,-18 16,-18 22,0 20,20 -20,20" fill="#ca8a04" stroke="#eab308" stroke-width="1.5" />
+    <!-- Gold Mylar Thermal Foil Texture Lines -->
+    <line x1="-15" y1="-5" x2="15" y2="-5" stroke="#a16207" stroke-width="1" />
+    <line x1="-18" y1="8" x2="18" y2="8" stroke="#a16207" stroke-width="1" />
+
+    <!-- Crew Cabin / Ascent Capsule Dome -->
+    <path d="M -14,-18 A 14 14 0 0 1 14,-18 Z" fill="#1e293b" stroke="#64748b" stroke-width="1" />
+    <circle cx="-5" cy="-22" r="2.5" fill="#38bdf8" /> <!-- Viewing Porthole -->
+    <circle cx="5" cy="-22" r="2.5" fill="#38bdf8" />
+
+    <!-- Rocket Engine Bell -->
+    <polygon points="-8,20 8,20 12,28 -12,28" fill="#334155" stroke="#64748b" stroke-width="1" />
+  </g>
+
+  <!-- Pilot HUD Overlay: Flight Instruments -->
+
+  <!-- Left: Vertical Velocity Tape (vy) -->
+  <g transform="translate(60, 150)">
+    <rect x="0" y="0" width="60" height="200" rx="3" fill="#061208" stroke="#166534" stroke-width="1" />
+    <text x="30" y="18" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">V_VERT</text>
+    <!-- Scale Ticks -->
+    <line x1="45" y1="40" x2="55" y2="40" stroke="#166534" stroke-width="1" /><text x="38" y="43" fill="#166534" font-family="'JetBrains Mono', monospace" font-size="8" text-anchor="end">+2</text>
+    <line x1="40" y1="80" x2="55" y2="80" stroke="#4ade80" stroke-width="1.5" /><text x="38" y="83" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="8" text-anchor="end">0</text>
+    <line x1="45" y1="120" x2="55" y2="120" stroke="#166534" stroke-width="1" /><text x="38" y="123" fill="#166534" font-family="'JetBrains Mono', monospace" font-size="8" text-anchor="end">-2</text>
+    <line x1="45" y1="160" x2="55" y2="160" stroke="#ef4444" stroke-width="1.5" /><text x="38" y="163" fill="#ef4444" font-family="'JetBrains Mono', monospace" font-size="8" text-anchor="end">-4</text>
+    
+    <!-- Current vy Pointer (-3.2 m/s -> y: 144) -->
+    <polygon points="58,144 48,138 48,150" fill="#facc15" />
+    <rect x="-10" y="136" width="54" height="16" rx="2" fill="#05140b" stroke="#facc15" stroke-width="1" />
+    <text x="17" y="148" fill="#facc15" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">-3.2</text>
+  </g>
+
+  <!-- Right: Radar Altitude Tape (h) -->
+  <g transform="translate(780, 150)">
+    <rect x="0" y="0" width="60" height="200" rx="3" fill="#061208" stroke="#166534" stroke-width="1" />
+    <text x="30" y="18" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">ALT_RAD</text>
+    <line x1="5" y1="40" x2="20" y2="40" stroke="#166534" stroke-width="1" /><text x="25" y="43" fill="#166534" font-family="'JetBrains Mono', monospace" font-size="8">100m</text>
+    <line x1="5" y1="90" x2="20" y2="90" stroke="#166534" stroke-width="1" /><text x="25" y="93" fill="#166534" font-family="'JetBrains Mono', monospace" font-size="8">50m</text>
+    <line x1="5" y1="140" x2="20" y2="140" stroke="#166534" stroke-width="1" /><text x="25" y="143" fill="#166534" font-family="'JetBrains Mono', monospace" font-size="8">20m</text>
+    <line x1="5" y1="180" x2="25" y2="180" stroke="#22c55e" stroke-width="1.5" /><text x="30" y="183" fill="#22c55e" font-family="'JetBrains Mono', monospace" font-size="8">0m</text>
+    
+    <!-- Current Altitude Pointer (48.5m -> y: 92) -->
+    <polygon points="2,92 12,86 12,98" fill="#4ade80" />
+    <rect x="16" y="84" width="50" height="16" rx="2" fill="#05140b" stroke="#4ade80" stroke-width="1" />
+    <text x="41" y="96" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">48.5m</text>
+  </g>
+
+  <!-- Top Center: Fuel Gauge -->
+  <g transform="translate(360, 95)">
+    <rect x="0" y="0" width="180" height="16" rx="3" fill="#05140b" stroke="#166534" stroke-width="1" />
+    <rect x="2" y="2" width="130" height="12" rx="2" fill="#15803d" />
+    <text x="90" y="12" fill="#ffffff" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">FUEL: 74.2%</text>
+  </g>
+
+  <!-- Controls Callout Banner (Bottom Left) -->
+  <g transform="translate(60, 415)">
+    <rect x="0" y="0" width="260" height="36" rx="3" fill="#061208" stroke="#166534" stroke-width="1" />
+    <text x="10" y="15" fill="#86efac" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700">CONTROLS [W/A/D KEYBOARD]:</text>
+    <text x="10" y="28" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="8">W: THRUST | A/D: RCS | M: AUTOPILOT</text>
+  </g>
+
+  <!-- Station HUD / Telemetry Bottom Ribbon -->
+  <rect x="25" y="470" width="850" height="30" rx="4" fill="#0a1a10" stroke="#1b3823" stroke-width="1" />
+  <g transform="translate(45, 490)">
+    <text x="0" y="0" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="11">ALT:</text>
+    <text x="35" y="0" fill="#86efac" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">48.5 m</text>
+
+    <text x="110" y="0" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="11">V_VERT:</text>
+    <text x="165" y="0" fill="#facc15" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">-3.20 m/s</text>
+
+    <text x="270" y="0" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="11">V_HORIZ:</text>
+    <text x="335" y="0" fill="#86efac" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">+0.42 m/s</text>
+
+    <text x="440" y="0" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="11">PITCH:</text>
+    <text x="490" y="0" fill="#86efac" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">+3.1°</text>
+
+    <text x="560" y="0" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="11">AUTOPILOT:</text>
+    <text x="645" y="0" fill="#22c55e" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">ACTIVE [TOUCHDOWN CORR]</text>
+  </g>
+</svg>

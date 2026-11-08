@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 550" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c0e12" />
+      <stop offset="100%" stop-color="#141820" />
+    </linearGradient>
+    <linearGradient id="robotOrange" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ea580c" />
+      <stop offset="60%" stop-color="#f97316" />
+      <stop offset="100%" stop-color="#c2410c" />
+    </linearGradient>
+    <linearGradient id="jointGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <pattern id="isoFloor" width="40" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 0 12 L 20 0 L 40 12 L 20 24 Z" fill="none" stroke="#1e2633" stroke-width="0.8" />
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="550" fill="url(#bgGrad6)" />
+
+  <!-- Station Viewport Frame -->
+  <rect x="25" y="45" width="850" height="455" rx="6" fill="#10141b" stroke="#263140" stroke-width="1.5" />
+
+  <!-- Header Bar -->
+  <rect x="25" y="45" width="850" height="34" rx="6" fill="#18202b" stroke="#263140" stroke-width="1" />
+  <circle cx="45" cy="62" r="5" fill="#10b981" />
+  <text x="60" y="66" fill="#f1f5f9" font-family="'JetBrains Mono', 'Segoe UI', monospace" font-size="12" font-weight="700" letter-spacing="1">STATION // 06-ROBOT-PICK-PLACE-PYTHON</text>
+  <rect x="360" y="53" width="95" height="18" rx="3" fill="#0f172a" stroke="#334155" stroke-width="1" />
+  <text x="368" y="66" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">SOLVER: RK4</text>
+  <rect x="465" y="53" width="115" height="18" rx="3" fill="#0f172a" stroke="#334155" stroke-width="1" />
+  <text x="473" y="66" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">VIEW: ISO 3D</text>
+  <text x="800" y="66" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="11">PORT: 8770</text>
+
+  <!-- Isometric Ground Workcell Grid -->
+  <g transform="translate(450, 310)">
+    <polygon points="0,-160 360,20 0,200 -360,20" fill="#121822" stroke="#263140" stroke-width="1.5" />
+    <polygon points="0,-160 360,20 0,200 -360,20" fill="url(#isoFloor)" />
+
+    <!-- Infeed Conveyor Belt (Left) -->
+    <g transform="translate(-240, 20)">
+      <polygon points="0,-40 120,-90 150,-75 30,-25" fill="#1e293b" stroke="#475569" stroke-width="1" />
+      <polygon points="0,-40 30,-25 30,10 0,-5" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <!-- Conveyor Rollers -->
+      <line x1="20" y1="-30" x2="45" y2="-42" stroke="#38bdf8" stroke-width="1.5" />
+      <line x1="50" y1="-45" x2="75" y2="-57" stroke="#38bdf8" stroke-width="1.5" />
+      <line x1="80" y1="-60" x2="105" y2="-72" stroke="#38bdf8" stroke-width="1.5" />
+      
+      <!-- Workpiece / Metallic Cylinder on Conveyor -->
+      <g transform="translate(30, -35)">
+        <polygon points="0,-10 16,-18 32,-10 16,-2" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1" />
+        <polygon points="0,-10 16,-2 16,10 0,2" fill="#94a3b8" />
+        <polygon points="16,-2 32,-10 32,2 16,10" fill="#64748b" />
+        <text x="16" y="-22" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="8" text-anchor="middle">PICK P0</text>
+      </g>
+    </g>
+
+    <!-- Sorting Bins (Right side) -->
+    <!-- Bin A (Metallic) -->
+    <g transform="translate(180, -20)">
+      <polygon points="0,-30 60,-60 90,-45 30,-15" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5" />
+      <polygon points="0,-30 30,-15 30,15 0,0" fill="#172554" />
+      <polygon points="30,-15 90,-45 90,-15 30,15" fill="#1e3a8a" />
+      <text x="45" y="-5" fill="#60a5fa" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700">BIN A [MET]</text>
+    </g>
+    <!-- Bin B (Composite) -->
+    <g transform="translate(240, 40)">
+      <polygon points="0,-30 60,-60 90,-45 30,-15" fill="#1e293b" stroke="#10b981" stroke-width="1.5" />
+      <polygon points="0,-30 30,-15 30,15 0,0" fill="#064e3b" />
+      <polygon points="30,-15 90,-45 90,-15 30,15" fill="#065f46" />
+      <text x="45" y="-5" fill="#34d399" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700">BIN B [CMP]</text>
+    </g>
+
+    <!-- Trajectory Spline Arc from Conveyor to Bin A -->
+    <path d="M -195,-25 C -150,-180 100,-180 225,-40" fill="none" stroke="#facc15" stroke-width="2" stroke-dasharray="4 4" />
+    <circle cx="-195" cy="-25" r="4" fill="#38bdf8" />
+    <circle cx="225" cy="-40" r="4" fill="#3b82f6" />
+    <text x="-10" y="-175" fill="#facc15" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">S-CURVE TRAJECTORY (QUINTIC)</text>
+
+    <!-- Articulated Robot Arm (Centered at 0, 40) -->
+    <g transform="translate(-20, 20)">
+      <!-- Pedestal Base (Machined Cast Gray) -->
+      <polygon points="-40,-10 0,-30 40,-10 0,10" fill="#334155" stroke="#475569" stroke-width="1.5" />
+      <polygon points="-40,-10 0,10 0,35 -40,15" fill="#1e293b" />
+      <polygon points="0,10 40,-10 40,15 0,35" fill="#0f172a" />
+      
+      <!-- Turret / Base Joint J1 (Rotates in azimuth) -->
+      <g transform="translate(0, -20)">
+        <ellipse cx="0" cy="0" rx="26" ry="14" fill="#475569" stroke="#64748b" stroke-width="1" />
+        <ellipse cx="0" cy="-6" rx="22" ry="12" fill="#f97316" />
+        <text x="35" y="0" fill="#f97316" font-family="'JetBrains Mono', monospace" font-size="8" font-weight="700">J1: 45.2°</text>
+
+        <!-- Shoulder Joint J2 & Lower Arm Link -->
+        <g transform="translate(0, -10)">
+          <!-- Shoulder Housing -->
+          <circle cx="-5" cy="-12" r="14" fill="url(#jointGrad)" stroke="#64748b" stroke-width="1.5" />
+          
+          <!-- Lower Arm (Reaching up and back left) -->
+          <g transform="rotate(-35, -5, -12)">
+            <rect x="-11" y="-110" width="22" height="110" rx="6" fill="url(#robotOrange)" stroke="#9a3412" stroke-width="1.5" />
+            <circle cx="0" cy="-100" r="12" fill="url(#jointGrad)" stroke="#64748b" stroke-width="1.5" />
+            
+            <!-- Elbow Joint J3 & Upper Arm Link -->
+            <g transform="translate(0, -100) rotate(75)">
+              <rect x="-8" y="0" width="16" height="95" rx="4" fill="url(#robotOrange)" stroke="#9a3412" stroke-width="1.5" />
+              
+              <!-- Wrist & Vacuum Gripper Head -->
+              <g transform="translate(0, 95) rotate(-40)">
+                <circle cx="0" cy="0" r="8" fill="#1e293b" stroke="#64748b" stroke-width="1" />
+                <rect x="-6" y="0" width="12" height="18" fill="#475569" />
+                <!-- Vacuum Suction Cup (Cyan rubber bellows) -->
+                <polygon points="-12,18 12,18 16,28 -16,28" fill="#0ea5e9" stroke="#38bdf8" stroke-width="1" />
+                
+                <!-- Gripped Metallic Workpiece -->
+                <polygon points="-10,28 10,28 8,42 -8,42" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1" />
+                
+                <rect x="20" y="10" width="115" height="18" rx="2" fill="#0f172a" stroke="#0ea5e9" stroke-width="1" />
+                <text x="25" y="23" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="8" font-weight="700">VACUUM: -82 kPa</text>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- Coordinate Triad & IK Target Box (Bottom-Left) -->
+  <g transform="translate(60, 420)">
+    <rect x="0" y="0" width="180" height="34" rx="3" fill="#0f172a" stroke="#334155" stroke-width="1" />
+    <text x="10" y="14" fill="#f97316" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700">IK SOLVER: CONVERGED</text>
+    <text x="10" y="27" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="8">TARGET: [0.420, 0.150, 0.180]m</text>
+  </g>
+
+  <!-- Station HUD / Telemetry Bottom Ribbon -->
+  <rect x="25" y="470" width="850" height="30" rx="4" fill="#141a24" stroke="#263140" stroke-width="1" />
+  <g transform="translate(45, 490)">
+    <text x="0" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">J1/J2/J3:</text>
+    <text x="65" y="0" fill="#f97316" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">45.2° / -28.6° / 72.1°</text>
+
+    <text x="240" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">EE_XYZ:</text>
+    <text x="295" y="0" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">[0.42, 0.15, 0.18] m</text>
+
+    <text x="470" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">TRAJECTORY:</text>
+    <text x="560" y="0" fill="#facc15" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">S-CURVE [58%]</text>
+
+    <text x="670" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">VACUUM:</text>
+    <text x="730" y="0" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">SEALED (-82 kPa)</text>
+  </g>
+</svg>

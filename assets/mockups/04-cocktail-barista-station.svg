@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 550" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c0e12" />
+      <stop offset="100%" stop-color="#141820" />
+    </linearGradient>
+    <linearGradient id="counterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="metalGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="50%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="campariGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e" />
+      <stop offset="100%" stop-color="#9f1239" />
+    </linearGradient>
+    <linearGradient id="streamGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#fb7185" stop-opacity="0.6" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="550" fill="url(#bgGrad4)" />
+
+  <!-- Station Viewport Frame -->
+  <rect x="25" y="45" width="850" height="455" rx="6" fill="#10141b" stroke="#263140" stroke-width="1.5" />
+
+  <!-- Header Bar -->
+  <rect x="25" y="45" width="850" height="34" rx="6" fill="#18202b" stroke="#263140" stroke-width="1" />
+  <circle cx="45" cy="62" r="5" fill="#10b981" />
+  <text x="60" y="66" fill="#f1f5f9" font-family="'JetBrains Mono', 'Segoe UI', monospace" font-size="12" font-weight="700" letter-spacing="1">STATION // 04-COCKTAIL-BARISTA-PYTHON</text>
+  <rect x="375" y="53" width="105" height="18" rx="3" fill="#0f172a" stroke="#334155" stroke-width="1" />
+  <text x="383" y="66" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">SOLVER: RK4</text>
+  <rect x="490" y="53" width="135" height="18" rx="3" fill="#0f172a" stroke="#334155" stroke-width="1" />
+  <text x="498" y="66" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">VIEW: ELEVATION 3D</text>
+  <text x="800" y="66" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="11">PORT: 8768</text>
+
+  <!-- Bar Countertop Base -->
+  <g transform="translate(100, 360)">
+    <!-- Stainless Steel Counter Surface -->
+    <polygon points="0,0 700,0 650,50 -50,50" fill="url(#counterGrad)" stroke="#334155" stroke-width="1.5" />
+    <polygon points="-50,50 650,50 650,80 -50,80" fill="#0b0f17" stroke="#1e293b" stroke-width="1" />
+    <!-- Drip Tray Grate -->
+    <rect x="180" y="8" width="340" height="34" rx="2" fill="#131b26" stroke="#475569" stroke-width="1" />
+    <g stroke="#334155" stroke-width="1">
+      <line x1="200" y1="12" x2="200" y2="38" /><line x1="220" y1="12" x2="220" y2="38" />
+      <line x1="240" y1="12" x2="240" y2="38" /><line x1="260" y1="12" x2="260" y2="38" />
+      <line x1="280" y1="12" x2="280" y2="38" /><line x1="300" y1="12" x2="300" y2="38" />
+      <line x1="320" y1="12" x2="320" y2="38" /><line x1="340" y1="12" x2="340" y2="38" />
+      <line x1="360" y1="12" x2="360" y2="38" /><line x1="380" y1="12" x2="380" y2="38" />
+      <line x1="400" y1="12" x2="400" y2="38" /><line x1="420" y1="12" x2="420" y2="38" />
+      <line x1="440" y1="12" x2="440" y2="38" /><line x1="460" y1="12" x2="460" y2="38" />
+      <line x1="480" y1="12" x2="480" y2="38" /><line x1="500" y1="12" x2="500" y2="38" />
+    </g>
+  </g>
+
+  <!-- Gantry Frame & Overhead Dispensers -->
+  <g transform="translate(180, 110)">
+    <!-- Overhead Gantry Rail -->
+    <rect x="0" y="0" width="540" height="22" rx="3" fill="url(#metalGrad)" stroke="#334155" stroke-width="1.5" />
+    <line x1="10" y1="11" x2="530" y2="11" stroke="#1e293b" stroke-width="2" />
+
+    <!-- Left & Right Vertical Support Columns -->
+    <rect x="-10" y="22" width="16" height="230" fill="#1e293b" stroke="#334155" stroke-width="1" />
+    <rect x="534" y="22" width="16" height="230" fill="#1e293b" stroke="#334155" stroke-width="1" />
+
+    <!-- 4 Solenoid Dispensers & Bottles -->
+    <!-- Bottle 1: Gin (Clear / Cyan) -->
+    <g transform="translate(80, 22)">
+      <rect x="-20" y="0" width="40" height="70" rx="3" fill="#0284c7" fill-opacity="0.25" stroke="#38bdf8" stroke-width="1.5" />
+      <rect x="-8" y="70" width="16" height="25" fill="#334155" />
+      <!-- Nozzle -->
+      <polygon points="-4,95 4,95 2,110 -2,110" fill="#64748b" />
+      <text x="0" y="40" fill="#bae6fd" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">GIN</text>
+      <circle cx="0" cy="115" r="3" fill="#64748b" />
+    </g>
+
+    <!-- Bottle 2: Vermouth (Amber Gold) -->
+    <g transform="translate(180, 22)">
+      <rect x="-20" y="0" width="40" height="70" rx="3" fill="#d97706" fill-opacity="0.3" stroke="#f59e0b" stroke-width="1.5" />
+      <rect x="-8" y="70" width="16" height="25" fill="#334155" />
+      <polygon points="-4,95 4,95 2,110 -2,110" fill="#64748b" />
+      <text x="0" y="40" fill="#fde68a" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">VERM</text>
+      <circle cx="0" cy="115" r="3" fill="#64748b" />
+    </g>
+
+    <!-- Bottle 3: Campari (Crimson Red - ACTIVE POURING) -->
+    <g transform="translate(280, 22)">
+      <rect x="-20" y="0" width="40" height="70" rx="3" fill="#e11d48" fill-opacity="0.5" stroke="#f43f5e" stroke-width="2" />
+      <rect x="-8" y="70" width="16" height="25" fill="#f43f5e" />
+      <!-- Active Solenoid Valve Glow -->
+      <polygon points="-4,95 4,95 2,110 -2,110" fill="#fb7185" />
+      <circle cx="0" cy="82" r="4" fill="#22c55e" />
+      <text x="0" y="40" fill="#ffe4e6" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">CAMPARI</text>
+
+      <!-- Active Fluid Stream into Shaker Glass -->
+      <line x1="0" y1="110" x2="0" y2="200" stroke="url(#streamGrad)" stroke-width="4.5" stroke-linecap="round" />
+      <line x1="0" y1="110" x2="0" y2="200" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="8 4" opacity="0.8" />
+      
+      <!-- Valve Callout Badge -->
+      <rect x="25" y="75" width="85" height="18" rx="3" fill="#4c0519" stroke="#f43f5e" stroke-width="1" />
+      <text x="67" y="88" fill="#fda4af" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">VALVE: OPEN</text>
+    </g>
+
+    <!-- Bottle 4: Soda Water / Syrup (Cyan Ice) -->
+    <g transform="translate(380, 22)">
+      <rect x="-20" y="0" width="40" height="70" rx="3" fill="#0d9488" fill-opacity="0.25" stroke="#14b8a6" stroke-width="1.5" />
+      <rect x="-8" y="70" width="16" height="25" fill="#334155" />
+      <polygon points="-4,95 4,95 2,110 -2,110" fill="#64748b" />
+      <text x="0" y="40" fill="#ccfbf1" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">SODA</text>
+      <circle cx="0" cy="115" r="3" fill="#64748b" />
+    </g>
+
+    <!-- Rotary Shaker Cup under Campari Valve (x=280) -->
+    <g transform="translate(280, 200)">
+      <!-- Stainless Mixing Shaker Tumbler -->
+      <polygon points="-28,0 28,0 22,65 -22,65" fill="#1e293b" stroke="#94a3b8" stroke-width="1.5" />
+      <!-- Liquid Fill (Campari + Gin mixture) -->
+      <polygon points="-24,25 24,25 20,63 -20,63" fill="url(#campariGrad)" opacity="0.85" />
+      <ellipse cx="0" cy="25" rx="24" ry="4" fill="#fb7185" />
+
+      <!-- Shaker Base Stand with RPM Sensor -->
+      <rect x="-35" y="65" width="70" height="12" rx="3" fill="#0f172a" stroke="#475569" stroke-width="1" />
+      <circle cx="0" cy="71" r="3" fill="#10b981" />
+      
+      <!-- Liquid Measurement Scale Callout -->
+      <line x1="28" y1="25" x2="55" y2="25" stroke="#f43f5e" stroke-width="1" />
+      <text x="60" y="28" fill="#fda4af" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700">VOL: 45 / 90 ml</text>
+    </g>
+
+    <!-- Highball Serving Glass on Right Conveyor Plate -->
+    <g transform="translate(450, 205)">
+      <!-- Translucent Glass -->
+      <rect x="-18" y="0" width="36" height="60" rx="3" fill="#38bdf8" fill-opacity="0.15" stroke="#7dd3fc" stroke-width="1.5" />
+      <!-- Glass Ice Cubes -->
+      <rect x="-10" y="32" width="12" height="12" rx="1" fill="#e0f2fe" opacity="0.6" stroke="#38bdf8" stroke-width="0.5" />
+      <rect x="0" y="42" width="12" height="12" rx="1" fill="#e0f2fe" opacity="0.6" stroke="#38bdf8" stroke-width="0.5" />
+      <text x="0" y="75" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="8" text-anchor="middle">STAGING</text>
+    </g>
+
+    <!-- Emergency Stop Button & Key Callout -->
+    <g transform="translate(-120, 180)">
+      <circle cx="20" cy="20" r="24" fill="#450a0a" stroke="#ef4444" stroke-width="2" />
+      <circle cx="20" cy="20" r="16" fill="#dc2626" />
+      <text x="20" y="24" fill="#ffffff" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="800" text-anchor="middle">E-STOP</text>
+      <rect x="-10" y="52" width="60" height="18" rx="3" fill="#1e293b" stroke="#475569" stroke-width="1" />
+      <text x="20" y="65" fill="#cbd5e1" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">[Space] KEY</text>
+    </g>
+  </g>
+
+  <!-- Station HUD / Telemetry Bottom Ribbon -->
+  <rect x="25" y="470" width="850" height="30" rx="4" fill="#141a24" stroke="#263140" stroke-width="1" />
+  <g transform="translate(45, 490)">
+    <text x="0" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">RECIPE:</text>
+    <text x="55" y="0" fill="#f43f5e" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">CLASSIC NEGRONI</text>
+
+    <text x="180" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">STEP:</text>
+    <text x="220" y="0" fill="#cbd5e1" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">2/4 DISPENSE_CAMPARI (30ml)</text>
+
+    <text x="440" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">FLOW_TOKEN:</text>
+    <text x="525" y="0" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">DISPENSE_ACTIVE</text>
+
+    <text x="650" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">E-STOP:</text>
+    <text x="705" y="0" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">NOMINAL [ARMED]</text>
+  </g>
+</svg>

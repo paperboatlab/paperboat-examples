@@ -1,0 +1,12 @@
+[backend]
+format = 0
+name = "chain"
+version = "0.1.0"
+engine = ">=0.1"
+language = "python"
+run = "server.py"
+port = 8771
+descriptor = "descriptor.toml"
+
+[test]
+golden = "expected.json"

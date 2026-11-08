@@ -1,0 +1,12 @@
+[backend]
+format = 0
+name = "parametric"
+version = "0.1.0"
+engine = ">=0.1"
+language = "python"
+run = "server.py"
+port = 8767
+descriptor = "descriptor.toml"
+
+[test]
+golden = "expected.json"
