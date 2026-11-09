@@ -1,0 +1,85 @@
+# 04-cocktail-barista-python: Automated Beverage Recipe & Step Flow
+#
+# The Flow page is the bar's procedure. Start begins one path; each step holds the path
+# until its work is done, then hands it on along a dark step wire:
+#
+#   Start → [Pour Base] Detect Cup → Gin → Vermouth → Campari
+#         → Shake & Chill → Strain & Serve → Stop
+#
+# A second hat runs beside it: When Space rises → Emergency Stop → Clean-in-Place Rinse.
+# Press Space while the recipe runs to close the valves and rinse the rig.
+domain = "barista"
+
+# Toolkit packages imported into the Flow palette.
+import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
+
+# Starter station: the stainless bar, four-valve gantry, shaker and serving glass.
+[station]
+view = "scene"
+
+# Starter Flow graph.
+[graph]
+nodes = [
+  { id = "recipe-choice", type = "choice", params = { options = "Negroni,Spritz,Americano", initial = 0 }, pos = [0, -80] },
+  { id = "recipe-select", type = "recipe_choice", pos = [220, -80] },
+  { id = "start-1", type = "start", pos = [0, 180] },
+  { id = "check-cup", type = "check_cup", pos = [180, 180] },
+  { id = "pour-1", type = "dispense", params = { stage = 1 }, pos = [380, 180] },
+  { id = "pour-2", type = "dispense", params = { stage = 2 }, pos = [580, 180] },
+  { id = "pour-3", type = "dispense", params = { stage = 3 }, pos = [780, 180] },
+  { id = "shake-chill", type = "shake_chill", pos = [1000, 180] },
+  { id = "serve-1", type = "serve", pos = [1220, 180] },
+  { id = "settle-1", type = "wait", params = { seconds = 0.2 }, pos = [1320, 180] },
+  { id = "stop-1", type = "stop", pos = [1440, 180] },
+
+  { id = "key-space", type = "key", params = { key = "Space" }, pos = [180, 460] },
+  { id = "when-estop", type = "when", pos = [380, 460] },
+  { id = "estop-1", type = "emergency_stop", pos = [580, 460] },
+  { id = "rinse-1", type = "rinse", params = { seconds = 1.2 }, pos = [780, 460] },
+
+  { id = "cup-1", type = "cup_sensor", pos = [0, 40] },
+  { id = "stage-1", type = "recipe_stage", pos = [0, 320] },
+  { id = "display-fill", type = "display", pos = [260, 40] },
+  { id = "display-served", type = "display", pos = [260, 320] },
+  { id = "scope-1", type = "scope", params = { inputs = 2 }, pos = [500, 20] },
+]
+edges = [
+  { from = ["recipe-choice", "y"], to = ["recipe-select", "index"] },
+  { from = ["start-1", "next"], to = ["check-cup", "in"] },
+  { from = ["check-cup", "next"], to = ["pour-1", "in"] },
+  { from = ["pour-1", "next"], to = ["pour-2", "in"] },
+  { from = ["pour-2", "next"], to = ["pour-3", "in"] },
+  { from = ["pour-3", "next"], to = ["shake-chill", "in"] },
+  { from = ["shake-chill", "next"], to = ["serve-1", "in"] },
+  { from = ["serve-1", "next"], to = ["settle-1", "in"] },
+  { from = ["settle-1", "next"], to = ["stop-1", "in"] },
+
+  { from = ["key-space", "pressed"], to = ["when-estop", "cond"] },
+  { from = ["when-estop", "next"], to = ["estop-1", "in"] },
+  { from = ["estop-1", "next"], to = ["rinse-1", "in"] },
+
+  { from = ["cup-1", "fill_ml"], to = ["display-fill", "in"] },
+  { from = ["cup-1", "fill_ml"], to = ["scope-1", "a"] },
+  { from = ["stage-1", "served"], to = ["display-served", "in"] },
+  { from = ["stage-1", "served"], to = ["scope-1", "b"] },
+]
+groups = [
+  { id = "menu", kind = "visual", label = "Menu (Excel)", nodes = ["recipe-choice", "recipe-select"] },
+  { id = "pour-base", kind = "visual", label = "Pour Base", nodes = ["check-cup", "pour-1", "pour-2", "pour-3"] },
+  { id = "shake-subsystem", kind = "subsystem", label = "Shake & Chill", nodes = ["shake-chill"], expose = [{ side = "in", to = ["shake-chill", "in"] }, { side = "out", to = ["shake-chill", "next"] }] },
+  { id = "serve-group", kind = "visual", label = "Strain & Serve", nodes = ["serve-1", "settle-1", "stop-1"] },
+  { id = "emergency", kind = "visual", label = "Priority E-Stop & Rinse", nodes = ["key-space", "when-estop", "estop-1", "rinse-1"] },
+]
+
+[dashboard]
+columns = 6
+instruments = [
+  { block = "scope-1", size = "xlarge", at = [0, 0] },
+  { block = "recipe-choice", size = "normal", at = [4, 0] },
+  { block = "display-fill", size = "compact", at = [4, 1] },
+  { block = "display-served", size = "compact", at = [4, 2] },
+]
+decorations = [
+  { kind = "label", text = "Menu from data/recipes.xlsx", at = [0, 3], span = [2, 1] },
+  { kind = "console", at = [2, 3], span = [4, 2] },
+]

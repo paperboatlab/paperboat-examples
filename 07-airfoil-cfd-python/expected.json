@@ -1,0 +1,15 @@
+{
+  "$comment": "What `--run` (the starter, headless) must produce; checked by protocol/golden.py.",
+  "status": "done",
+  "run": "server.py",
+  "signals": {
+    "display-cl": [0.5911, 0.001],
+    "display-cd": [0.02004, 0.0005],
+    "display-ld": [29.5, 0.05],
+    "display-steps": [546.0, 6.0]
+  },
+  "logs": [
+    "LBM",
+    "NACA 0012 at 6.0 deg"
+  ]
+}

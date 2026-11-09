@@ -1,0 +1,13 @@
+[backend]
+format = 0
+name = "06-robot-pick-place-python"
+version = "0.1.0"
+engine = ">=0.1"
+language = "python"
+run = "server.py"
+port = 8770
+descriptor = "descriptor.toml"
+solver = "euler"
+
+[test]
+golden = "expected.json"

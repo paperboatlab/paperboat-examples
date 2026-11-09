@@ -1,0 +1,14 @@
+{
+  "$comment": "What `--run` (the starter, headless) must produce; checked by protocol/golden.py.",
+  "status": "done",
+  "run": "build/paperboat-modular-synth",
+  "signals": {
+    "display-rms": [0.828, 0.002],
+    "display-peak": [1.2598, 0.002],
+    "display-voices": [6.0, 1e-9],
+    "display-audio-rms": [0.2714, 0.01]
+  },
+  "logs": [
+    "6-voice chord rendered over 361 frames"
+  ]
+}

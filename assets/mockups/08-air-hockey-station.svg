@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420" role="img" aria-labelledby="title">
+  <title id="title">Air-hockey puck tracker station</title>
+  <defs>
+    <linearGradient id="ice" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#dbeafe"/>
+      <stop offset="1" stop-color="#bfdbfe"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <rect width="720" height="420" fill="#0f172a"/>
+  <text x="36" y="42" fill="#e2e8f0" font-family="ui-monospace, monospace" font-size="18" letter-spacing="3">AIR-HOCKEY PUCK TRACKER</text>
+  <text x="36" y="64" fill="#38bdf8" font-family="ui-monospace, monospace" font-size="11" letter-spacing="2">OVERHEAD CAMERA · HSV → CENTROID → TRACKER</text>
+
+  <g filter="url(#shadow)">
+    <rect x="88" y="112" width="544" height="252" rx="18" fill="#1e293b"/>
+    <rect x="100" y="124" width="520" height="228" rx="14" fill="url(#ice)" stroke="#e2e8f0" stroke-width="5"/>
+    <line x1="360" y1="124" x2="360" y2="352" stroke="#94a3b8" stroke-width="3" stroke-dasharray="10 8"/>
+    <circle cx="360" cy="238" r="46" fill="none" stroke="#94a3b8" stroke-width="3"/>
+    <circle cx="360" cy="238" r="5" fill="#94a3b8"/>
+    <rect x="100" y="196" width="22" height="84" fill="#f59e0b"/>
+    <rect x="598" y="196" width="22" height="84" fill="#f59e0b"/>
+  </g>
+
+  <!-- Player and rival mallets -->
+  <circle cx="214" cy="284" r="30" fill="#f97316" stroke="#c2410c" stroke-width="4"/>
+  <circle cx="214" cy="284" r="16" fill="#fdba74"/>
+  <circle cx="506" cy="192" r="30" fill="#22c55e" stroke="#15803d" stroke-width="4"/>
+  <circle cx="506" cy="192" r="16" fill="#86efac"/>
+
+  <!-- Puck, trail and detected centroid -->
+  <path d="M 420 300 C 455 288 480 262 500 236" fill="none" stroke="#f97316" stroke-width="3" stroke-dasharray="6 6" opacity="0.7"/>
+  <circle cx="500" cy="236" r="13" fill="#ef4444" stroke="#7f1d1d" stroke-width="3"/>
+  <circle cx="500" cy="236" r="22" fill="none" stroke="#22c55e" stroke-width="2"/>
+  <line x1="478" y1="236" x2="522" y2="236" stroke="#22c55e" stroke-width="2"/>
+  <line x1="500" y1="214" x2="500" y2="258" stroke="#22c55e" stroke-width="2"/>
+  <text x="528" y="232" fill="#166534" font-family="ui-monospace, monospace" font-size="11">u, v</text>
+
+  <!-- HUD cards -->
+  <g font-family="ui-monospace, monospace">
+    <rect x="88" y="86" width="150" height="18" rx="4" fill="#0b1220" stroke="#334155"/>
+    <text x="96" y="99" fill="#7dffb0" font-size="10">HSV 0–12 · S≥120 · V≥80</text>
+    <rect x="520" y="86" width="112" height="18" rx="4" fill="#0b1220" stroke="#334155"/>
+    <text x="528" y="99" fill="#7dd3fc" font-size="10">320 × 240 px</text>
+    <text x="88" y="398" fill="#64748b" font-size="10" letter-spacing="1">SYNTHETIC CAMERA · IMAGE WIRES · OPTIONAL OPENCV</text>
+  </g>
+</svg>

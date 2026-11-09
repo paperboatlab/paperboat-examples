@@ -1,0 +1,16 @@
+{
+  "$comment": "What `--run` (the starter, headless) must produce; checked by protocol/golden.py.",
+  "status": "done",
+  "run": "build/paperboat-train-pantograph",
+  "signals": {
+    "display-force": [126.7, 2.0],
+    "display-speed": [320.0, 1e-6],
+    "display-losses": [0.0, 1e-9],
+    "display-window": [1.0, 1e-9],
+    "display-uplift": [94.815, 0.01]
+  },
+  "logs": [
+    "regulator: contact",
+    "0 contact losses"
+  ]
+}

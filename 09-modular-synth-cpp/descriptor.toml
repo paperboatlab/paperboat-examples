@@ -1,0 +1,119 @@
+# 09-modular-synth-cpp: Polyphonic Eurorack Synthesizer & Multi-channel Scope
+#
+# Vector wires carry six voices at once:
+#   Chord CV [6] ─┬→ VCO · 6 voices → VCA → VCF → Stereo Mixer → Scope (6 channels)
+#   Chord Gate [6] → ADSR · 6 voices ─┘
+#   LFO → VCO detune and → filter cutoff sweep
+# Open Lookout mode (Alt+L) for the full-screen Scope and jam with the Variables sheet.
+domain = "synth"
+
+import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
+
+[[variables]]
+name = "root_note"
+value = 48.0
+unit = "MIDI"
+min = 24.0
+max = 84.0
+step = 1.0
+group = "Chord"
+note = "Root note of the six-voice chord"
+
+[[variables]]
+name = "cutoff"
+value = 1200.0
+unit = "Hz"
+min = 120.0
+max = 6000.0
+step = 20.0
+group = "Filter"
+note = "VCF cutoff; the LFO sweeps it by 400 Hz"
+
+[[variables]]
+name = "resonance"
+value = 0.3
+unit = ""
+min = 0.0
+max = 0.9
+step = 0.05
+group = "Filter"
+note = "Ladder resonance"
+
+[graph]
+nodes = [
+  { id = "chord-1", type = "chord", params = { root = { var = "root_note" } }, pos = [0, 80] },
+  { id = "lfo-1", type = "lfo", params = { rate = 0.35, depth = 1.0 }, pos = [0, 320] },
+
+  { id = "cut-base", type = "constant", params = { value = { var = "cutoff" } }, pos = [0, 520] },
+  { id = "cut-gain", type = "gain", params = { k = 400 }, pos = [220, 420] },
+  { id = "cut-sum", type = "sum", pos = [440, 500] },
+  { id = "res-1", type = "constant", params = { value = { var = "resonance" } }, pos = [220, 620] },
+
+  { id = "vco-1", type = "vco", params = { detune = 0 }, pos = [260, 80] },
+  { id = "adsr-1", type = "adsr", pos = [260, 240] },
+  { id = "vca-1", type = "vca", pos = [520, 120] },
+  { id = "vcf-1", type = "vcf", pos = [760, 160] },
+  { id = "mixer-1", type = "mixer", pos = [1000, 160] },
+  { id = "audio-1", type = "audio_out", params = { rate = 44100, volume = 0.22, steps = 2 }, pos = [1000, 300] },
+  { id = "speaker-1", type = "speaker", params = { rate = 44100, volume = 0.8 }, pos = [1240, 300] },
+
+  { id = "scope-1", type = "scope", params = { inputs = 2 }, pos = [1240, 60] },
+  { id = "voices-1", type = "voices", pos = [1000, 420] },
+  { id = "display-rms", type = "display", pos = [1260, 260] },
+  { id = "display-peak", type = "display", pos = [1260, 330] },
+  { id = "display-mix", type = "display", pos = [1260, 400] },
+  { id = "display-voices", type = "display", pos = [1260, 470] },
+  { id = "display-audio-rms", type = "display", pos = [1260, 540] },
+]
+edges = [
+  { from = ["chord-1", "cv"], to = ["vco-1", "cv"] },
+  { from = ["chord-1", "gate"], to = ["vco-1", "gate"] },
+  { from = ["chord-1", "gate"], to = ["adsr-1", "gate"] },
+  { from = ["lfo-1", "lfo"], to = ["vco-1", "detune"] },
+
+  { from = ["cut-base", "y"], to = ["cut-sum", "a"] },
+  { from = ["lfo-1", "lfo"], to = ["cut-gain", "u"] },
+  { from = ["cut-gain", "y"], to = ["cut-sum", "b"] },
+  { from = ["cut-sum", "y"], to = ["vcf-1", "cutoff"] },
+  { from = ["res-1", "y"], to = ["vcf-1", "resonance"] },
+
+  { from = ["vco-1", "audio"], to = ["vca-1", "audio"] },
+  { from = ["adsr-1", "env"], to = ["vca-1", "env"] },
+  { from = ["vca-1", "audio"], to = ["vcf-1", "audio"] },
+  { from = ["vcf-1", "audio"], to = ["mixer-1", "audio"] },
+  { from = ["lfo-1", "lfo"], to = ["mixer-1", "lfo"] },
+  { from = ["chord-1", "cv"], to = ["audio-1", "cv"] },
+  { from = ["chord-1", "gate"], to = ["audio-1", "gate"] },
+  { from = ["adsr-1", "env"], to = ["audio-1", "env"] },
+  { from = ["audio-1", "pcm"], to = ["speaker-1", "in"] },
+
+  { from = ["vcf-1", "audio"], to = ["scope-1", "a"] },
+  { from = ["mixer-1", "mix"], to = ["scope-1", "b"] },
+  { from = ["mixer-1", "rms"], to = ["display-rms", "in"] },
+  { from = ["mixer-1", "peak"], to = ["display-peak", "in"] },
+  { from = ["mixer-1", "mix"], to = ["display-mix", "in"] },
+  { from = ["voices-1", "voices"], to = ["display-voices", "in"] },
+  { from = ["audio-1", "rms"], to = ["display-audio-rms", "in"] },
+]
+groups = [
+  { id = "voice", kind = "subsystem", label = "6-Voice Voice Card", nodes = ["vco-1", "adsr-1", "vca-1"], expose = [{ side = "in", to = ["vco-1", "cv"] }, { side = "out", to = ["vca-1", "audio"] }] },
+  { id = "filter", kind = "visual", label = "VCF & LFO", nodes = ["lfo-1", "cut-base", "cut-gain", "cut-sum", "res-1", "vcf-1"] },
+  { id = "master", kind = "visual", label = "Mixer & Scope", nodes = ["mixer-1", "scope-1", "voices-1", "display-rms", "display-peak", "display-mix", "display-voices"] },
+  { id = "audio", kind = "visual", label = "Speaker (PCM)", nodes = ["audio-1", "speaker-1", "display-audio-rms"] },
+]
+
+[dashboard]
+columns = 8
+instruments = [
+  { block = "scope-1", size = "xlarge", at = [0, 0] },
+  { block = "display-rms", size = "compact", at = [3, 0] },
+  { block = "display-peak", size = "compact", at = [4, 0] },
+  { block = "display-mix", size = "compact", at = [3, 1] },
+  { block = "display-voices", size = "compact", at = [4, 1] },
+  { block = "speaker-1", size = "normal", at = [5, 0] },
+  { block = "display-audio-rms", size = "compact", at = [4, 2] },
+]
+decorations = [
+  { kind = "label", text = "6 voices · root {root_note} · cutoff {cutoff} Hz", at = [0, 3], span = [3, 1] },
+  { kind = "console", at = [3, 3], span = [5, 2] },
+]

@@ -1,0 +1,13 @@
+[backend]
+format = 0
+name = "04-cocktail-barista-python"
+version = "0.1.0"
+engine = ">=0.1"
+language = "python"
+run = "server.py"
+port = 8768
+descriptor = "descriptor.toml"
+solver = "discrete"
+
+[test]
+golden = "expected.json"
