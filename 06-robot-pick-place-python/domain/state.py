@@ -1,9 +1,35 @@
 """The robot cell: the arm, three workpieces, the conveyor and the two sorting bins."""
 
 import math
+from pathlib import Path
 
 from paperboat import DomainState
 from domain.kinematics import BIN_A, BIN_B, HOME, LINK1, LINK2, BASE_HEIGHT, forward, inverse, quintic, shortest_delta
+from domain.stl import load as load_stl
+
+
+def _quat_from_to(a, b):
+    """Quaternion rotating unit vector a to unit vector b (w, x, y, z)."""
+    dot = sum(x * y for x, y in zip(a, b))
+    if dot > 0.999999:
+        return [1.0, 0.0, 0.0, 0.0]
+    if dot < -0.999999:
+        return [0.0, 0.0, 1.0, 0.0]
+    cross = [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]
+    s = math.sqrt((1.0 + dot) * 2.0)
+    return [0.5 * s, cross[0] / s, cross[1] / s, cross[2] / s]
+
+
+def _euler_xyz(q):
+    """Quaternion to three.js XYZ Euler angles."""
+    w, x, y, z = q
+    m11, m12, m13 = 1 - 2 * (y * y + z * z), 2 * (x * y - w * z), 2 * (x * z + w * y)
+    m22, m23 = 1 - 2 * (x * x + z * z), 2 * (y * z - w * x)
+    m32, m33 = 2 * (y * z + w * x), 1 - 2 * (x * x + y * y)
+    ry = math.asin(max(-1.0, min(1.0, m13)))
+    if abs(m13) < 0.9999999:
+        return [math.atan2(-m23, m33), ry, math.atan2(-m12, m11)]
+    return [math.atan2(m32, m22), ry, 0.0]
 
 
 class Part:
@@ -131,8 +157,27 @@ class RobotCell(DomainState):
         )
         return shoulder, elbow, wrist
 
+    def _cad(self, name: str, color: str, pos, rot=None, arrays=True) -> dict:
+        """One CAD part as a Station mesh entity, in metres and radians."""
+        vertices, indices = load_stl(Path(__file__).resolve().parent.parent / "data" / "cad" / f"{name}.stl")
+        entity = {
+            "id": name,
+            "shape": "mesh",
+            "pos": [round(v, 5) for v in pos],
+            "rot": [round(v, 5) for v in (rot or (0.0, 0.0, 0.0))],
+            "color": color,
+        }
+        if arrays:
+            entity["vertices"] = vertices
+            entity["indices"] = indices
+        return entity
+
+    def _arm_rot(self, pitch: float) -> list[float]:
+        # A CAD link runs along +y; turn it to the radial direction at this pitch and yaw.
+        direction = [math.sin(pitch) * math.sin(self.q[0]), math.cos(pitch), math.sin(pitch) * math.cos(self.q[0])]
+        return _euler_xyz(_quat_from_to([0.0, 1.0, 0.0], direction))
+
     def entities(self) -> list[dict]:
-        shoulder, elbow, wrist = self._joint_points()
         parts = []
         for part in self.parts:
             if part.state == "placed":
@@ -148,9 +193,9 @@ class RobotCell(DomainState):
                 "size": [0.16, 0.16, 0.16],
                 "color": color,
             })
-        # ABB IRB 460-style palletizer: a cast pedestal, a turret, a two-link arm and a
-        # wide fork. This is a primitive stand-in for the real CAD (mesh import is not yet
-        # part of the Station API).
+        # The palletizer's CAD parts are binary STLs in data/cad (see data/generate_cad.py):
+        # a cast base, a rotating turret, two arm links and a fork. They are loaded once and
+        # sent as Station mesh entities; the moving links patch only their pose.
         crates = []
         for row, z in enumerate((-0.78, -0.46, -0.14, 0.18)):
             crates.append({"id": f"crate-a-{row}", "shape": "box", "pos": [1.30, 0.13 + row * 0.2, z],
@@ -158,36 +203,40 @@ class RobotCell(DomainState):
         for row, z in enumerate((-0.78, -0.46, -0.14, 0.18)):
             crates.append({"id": f"crate-b-{row}", "shape": "box", "pos": [1.30, 0.13 + row * 0.2, z + 1.3],
                            "size": [0.26, 0.18, 0.26], "color": "#d6d3d1" if row % 2 == 0 else "#a8a29e"})
-        pallets = [
+        shoulder, elbow, wrist = self._joint_points()
+        arm1_rot = self._arm_rot(self.q[1])
+        arm2_rot = self._arm_rot(self.q[1] + self.q[2])
+        return [
+            {"id": "floor", "shape": "box", "pos": [0, -0.06, 0], "size": [6.4, 0.12, 4.8], "color": "#1f2429"},
+            self._cad("base", "#3f3f46", (0.0, 0.0, 0.0)),
+            self._cad("turret", "#f97316", (0.0, 0.70, 0.0), (0.0, self.q[0], 0.0)),
+            self._cad("arm1", "#f97316", shoulder, arm1_rot),
+            self._cad("arm2", "#fb923c", elbow, arm2_rot),
+            self._cad("fork", "#facc15" if self.gripper > 0.5 else "#a16207", wrist, arm2_rot),
+            {"id": "conveyor", "shape": "box", "pos": [-1.15, 0.55, -0.85], "size": [2.2, 0.14, 0.6], "color": "#475569"},
+            {"id": "conveyor-leg-1", "shape": "box", "pos": [-2.0, 0.26, -0.85], "size": [0.1, 0.52, 0.5], "color": "#334155"},
+            {"id": "conveyor-leg-2", "shape": "box", "pos": [-0.3, 0.26, -0.85], "size": [0.1, 0.52, 0.5], "color": "#334155"},
             {"id": "pallet-a", "shape": "box", "pos": [1.30, 0.03, -0.46], "size": [1.10, 0.08, 1.10], "color": "#92400e"},
             {"id": "pallet-b", "shape": "box", "pos": [1.30, 0.03, 0.84], "size": [1.10, 0.08, 1.10], "color": "#92400e"},
             {"id": "pallet-a-label", "shape": "box", "pos": [1.30, 0.09, -1.02], "size": [0.32, 0.04, 0.04], "color": "#f59e0b"},
             {"id": "pallet-b-label", "shape": "box", "pos": [1.30, 0.09, 1.40], "size": [0.32, 0.04, 0.04], "color": "#f59e0b"},
-        ]
-        return [
-            {"id": "floor", "shape": "box", "pos": [0, -0.06, 0], "size": [6.4, 0.12, 4.8], "color": "#1f2429"},
-            {"id": "pedestal", "shape": "box", "pos": [0, 0.34, 0], "size": [1.15, 0.68, 1.15], "color": "#3f3f46"},
-            {"id": "turret", "shape": "box", "pos": [0, 0.78, 0], "size": [0.82, 0.28, 0.82], "color": "#f97316"},
-            {"id": "column", "shape": "box", "pos": [0, 1.35, 0], "size": [0.46, 0.9, 0.46], "color": "#ea580c"},
-            {"id": "shoulder", "shape": "sphere", "pos": list(shoulder), "size": [0.32, 0, 0], "color": "#ea580c"},
-            {"id": "link1", "shape": "line", "pos": list(shoulder), "to": list(elbow), "color": "#f97316"},
-            {"id": "link1-back", "shape": "line", "pos": [shoulder[0] + 0.08, shoulder[1], shoulder[2]],
-             "to": [elbow[0] + 0.08, elbow[1], elbow[2]], "color": "#c2410c"},
-            {"id": "elbow", "shape": "sphere", "pos": list(elbow), "size": [0.26, 0, 0], "color": "#ea580c"},
-            {"id": "link2", "shape": "line", "pos": list(elbow), "to": list(wrist), "color": "#fb923c"},
-            {"id": "link2-back", "shape": "line", "pos": [elbow[0] + 0.07, elbow[1], elbow[2]],
-             "to": [wrist[0] + 0.07, wrist[1], wrist[2]], "color": "#c2410c"},
-            {"id": "wrist", "shape": "sphere", "pos": list(wrist), "size": [0.2, 0, 0], "color": "#c2410c"},
-            {"id": "fork", "shape": "box", "pos": [wrist[0], wrist[1] - 0.12, wrist[2]], "size": [0.62, 0.08, 0.18],
-             "color": "#facc15" if self.gripper > 0.5 else "#a16207"},
-            {"id": "fork-tine-1", "shape": "box", "pos": [wrist[0] - 0.22, wrist[1] - 0.18, wrist[2] - 0.24],
-             "size": [0.12, 0.04, 0.42], "color": "#a16207"},
-            {"id": "fork-tine-2", "shape": "box", "pos": [wrist[0] + 0.22, wrist[1] - 0.18, wrist[2] - 0.24],
-             "size": [0.12, 0.04, 0.42], "color": "#a16207"},
-            {"id": "conveyor", "shape": "box", "pos": [-1.15, 0.55, -0.85], "size": [2.2, 0.14, 0.6], "color": "#475569"},
-            {"id": "conveyor-leg-1", "shape": "box", "pos": [-2.0, 0.26, -0.85], "size": [0.1, 0.52, 0.5], "color": "#334155"},
-            {"id": "conveyor-leg-2", "shape": "box", "pos": [-0.3, 0.26, -0.85], "size": [0.1, 0.52, 0.5], "color": "#334155"},
-            *pallets,
             *crates,
             *parts,
         ]
+
+    def patch(self) -> list[dict]:
+        """Only the moving CAD links and workpieces; the meshes' vertices stay in the scene."""
+        shoulder, elbow, wrist = self._joint_points()
+        arm1_rot = self._arm_rot(self.q[1])
+        arm2_rot = self._arm_rot(self.q[1] + self.q[2])
+        moving = [
+            self._cad("turret", "#f97316", (0.0, 0.70, 0.0), (0.0, self.q[0], 0.0), arrays=False),
+            self._cad("arm1", "#f97316", shoulder, arm1_rot, arrays=False),
+            self._cad("arm2", "#fb923c", elbow, arm2_rot, arrays=False),
+            self._cad("fork", "#facc15" if self.gripper > 0.5 else "#a16207", wrist, arm2_rot, arrays=False),
+        ]
+        for part in self.parts:
+            color = "#22c55e" if part.state == "placed" else "#f59e0b" if part.state == "held" else "#cbd5e1"
+            moving.append({"id": f"part-{part.index}", "shape": "box",
+                           "pos": [round(v, 4) for v in part.position], "size": [0.16, 0.16, 0.16], "color": color})
+        return moving
