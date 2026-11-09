@@ -67,12 +67,13 @@ objects = [
 # Starter Flow graph (graph.load)
 [graph]
 nodes = [
-  { id = "cart-pole-1", type = "cart-pole", pos = [0, 120] },
-  { id = "pid-theta", type = "pid", params = { kp = { var = "kp_theta" }, ki = 0, kd = { var = "kd_theta" } }, pos = [260, 0] },
-  { id = "pid-x", type = "pid", params = { kp = { var = "kp_x" }, ki = 0, kd = { var = "kd_x" } }, pos = [260, 200] },
-  { id = "sum-1", type = "sum", pos = [520, 100] },
-  { id = "graph-theta", type = "graph", pos = [260, 400] },
-  { id = "graph-x", type = "graph", pos = [520, 400] },
+  # Spread so the cards never overlap: the cart-pole card is wide, and the graphs sit clear of it.
+  { id = "cart-pole-1", type = "cart-pole", pos = [0, 130] },
+  { id = "pid-theta", type = "pid", params = { kp = { var = "kp_theta" }, ki = 0, kd = { var = "kd_theta" } }, pos = [440, 20] },
+  { id = "pid-x", type = "pid", params = { kp = { var = "kp_x" }, ki = 0, kd = { var = "kd_x" } }, pos = [440, 250] },
+  { id = "sum-1", type = "sum", pos = [760, 130] },
+  { id = "graph-theta", type = "graph", pos = [440, 470] },
+  { id = "graph-x", type = "graph", pos = [760, 470] },
 ]
 edges = [
   { from = ["cart-pole-1", "theta"], to = ["pid-theta", "e"] },
