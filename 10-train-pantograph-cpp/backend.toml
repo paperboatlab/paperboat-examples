@@ -1,0 +1,13 @@
+[backend]
+format = 0
+name = "10-train-pantograph-cpp"
+version = "0.1.0"
+engine = ">=0.1"
+language = "cpp"
+run = "build/paperboat-train-pantograph"
+port = 8774
+descriptor = "descriptor.toml"
+solver = "rk4"
+
+[test]
+golden = "expected.json"

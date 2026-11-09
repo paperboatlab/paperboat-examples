@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LZ-1 · Lunar Descent Cockpit</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <canvas id="view" tabindex="0"></canvas>
+    <div class="scanlines"></div>
+    <div class="hud">
+      <div class="panel left">
+        <div class="title">ALTITUDE</div>
+        <div id="alt" class="big">70.0</div>
+        <div class="unit">metres</div>
+        <div id="vy" class="readout">V/S -2.00 m/s</div>
+        <div id="vx" class="readout">H/S +0.50 m/s</div>
+        <div id="target" class="readout">LZ X +0.0 m</div>
+      </div>
+      <div class="panel right">
+        <div class="title">PROPELLANT</div>
+        <div class="gauge"><div id="fuel-bar"></div></div>
+        <div id="fuel" class="readout">90.0 kg</div>
+        <div class="title" style="margin-top: 14px">MODE</div>
+        <div id="mode" class="readout">AP</div>
+        <div id="status" class="status">READY</div>
+      </div>
+      <button id="fullscreen" title="Fullscreen cockpit" aria-label="Fullscreen cockpit">⛶</button>
+      <div class="keys">
+        <button data-key="KeyW">W · MAIN</button>
+        <button data-key="KeyA">A · RCS ◀</button>
+        <button data-key="KeyD">D · RCS ▶</button>
+        <button data-key="KeyP" class="wide">P · AUTOPILOT</button>
+      </div>
+      <div class="hint">Click the cockpit, then W / A / D or the buttons · P hands control to the autopilot</div>
+    </div>
+    <script src="/paperboat/station.js"></script>
+    <script src="cockpit.js"></script>
+  </body>
+</html>

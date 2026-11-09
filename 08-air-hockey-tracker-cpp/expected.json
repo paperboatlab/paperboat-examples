@@ -1,0 +1,14 @@
+{
+  "$comment": "What `--run` (the starter, headless) must produce; checked by protocol/golden.py.",
+  "status": "done",
+  "run": "build/paperboat-air-hockey",
+  "signals": {
+    "display-x": [0.289, 0.02],
+    "display-z": [-0.469, 0.02],
+    "display-truth-bounces": [11.0, 1e-9]
+  },
+  "logs": [
+    "tracker: direction change",
+    "Tracked 481 frames; 11 rail/mallet bounces"
+  ]
+}

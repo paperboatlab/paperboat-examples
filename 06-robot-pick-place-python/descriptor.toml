@@ -1,0 +1,99 @@
+# 06-robot-pick-place-python: ABB-style palletizer pick & place
+#
+# The Flow page runs the cell as a Step flow: a Start hat, Repeat 3 × (S-curve to the
+# workpiece, vacuum on, S-curve to the sorting bin, vacuum off), then Stop. Each S-curve
+# asks the arm's analytical IK for the joint angles at every clock step. Story frames keep
+# the approach, grip, transfer and release phases readable on the canvas.
+# The arm is a primitive stand-in for an ABB IRB 460 palletizer (a CAD mesh import is
+# not part of the Station API yet); the IK, quintic paths and fork logic are the tutorial.
+domain = "robot-cell"
+
+import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
+
+[[variables]]
+name = "transfer_seconds"
+value = 1.4
+unit = "s"
+min = 0.6
+max = 3.0
+step = 0.1
+group = "Trajectory"
+note = "Duration of one quintic transfer"
+
+[[variables]]
+name = "transfer_lift"
+value = 0.8
+unit = "m"
+min = 0.0
+max = 1.2
+step = 0.05
+group = "Trajectory"
+note = "How high the tool arcs over the conveyor"
+
+[graph]
+nodes = [
+  { id = "start-1", type = "start", pos = [0, 100] },
+  { id = "repeat-1", type = "repeat", params = { times = 3 }, pos = [180, 100] },
+  { id = "move-pick", type = "trajectory", params = { target = "pick", seconds = { var = "transfer_seconds" }, lift = { var = "transfer_lift" } }, pos = [400, 40] },
+  { id = "grip-on", type = "grip", params = { action = "grip" }, pos = [620, 40] },
+  { id = "move-bin", type = "trajectory", params = { target = "bin", seconds = { var = "transfer_seconds" }, lift = { var = "transfer_lift" } }, pos = [840, 40] },
+  { id = "grip-off", type = "grip", params = { action = "release" }, pos = [1060, 40] },
+  { id = "settle-1", type = "wait", params = { seconds = 0.2 }, pos = [1180, 40] },
+  { id = "stop-1", type = "stop", pos = [1320, 100] },
+
+  { id = "arm-1", type = "arm_probe", pos = [0, 340] },
+  { id = "status-1", type = "cell_status", pos = [0, 520] },
+  { id = "display-placed", type = "display", pos = [300, 520] },
+  { id = "scope-rates", type = "scope", params = { inputs = 3 }, pos = [300, 300] },
+
+  { id = "target-x", type = "constant", params = { value = 1.25 }, pos = [0, 700] },
+  { id = "target-y", type = "constant", params = { value = 0.72 }, pos = [0, 780] },
+  { id = "target-z", type = "constant", params = { value = -0.62 }, pos = [0, 860] },
+  { id = "ik-1", type = "inverse_kinematics", pos = [260, 760] },
+  { id = "display-t1", type = "display", pos = [520, 700] },
+  { id = "display-t2", type = "display", pos = [520, 780] },
+  { id = "display-t3", type = "display", pos = [520, 860] },
+]
+edges = [
+  { from = ["start-1", "next"], to = ["repeat-1", "in"] },
+  { from = ["repeat-1", "loop"], to = ["move-pick", "in"] },
+  { from = ["move-pick", "next"], to = ["grip-on", "in"] },
+  { from = ["grip-on", "next"], to = ["move-bin", "in"] },
+  { from = ["move-bin", "next"], to = ["grip-off", "in"] },
+  { from = ["grip-off", "next"], to = ["repeat-1", "in"] },
+  { from = ["repeat-1", "done"], to = ["settle-1", "in"] },
+  { from = ["settle-1", "next"], to = ["stop-1", "in"] },
+
+  { from = ["arm-1", "dt1"], to = ["scope-rates", "a"] },
+  { from = ["arm-1", "dt2"], to = ["scope-rates", "b"] },
+  { from = ["arm-1", "dt3"], to = ["scope-rates", "c"] },
+  { from = ["status-1", "placed"], to = ["display-placed", "in"] },
+
+  { from = ["target-x", "y"], to = ["ik-1", "x"] },
+  { from = ["target-y", "y"], to = ["ik-1", "y"] },
+  { from = ["target-z", "y"], to = ["ik-1", "z"] },
+  { from = ["ik-1", "t1"], to = ["display-t1", "in"] },
+  { from = ["ik-1", "t2"], to = ["display-t2", "in"] },
+  { from = ["ik-1", "t3"], to = ["display-t3", "in"] },
+]
+groups = [
+  { id = "cycle", kind = "visual", label = "Palletizer Cycle ×3", nodes = ["repeat-1", "move-pick", "grip-on", "move-bin", "grip-off"] },
+  { id = "approach", kind = "visual", label = "Approach", nodes = ["move-pick"] },
+  { id = "transfer", kind = "visual", label = "Transfer Arc", nodes = ["move-bin"] },
+  { id = "telemetry", kind = "visual", label = "Joint Telemetry", nodes = ["arm-1", "status-1", "scope-rates", "display-placed"] },
+  { id = "ik", kind = "visual", label = "IK Solver", nodes = ["target-x", "target-y", "target-z", "ik-1", "display-t1", "display-t2", "display-t3"] },
+]
+
+[dashboard]
+columns = 6
+instruments = [
+  { block = "scope-rates", size = "xlarge", at = [0, 0] },
+  { block = "display-placed", size = "compact", at = [4, 0] },
+  { block = "display-t1", size = "compact", at = [4, 1] },
+  { block = "display-t2", size = "compact", at = [5, 1] },
+  { block = "display-t3", size = "compact", at = [4, 2] },
+]
+decorations = [
+  { kind = "label", text = "Transfer {transfer_seconds} s · lift {transfer_lift} m", at = [0, 3], span = [2, 1] },
+  { kind = "console", at = [2, 3], span = [4, 2] },
+]

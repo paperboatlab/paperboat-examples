@@ -1,0 +1,94 @@
+# 10-train-pantograph-cpp: High-speed rail pantograph & compliant catenary
+#
+# The Station page is the equipment: train roof, articulated pantograph and the overhead
+# contact wire. The Flow page is the procedure: the pneumatic regulator reads the contact
+# force and speed and commands the actuator. The Board switch (or B) bypasses the regulator
+# to a fixed 150 N and the console reports arcing at speed.
+domain = "train"
+
+import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
+
+[[variables]]
+name = "target_force"
+value = 108.0
+unit = "N"
+min = 80.0
+max = 140.0
+step = 2.0
+group = "Pneumatic Regulator"
+note = "Contact-force setpoint; the optimal band is 90–140 N"
+tunable = true
+
+[[variables]]
+name = "max_speed"
+value = 320.0
+unit = "km/h"
+min = 80.0
+max = 400.0
+step = 10.0
+group = "Train"
+note = "Top speed reached 25 s into the run"
+
+[station]
+objects = [
+  { id = "pantograph-1", type = "pantograph", props = { target_force = { var = "target_force" }, max_speed = { var = "max_speed" } } },
+]
+
+[graph]
+nodes = [
+  { id = "pantograph-1", type = "pantograph", pos = [0, 160] },
+  { id = "regulator-1", type = "regulator", params = { target = { var = "target_force" }, kp = 2.5, ki = 0.6, base = 150 }, pos = [320, 120] },
+  { id = "mode-switch", type = "switch", params = { initial = 1, key = "KeyB" }, pos = [320, 360] },
+  { id = "probe-1", type = "contact_probe", pos = [640, 160] },
+
+  { id = "display-force", type = "display", pos = [900, 40] },
+  { id = "display-speed", type = "display", pos = [900, 120] },
+  { id = "display-losses", type = "display", pos = [900, 200] },
+  { id = "display-window", type = "display", pos = [900, 280] },
+  { id = "display-uplift", type = "display", pos = [900, 360] },
+  { id = "display-command", type = "display", pos = [640, 280] },
+  { id = "scope-1", type = "scope", params = { inputs = 3 }, pos = [640, 420] },
+]
+edges = [
+  { from = ["pantograph-1", "contact"], to = ["regulator-1", "contact"] },
+  { from = ["pantograph-1", "speed"], to = ["regulator-1", "speed"] },
+  { from = ["mode-switch", "y"], to = ["regulator-1", "mode"] },
+  { from = ["regulator-1", "force"], to = ["pantograph-1", "force"] },
+
+  { from = ["pantograph-1", "contact"], to = ["probe-1", "contact"] },
+  { from = ["pantograph-1", "speed"], to = ["probe-1", "speed"] },
+  { from = ["pantograph-1", "losses"], to = ["probe-1", "losses"] },
+  { from = ["pantograph-1", "uplift"], to = ["probe-1", "uplift"] },
+
+  { from = ["probe-1", "contact"], to = ["display-force", "in"] },
+  { from = ["probe-1", "speed"], to = ["display-speed", "in"] },
+  { from = ["probe-1", "losses"], to = ["display-losses", "in"] },
+  { from = ["probe-1", "in_window"], to = ["display-window", "in"] },
+  { from = ["probe-1", "uplift"], to = ["display-uplift", "in"] },
+  { from = ["regulator-1", "force"], to = ["display-command", "in"] },
+  { from = ["probe-1", "contact"], to = ["scope-1", "a"] },
+  { from = ["probe-1", "speed"], to = ["scope-1", "b"] },
+  { from = ["probe-1", "uplift"], to = ["scope-1", "c"] },
+]
+groups = [
+  { id = "plant", kind = "visual", label = "Train & Catenary", nodes = ["pantograph-1"] },
+  { id = "control", kind = "subsystem", label = "Active Force Regulator", nodes = ["regulator-1", "mode-switch"], expose = [{ side = "in", to = ["regulator-1", "contact"] }, { side = "out", to = ["regulator-1", "force"] }] },
+  { id = "telemetry", kind = "visual", label = "Contact Telemetry", nodes = ["probe-1", "display-force", "display-speed", "display-losses", "display-window", "display-uplift", "display-command", "scope-1"] },
+]
+
+[dashboard]
+columns = 8
+instruments = [
+  { block = "scope-1", size = "xlarge", at = [0, 0] },
+  { block = "mode-switch", size = "compact", at = [4, 0] },
+  { block = "display-force", size = "compact", at = [4, 1] },
+  { block = "display-speed", size = "compact", at = [5, 1] },
+  { block = "display-losses", size = "compact", at = [4, 2] },
+  { block = "display-window", size = "compact", at = [5, 2] },
+  { block = "display-uplift", size = "compact", at = [4, 3] },
+  { block = "display-command", size = "compact", at = [5, 3] },
+]
+decorations = [
+  { kind = "label", text = "Pantograph · target {target_force} N · {max_speed} km/h", at = [0, 4], span = [3, 1] },
+  { kind = "console", at = [3, 4], span = [5, 2] },
+]

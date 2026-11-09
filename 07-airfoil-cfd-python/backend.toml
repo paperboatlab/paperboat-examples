@@ -1,0 +1,13 @@
+[backend]
+format = 0
+name = "07-airfoil-cfd-python"
+version = "0.1.0"
+engine = ">=0.1"
+language = "python"
+run = "server.py"
+port = 8771
+descriptor = "descriptor.toml"
+solver = "discrete"
+
+[test]
+golden = "expected.json"

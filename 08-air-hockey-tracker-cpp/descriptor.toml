@@ -1,0 +1,97 @@
+# 08-air-hockey-tracker-cpp: top-down air-hockey puck tracking with the OpenCV toolkit
+#
+# The Flow page is a vision pipeline, built from the optional `opencv` package:
+#   Overhead Camera → HSV range → Open → Close → Centroid → Puck Tracker
+# The Centroid block marks the puck for the Board's Image views. The camera is synthetic and
+# deterministic, so the tutorial runs without a webcam.
+domain = "air-hockey"
+
+import = ["base", "control", "dashboard", "math", "signal", "step", "string", "opencv"]
+
+[[variables]]
+name = "hue_min"
+value = 0.0
+unit = ""
+min = 0.0
+max = 180.0
+step = 1.0
+group = "Vision"
+note = "Red puck window, low hue (OpenCV hue is 0–180)"
+
+[[variables]]
+name = "hue_max"
+value = 12.0
+unit = ""
+min = 0.0
+max = 180.0
+step = 1.0
+group = "Vision"
+note = "Red puck window, high hue"
+
+# The OpenCV toolkit brings an Image station object, so the catalog has objects; an
+# explicit empty station keeps the handshake complete when the starter uses none.
+[station]
+objects = []
+
+[graph]
+nodes = [
+  { id = "camera-1", type = "camera", pos = [0, 120] },
+  { id = "hsv-1", type = "hsv_range", params = { h_min = { var = "hue_min" }, h_max = { var = "hue_max" }, s_min = 120, s_max = 255, v_min = 80, v_max = 255 }, pos = [220, 120] },
+  { id = "open-1", type = "open", params = { size = 3 }, pos = [440, 120] },
+  { id = "close-1", type = "close", params = { size = 5 }, pos = [660, 120] },
+  { id = "centroid-1", type = "centroid", pos = [880, 120] },
+  { id = "tracker-1", type = "tracker", pos = [1120, 120] },
+
+  { id = "view-raw", type = "view", pos = [220, 340] },
+  { id = "view-mask", type = "view", pos = [660, 340] },
+  { id = "view-result", type = "view", pos = [880, 340] },
+
+  { id = "truth-1", type = "truth", pos = [0, 460] },
+  { id = "display-x", type = "display", pos = [1120, 300] },
+  { id = "display-z", type = "display", pos = [1120, 380] },
+  { id = "display-bounces", type = "display", pos = [1120, 460] },
+  { id = "display-truth-bounces", type = "display", pos = [1120, 540] },
+  { id = "scope-1", type = "scope", params = { inputs = 2 }, pos = [880, 520] },
+]
+edges = [
+  { from = ["camera-1", "image"], to = ["hsv-1", "image"] },
+  { from = ["hsv-1", "image"], to = ["open-1", "image"] },
+  { from = ["open-1", "image"], to = ["close-1", "image"] },
+  { from = ["close-1", "image"], to = ["centroid-1", "image"] },
+  { from = ["centroid-1", "u"], to = ["tracker-1", "u"] },
+  { from = ["centroid-1", "v"], to = ["tracker-1", "v"] },
+  { from = ["centroid-1", "radius"], to = ["tracker-1", "radius"] },
+
+  { from = ["camera-1", "image"], to = ["view-raw", "image"] },
+  { from = ["close-1", "image"], to = ["view-mask", "image"] },
+  { from = ["centroid-1", "image"], to = ["view-result", "image"] },
+
+  { from = ["tracker-1", "x"], to = ["display-x", "in"] },
+  { from = ["tracker-1", "z"], to = ["display-z", "in"] },
+  { from = ["tracker-1", "bounces"], to = ["display-bounces", "in"] },
+  { from = ["truth-1", "bounces"], to = ["display-truth-bounces", "in"] },
+  { from = ["tracker-1", "du"], to = ["scope-1", "a"] },
+  { from = ["tracker-1", "dv"], to = ["scope-1", "b"] },
+]
+groups = [
+  { id = "camera", kind = "visual", label = "Camera & Truth", nodes = ["camera-1", "truth-1"] },
+  { id = "vision", kind = "visual", label = "OpenCV Vision", nodes = ["hsv-1", "open-1", "close-1", "view-raw", "view-mask"] },
+  { id = "tracking", kind = "visual", label = "Puck Tracking", nodes = ["centroid-1", "tracker-1", "view-result", "display-x", "display-z", "display-bounces", "display-truth-bounces", "scope-1"] },
+]
+
+[dashboard]
+columns = 8
+instruments = [
+  { block = "view-result", size = "large", at = [0, 0] },
+  { block = "view-raw", size = "normal", at = [2, 0] },
+  { block = "view-mask", size = "normal", at = [4, 0] },
+  { block = "scope-1", size = "normal", at = [6, 0] },
+  { block = "display-x", size = "compact", at = [2, 2] },
+  { block = "display-z", size = "compact", at = [3, 2] },
+  { block = "display-bounces", size = "compact", at = [4, 2] },
+  { block = "display-truth-bounces", size = "compact", at = [5, 2] },
+]
+decorations = [
+  { kind = "label", text = "Air hockey · HSV hue {hue_min}–{hue_max} · synthetic 320×240 camera", at = [0, 3], span = [3, 1] },
+  { kind = "console", at = [3, 3], span = [5, 2] },
+]

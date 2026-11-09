@@ -1,0 +1,112 @@
+# 05-rover-lander-python: Lunar Soft Touchdown & Custom Web Station
+#
+# The Flow page is the guidance computer. Lander Telemetry feeds the GNC Autopilot, which
+# follows a descent-speed profile and steers to LZ-1. The dashboard switch (or the P key)
+# hands control to the pilot: W fires the main engine, A/D pulse the RCS. The Station page
+# is a custom HTML5 CRT cockpit, not the built-in 3D scene.
+domain = "lander"
+
+import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
+
+[[variables]]
+name = "descent_rate"
+value = 0.32
+unit = ""
+min = 0.1
+max = 0.8
+step = 0.02
+group = "Guidance"
+note = "Descent-speed profile slope: lower is a slower, thirstier approach"
+
+[[variables]]
+name = "landing_x"
+value = 0.0
+unit = "m"
+min = -9.0
+max = 9.0
+step = 0.5
+group = "Guidance"
+note = "Lateral landing target; the pad and LZ-1 beacon move with it"
+tunable = true
+dock = true
+
+[[variables]]
+name = "landing_floor"
+value = 0.55
+unit = "m/s"
+min = 0.2
+max = 1.2
+step = 0.05
+group = "Guidance"
+note = "Slowest target descent speed above the pad"
+
+[station]
+view = "web"
+page = "station/index.html"
+
+[graph]
+nodes = [
+  { id = "lander-1", type = "lander_probe", pos = [0, 100] },
+  { id = "landing-var", type = "variable", params = { name = "landing_x" }, pos = [0, 680] },
+  { id = "guidance-1", type = "guidance", params = { descent = { var = "descent_rate" }, floor = { var = "landing_floor" } }, pos = [260, 60] },
+  { id = "ap-switch", type = "switch", params = { initial = 1, key = "KeyP" }, pos = [0, 300] },
+
+  { id = "key-w", type = "key", params = { key = "KeyW" }, pos = [0, 460] },
+  { id = "key-a", type = "key", params = { key = "KeyA" }, pos = [0, 540] },
+  { id = "key-d", type = "key", params = { key = "KeyD" }, pos = [0, 620] },
+  { id = "manual-1", type = "manual_thrusters", pos = [260, 500] },
+  { id = "thrusters-1", type = "thrusters", pos = [520, 120] },
+
+  { id = "display-alt", type = "display", pos = [780, 40] },
+  { id = "display-vy", type = "display", pos = [780, 120] },
+  { id = "display-fuel", type = "display", pos = [780, 200] },
+  { id = "display-target", type = "display", pos = [780, 280] },
+  { id = "scope-1", type = "scope", params = { inputs = 3 }, pos = [520, 280] },
+]
+edges = [
+  { from = ["lander-1", "y"], to = ["guidance-1", "y"] },
+  { from = ["lander-1", "vy"], to = ["guidance-1", "vy"] },
+  { from = ["lander-1", "x"], to = ["guidance-1", "x"] },
+  { from = ["lander-1", "vx"], to = ["guidance-1", "vx"] },
+  { from = ["lander-1", "fuel"], to = ["guidance-1", "fuel"] },
+  { from = ["landing-var", "y"], to = ["guidance-1", "target_x"] },
+  { from = ["ap-switch", "y"], to = ["guidance-1", "mode"] },
+
+  { from = ["ap-switch", "y"], to = ["manual-1", "mode"] },
+  { from = ["key-w", "pressed"], to = ["manual-1", "w"] },
+  { from = ["key-a", "pressed"], to = ["manual-1", "a"] },
+  { from = ["key-d", "pressed"], to = ["manual-1", "d"] },
+
+  { from = ["guidance-1", "main"], to = ["thrusters-1", "main_auto"] },
+  { from = ["guidance-1", "rcs"], to = ["thrusters-1", "rcs_auto"] },
+  { from = ["manual-1", "main"], to = ["thrusters-1", "main_manual"] },
+  { from = ["manual-1", "rcs"], to = ["thrusters-1", "rcs_manual"] },
+
+  { from = ["lander-1", "y"], to = ["display-alt", "in"] },
+  { from = ["lander-1", "vy"], to = ["display-vy", "in"] },
+  { from = ["lander-1", "fuel"], to = ["display-fuel", "in"] },
+  { from = ["landing-var", "y"], to = ["display-target", "in"] },
+  { from = ["lander-1", "y"], to = ["scope-1", "a"] },
+  { from = ["lander-1", "vy"], to = ["scope-1", "b"] },
+  { from = ["lander-1", "main"], to = ["scope-1", "c"] },
+]
+groups = [
+  { id = "gnc", kind = "visual", label = "GNC Autopilot", nodes = ["lander-1", "guidance-1", "ap-switch", "landing-var"] },
+  { id = "manual", kind = "visual", label = "Pilot (W/A/D)", nodes = ["key-w", "key-a", "key-d", "manual-1"] },
+  { id = "telemetry", kind = "visual", label = "Telemetry", nodes = ["display-alt", "display-vy", "display-fuel", "scope-1"] },
+]
+
+[dashboard]
+columns = 6
+instruments = [
+  { block = "scope-1", size = "xlarge", at = [0, 0] },
+  { block = "ap-switch", size = "compact", at = [4, 0] },
+  { block = "display-alt", size = "compact", at = [4, 1] },
+  { block = "display-vy", size = "compact", at = [5, 1] },
+  { block = "display-fuel", size = "compact", at = [4, 2] },
+  { block = "display-target", size = "compact", at = [5, 2] },
+]
+decorations = [
+  { kind = "label", text = "LZ-1 · target {landing_x} m · GNC {descent_rate} profile", at = [0, 3], span = [3, 1] },
+  { kind = "console", at = [2, 3], span = [4, 2] },
+]

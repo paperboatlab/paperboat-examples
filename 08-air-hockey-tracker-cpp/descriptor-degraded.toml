@@ -1,0 +1,61 @@
+# 08-air-hockey-tracker-cpp, degraded: no OpenCV toolkit is installed.
+#
+# The same graph shape with the domain's synthetic vision stage, so the tutorial still runs
+# and its golden result still passes; the Image tiles say that OpenCV is not built.
+domain = "air-hockey"
+
+import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
+
+# The OpenCV toolkit brings an Image station object, so the catalog has objects; an
+# explicit empty station keeps the handshake complete when the starter uses none.
+[station]
+objects = []
+
+[graph]
+nodes = [
+  { id = "camera-1", type = "camera", pos = [0, 120] },
+  { id = "vision-1", type = "vision", pos = [220, 120] },
+  { id = "tracker-1", type = "tracker", pos = [460, 120] },
+  { id = "view-fallback", type = "view_fallback", pos = [460, 340] },
+  { id = "truth-1", type = "truth", pos = [0, 460] },
+  { id = "display-x", type = "display", pos = [700, 100] },
+  { id = "display-z", type = "display", pos = [700, 180] },
+  { id = "display-bounces", type = "display", pos = [700, 260] },
+  { id = "display-truth-bounces", type = "display", pos = [700, 340] },
+  { id = "scope-1", type = "scope", params = { inputs = 2 }, pos = [460, 520] },
+]
+edges = [
+  { from = ["camera-1", "image"], to = ["vision-1", "image"] },
+  { from = ["camera-1", "truth_u"], to = ["vision-1", "truth_u"] },
+  { from = ["camera-1", "truth_v"], to = ["vision-1", "truth_v"] },
+  { from = ["vision-1", "u"], to = ["tracker-1", "u"] },
+  { from = ["vision-1", "v"], to = ["tracker-1", "v"] },
+  { from = ["vision-1", "radius"], to = ["tracker-1", "radius"] },
+  { from = ["vision-1", "image"], to = ["view-fallback", "image"] },
+  { from = ["tracker-1", "x"], to = ["display-x", "in"] },
+  { from = ["tracker-1", "z"], to = ["display-z", "in"] },
+  { from = ["tracker-1", "bounces"], to = ["display-bounces", "in"] },
+  { from = ["truth-1", "bounces"], to = ["display-truth-bounces", "in"] },
+  { from = ["tracker-1", "du"], to = ["scope-1", "a"] },
+  { from = ["tracker-1", "dv"], to = ["scope-1", "b"] },
+]
+groups = [
+  { id = "camera", kind = "visual", label = "Camera & Truth", nodes = ["camera-1", "truth-1"] },
+  { id = "vision", kind = "visual", label = "Synthetic Vision (degraded)", nodes = ["vision-1", "view-fallback"] },
+  { id = "tracking", kind = "visual", label = "Puck Tracking", nodes = ["tracker-1", "display-x", "display-z", "display-bounces", "display-truth-bounces", "scope-1"] },
+]
+
+[dashboard]
+columns = 8
+instruments = [
+  { block = "view-fallback", size = "large", at = [0, 0] },
+  { block = "scope-1", size = "normal", at = [2, 0] },
+  { block = "display-x", size = "compact", at = [2, 2] },
+  { block = "display-z", size = "compact", at = [3, 2] },
+  { block = "display-bounces", size = "compact", at = [4, 2] },
+  { block = "display-truth-bounces", size = "compact", at = [5, 2] },
+]
+decorations = [
+  { kind = "label", text = "Air hockey · degraded (OpenCV not built)", at = [0, 3], span = [3, 1] },
+  { kind = "console", at = [3, 3], span = [5, 2] },
+]
