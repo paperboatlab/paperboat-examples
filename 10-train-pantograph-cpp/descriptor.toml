@@ -6,7 +6,7 @@
 # to a fixed 150 N and the console reports arcing at speed.
 domain = "train"
 
-import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "dashboard", "math", "signal", "step", "string"]
 
 [[variables]]
 name = "target_force"

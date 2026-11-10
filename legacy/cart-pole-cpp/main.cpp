@@ -7,12 +7,14 @@
 
 #include <paperboat/sdk.hpp>
 
+#include "paperboat/toolkit/control.hpp"
 #include "domain/cart_pole.hpp"
 
 int main(int argc, char** argv) {
   // Static: catalog entries point into the registry, so both live as long as the server.
   static const paperboat::Registry registry = [] {
     paperboat::Registry r = paperboat::builtins();
+    paperboat::toolkit::control::register_control(r);
     cart_pole::register_cart_pole(r);
     return r;
   }();

@@ -2,7 +2,7 @@
 domain = "thermostat"
 
 # Toolkit packages imported into the Flow palette
-import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "dashboard", "math", "signal", "step", "string"]
 
 [[blocks]]
 use = "base/constant"

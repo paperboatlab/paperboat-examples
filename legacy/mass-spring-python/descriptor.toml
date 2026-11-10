@@ -2,7 +2,7 @@
 domain = "mass-spring"
 
 # Every block of these toolkit packages is in the palette.
-import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "dashboard", "math", "signal", "step", "string"]
 
 # The domain's own blocks (F1, a force source, and P1, a probe on the mass) are defined in
 # code, domain/blocks.py.

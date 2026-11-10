@@ -6,7 +6,7 @@
 # deterministic, so the tutorial runs without a webcam.
 domain = "air-hockey"
 
-import = ["base", "control", "dashboard", "math", "signal", "step", "string", "opencv"]
+import = ["base", "dashboard", "math", "signal", "step", "string", "opencv"]
 
 [[variables]]
 name = "hue_min"

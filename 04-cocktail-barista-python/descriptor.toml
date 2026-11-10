@@ -11,7 +11,7 @@
 domain = "barista"
 
 # Toolkit packages imported into the Flow palette.
-import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "dashboard", "math", "signal", "step", "string"]
 
 # Starter station: the stainless bar, four-valve gantry, shaker and serving glass.
 [station]

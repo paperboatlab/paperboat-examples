@@ -4,7 +4,7 @@ domain = "animation"
 # Every block of these toolkit packages is in the palette: the Step flow's path (start,
 # when, wait, if, repeat, stop) and the base signal blocks (conditions, keys, clock,
 # graphs).
-import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "dashboard", "math", "signal", "step", "string"]
 
 # The domain's own steps (Move, Rotate, Scale, each over `seconds`, in the actor's frame)
 # and its Pose probe are defined in code, domain/blocks.py.
