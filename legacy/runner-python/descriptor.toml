@@ -3,7 +3,7 @@
 domain = "runner"
 
 # Every block of these toolkit packages is in the palette.
-import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "dashboard", "math", "signal", "step", "string"]
 
 # The domain's own blocks (Runner, Next crate, Next bar, Jump, Duck) are defined in code,
 # domain/blocks.py: the palette has them without listing them here.

@@ -6,7 +6,7 @@
 # is a custom HTML5 CRT cockpit, not the built-in 3D scene.
 domain = "lander"
 
-import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "dashboard", "math", "signal", "step", "string"]
 
 [[variables]]
 name = "descent_rate"

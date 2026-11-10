@@ -18,7 +18,26 @@ endif()
 set(PAPERBOAT_ENGINE_DIR "${PAPERBOAT_ENGINE_DIR}" CACHE PATH "Paperboat engine sources")
 add_subdirectory(${PAPERBOAT_ENGINE_DIR} paperboat EXCLUDE_FROM_ALL)
 
+# The optional toolkits this backend imports: control (the PID blocks) and the optimization
+# toolkit its Workspace links. They are installed into the engine with
+# `paperboat toolkit install optimization` and `paperboat toolkit install control`.
+foreach(toolkit optimization control)
+  if(NOT TARGET paperboat::toolkit_${toolkit})
+    foreach(dir
+        "${PAPERBOAT_ENGINE_DIR}/toolkit/${toolkit}"
+        "${CMAKE_CURRENT_LIST_DIR}/../paperboat-toolkit-${toolkit}/engine/toolkit/${toolkit}")
+      if(EXISTS "${dir}/toolkit.toml")
+        add_subdirectory("${dir}" "${CMAKE_CURRENT_BINARY_DIR}/${toolkit}-toolkit")
+        break()
+      endif()
+    endforeach()
+  endif()
+  if(NOT TARGET paperboat::toolkit_${toolkit})
+    message(FATAL_ERROR "The ${toolkit} toolkit is not installed (paperboat toolkit install ${toolkit})")
+  endif()
+endforeach()
+
 add_executable(paperboat-cart-pole main.cpp domain/cart_pole.cpp)
-target_link_libraries(paperboat-cart-pole PRIVATE paperboat::core paperboat_warnings)
+target_link_libraries(paperboat-cart-pole PRIVATE paperboat::core paperboat::toolkit_control paperboat::toolkit_optimization paperboat_warnings)
 target_compile_definitions(paperboat-cart-pole PRIVATE
   PAPERBOAT_DESCRIPTOR="${CMAKE_CURRENT_SOURCE_DIR}/descriptor.toml")

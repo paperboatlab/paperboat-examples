@@ -9,7 +9,7 @@
 # curve breaks past 14°. The Station page plots arrows, streamlines and force vectors.
 domain = "airfoil"
 
-import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "dashboard", "math", "signal", "step", "string"]
 
 [[variables]]
 name = "alpha"

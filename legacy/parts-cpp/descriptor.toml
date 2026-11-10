@@ -5,7 +5,7 @@ domain = "parts"
 # Every block and station object of these toolkit packages: opencv brings the Image
 # station object, the image blocks (gray, blur, threshold, morphology…) and Image view;
 # dashboard brings Graph and Display.
-import = ["base", "control", "dashboard", "math", "signal", "step", "string", "opencv"]
+import = ["base", "dashboard", "math", "signal", "step", "string", "opencv"]
 
 # The domain's own block, Count parts, is defined in code (domain/count.cpp) under the
 # package "parts": the palette gets it without listing it here.

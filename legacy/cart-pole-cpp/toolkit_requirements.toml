@@ -1,0 +1,11 @@
+# This backend imports the optional control toolkit; its dynamic blocks link the
+# optimization toolkit. Install both first:
+#   paperboat toolkit install optimization --repo https://github.com/paperboatlab/paperboat-toolkit-optimization.git
+#   paperboat toolkit install control --repo https://github.com/paperboatlab/paperboat-toolkit-control.git
+[[toolkits]]
+name = "optimization"
+repo = "https://github.com/paperboatlab/paperboat-toolkit-optimization.git"
+
+[[toolkits]]
+name = "control"
+repo = "https://github.com/paperboatlab/paperboat-toolkit-control.git"
