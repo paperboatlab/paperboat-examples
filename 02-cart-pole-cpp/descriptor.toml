@@ -60,6 +60,7 @@ note = "Cart velocity damping (kp / 2)"
 
 # Starter station (station.load)
 [station]
+orientation = "axes"
 objects = [
   { id = "cart-pole-1", type = "cart-pole", props = { cart_mass = 1.0, pole_mass = 0.1, pole_length = { var = "pole_length" }, max_force = 25.0, x0 = 0.0, theta0 = 0.12 } },
 ]
