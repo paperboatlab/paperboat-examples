@@ -1,11 +1,11 @@
-# Parametric geometry backend (Python)
+# Parametric geometry station (Python)
 
-A third example backend for the [Paperboat protocol](../../../protocol/README.md), and the
+A third example station for the [Paperboat protocol](../../../protocol/README.md), and the
 first that is not a simulation. A run evaluates the graph once, Grasshopper style: a
 Grid of points goes through a Wave and an Attractor, their sum sets box heights, and
 the Boxes block writes the boxes into the 3D scene. Wires carry lists, not scalars.
 
-The web app drives it with no change, the same as the simulation backends.
+The web app drives it with no change, the same as the simulation stations.
 
 ## Layout
 
@@ -14,7 +14,7 @@ descriptor.toml   the palette (imports, this domain's blocks) and the starter gr
 domain/
   state.py        the boxes the Boxes block builds, on a ground plate
   blocks.py       Grid, Wave, Attractor, Add, Scale, Boxes
-server.py         fills a paperboat.Backend and serves it: no logic
+server.py         fills a paperboat.Station and serves it: no logic
 ```
 
 Everything else (the protocol, graph checking, the runs, the toolkit blocks) is the C++

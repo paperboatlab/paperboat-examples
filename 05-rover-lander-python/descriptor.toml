@@ -1,12 +1,12 @@
 # 05-rover-lander-python: Lunar Soft Touchdown & Custom Web Station
 #
 # The Flow page is the guidance computer. Lander Telemetry feeds the GNC Autopilot, which
-# follows a descent-speed profile and steers to LZ-1. The dashboard switch (or the P key)
+# follows a descent-speed profile and steers to LZ-1. The board switch (or the P key)
 # hands control to the pilot: W fires the main engine, A/D pulse the RCS. The Station page
 # is a custom HTML5 CRT cockpit, not the built-in 3D scene.
 domain = "lander"
 
-import = ["base", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "board", "math", "signal", "step", "string"]
 
 [[variables]]
 name = "descent_rate"
@@ -96,7 +96,7 @@ groups = [
   { id = "telemetry", kind = "visual", label = "Telemetry", nodes = ["display-alt", "display-vy", "display-fuel", "scope-1"] },
 ]
 
-[dashboard]
+[board]
 columns = 6
 instruments = [
   { block = "scope-1", size = "xlarge", at = [0, 0] },

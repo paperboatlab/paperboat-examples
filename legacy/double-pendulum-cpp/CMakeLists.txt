@@ -1,4 +1,4 @@
-# A Paperboat backend as a project of its own: it uses the engine, the engine doesn't know
+# A Paperboat station as a project of its own: it uses the engine, the engine doesn't know
 # it. Copy this folder anywhere and point PAPERBOAT_ENGINE_DIR at a Paperboat engine.
 cmake_minimum_required(VERSION 3.25)
 project(paperboat_double_pendulum LANGUAGES CXX)

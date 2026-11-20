@@ -33,7 +33,7 @@ class Guidance(paperboat.Block):
     """Autonomous guidance, navigation and control: a terminal deceleration burn.
 
     It follows a descent-speed profile and steers the horizontal drift to the LZ-1 pad,
-    then shuts the engine down just above the surface. `mode` (the dashboard switch) turns
+    then shuts the engine down just above the surface. `mode` (the board switch) turns
     it off so the keyboard can fly the module.
     """
 

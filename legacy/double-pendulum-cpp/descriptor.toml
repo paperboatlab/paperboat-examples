@@ -3,9 +3,9 @@
 # by domain/, next to this file; the story sequence is the Flow page.
 domain = "double-pendulum"
 
-# step: the stories run as a sequence. math: the force sum. dashboard: the monitors. The
+# step: the stories run as a sequence. math: the force sum. board: the monitors. The
 # domain's own station object and blocks are in code (domain/), so they need no import.
-import = ["base", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "board", "math", "signal", "step", "string"]
 
 [[blocks]]
 use = "math/sum"

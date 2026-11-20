@@ -2,7 +2,7 @@
 domain = "thermostat"
 
 # Toolkit packages imported into the Flow palette
-import = ["base", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "board", "math", "signal", "step", "string"]
 
 [[blocks]]
 use = "base/constant"
@@ -58,8 +58,8 @@ edges = [
   { from = ["sensor-1", "t_room"], to = ["scope-1", "c"] },
 ]
 
-# Starter Dashboard layout
-[dashboard]
+# Starter Board layout
+[board]
 columns = 6
 instruments = [
   { block = "scope-1", size = "xlarge", at = [1, 0] },

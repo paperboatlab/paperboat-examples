@@ -5,7 +5,7 @@ domain = "chain"
 # Toolkit packages for the test logic (step: the test runs as a sequence of stories). The
 # domain's own station objects (Wall, Mass, Spring, Damper) are defined in code,
 # domain/objects.py.
-import = ["base", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "board", "math", "signal", "step", "string"]
 
 [[blocks]]
 use = "signal/step"
@@ -34,7 +34,7 @@ objects = [
 # Starter graph: the test, as two stories in sequence (Start → Pull test → Check).
 # - Pull test (a story, 6 s): pull mass-2 with 5 N from t = 0.5 s and record where it goes
 #   and how hard spring-1 pulls on the wall.
-# - Check (a story, once): is spring-1 over its 4.5 N limit? Shown on the Dashboard.
+# - Check (a story, once): is spring-1 over its 4.5 N limit? Shown on the Board.
 # The linked blocks (mass-2, spring-1) stay outside the stories: the structure is always
 # there; the stories are what the test does to it, in order.
 [graph]

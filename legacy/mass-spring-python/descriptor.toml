@@ -1,8 +1,8 @@
-# Mass on a spring, pushed by a force source. Served by examples/backends/mass-spring-python.
+# Mass on a spring, pushed by a force source. Served by examples/stations/mass-spring-python.
 domain = "mass-spring"
 
 # Every block of these toolkit packages is in the palette.
-import = ["base", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "board", "math", "signal", "step", "string"]
 
 # The domain's own blocks (F1, a force source, and P1, a probe on the mass) are defined in
 # code, domain/blocks.py.

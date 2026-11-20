@@ -1,6 +1,6 @@
 # Archived examples
 
-The nine backends below predate the numbered tutorial curriculum. They remain here as
+The nine stations below predate the numbered tutorial curriculum. They remain here as
 reference material, but they are **not** part of the CLI's example list and the golden test
 does not run them.
 
@@ -17,5 +17,5 @@ does not run them.
 | `double-pendulum-cpp/` | Payload identification, swing-up and LQR balance with vector ports |
 
 Use the numbered tutorials in the repository root instead; each has an updated README,
-`backend.toml`, descriptor and golden result. To run an archived backend explicitly, pass its
+`station.toml`, descriptor and golden result. To run an archived station explicitly, pass its
 path: `./bin/paperboat run paperboat-examples/legacy/parts-cpp`.

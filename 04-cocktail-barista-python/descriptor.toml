@@ -11,7 +11,7 @@
 domain = "barista"
 
 # Toolkit packages imported into the Flow palette.
-import = ["base", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "board", "math", "signal", "step", "string"]
 
 # Starter station: the stainless bar, four-valve gantry, shaker and serving glass.
 [station]
@@ -71,7 +71,7 @@ groups = [
   { id = "emergency", kind = "visual", label = "Priority E-Stop & Rinse", nodes = ["key-space", "when-estop", "estop-1", "rinse-1"] },
 ]
 
-[dashboard]
+[board]
 columns = 6
 instruments = [
   { block = "scope-1", size = "xlarge", at = [0, 0] },

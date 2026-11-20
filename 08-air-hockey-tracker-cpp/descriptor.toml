@@ -6,7 +6,7 @@
 # deterministic, so the tutorial runs without a webcam.
 domain = "air-hockey"
 
-import = ["base", "dashboard", "math", "signal", "step", "string", "opencv"]
+import = ["base", "board", "math", "signal", "step", "string", "opencv"]
 
 [[variables]]
 name = "hue_min"
@@ -79,7 +79,7 @@ groups = [
   { id = "tracking", kind = "visual", label = "Puck Tracking", nodes = ["centroid-1", "tracker-1", "view-result", "display-x", "display-z", "display-bounces", "display-truth-bounces", "scope-1"] },
 ]
 
-[dashboard]
+[board]
 columns = 8
 instruments = [
   { block = "view-result", size = "large", at = [0, 0] },

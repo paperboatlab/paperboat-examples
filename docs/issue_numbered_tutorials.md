@@ -1,4 +1,4 @@
-# [RFC/Plan] Redesign 10 Numbered Tutorial Examples (01-10) with Modernized Cart-Pole, Station Mockups, and Backend Manifests
+# [RFC/Plan] Redesign 10 Numbered Tutorial Examples (01-10) with Modernized Cart-Pole, Station Mockups, and Station Manifests
 
 **Issue Type**: Epic / RFC  
 **Priority**: `P1`  
@@ -11,8 +11,8 @@
 ## 1. Executive Summary & Problem Statement
 
 Paperboat's existing example catalog consists of 9 legacy directories (`animation-python`, `cart-pole-cpp`, `chain-python`, `double-pendulum-cpp`, `mass-spring-python`, `parametric-python`, `parts-cpp`, `runner-python`, `supply-python`). While functional, they present significant technical and pedagogical debt:
-1. **Missing Modern Backend Manifests**: Backends do not include `backend.toml` (format = 0). They rely on ad-hoc CLI conventions rather than declarative metadata (`descriptor`, `solver`, `port`, `toolkits`, and `[test].golden`).
-2. **Missing Pedagogical Progression**: The legacy backends are disparate physics demos rather than a structured 1-to-10 curriculum where each example introduces specific Paperboat platform features (UI cockpit modes, wire types, toolkits, acausal modeling).
+1. **Missing Modern Station Manifests**: Stations do not include `station.toml` (format = 0). They rely on ad-hoc CLI conventions rather than declarative metadata (`descriptor`, `solver`, `port`, `toolkits`, and `[test].golden`).
+2. **Missing Pedagogical Progression**: The legacy stations are disparate physics demos rather than a structured 1-to-10 curriculum where each example introduces specific Paperboat platform features (UI cockpit modes, wire types, toolkits, acausal modeling).
 3. **Underutilized UI Cockpit Capabilities**: Features such as Commander mode split views (`Alt+C`), Navigator mode, Lookout full-screen (`Alt+L`), Variables sheet formulas (`Alt+V`), custom HTML5 Web Stations, block commenting (`Ctrl+/`), visual groups (`Ctrl+G`), and degraded toolkit fallback modes are rarely or never showcased.
 4. **Preserving and Modernizing Cart-Pole**: The iconic inverted pendulum benchmark (`cart-pole`) should be retained, but elevated from its untextured primitive shapes to a precision machined instrument at **Level 02** (`02-cart-pole-cpp`), complete with guide rails, travel limit stops, axle protractors, and dynamic force vectors.
 
@@ -24,7 +24,7 @@ This RFC establishes the definitive **10-part numbered curriculum (`01` through 
 
 | Level | Directory | Language | Port | Domain & Core Theme | UI Cockpit Paradigm | Core Platform Feature |
 |---|---|---|---|---|---|---|
-| **01** | `01-smart-thermostat-python` | Python | 8765 | **Home Thermal Comfort**: Room heat loss & bang-bang heating hysteresis | Navigator Mode | Board Wave plots, scalar float wires, `backend.toml` (format = 0) |
+| **01** | `01-smart-thermostat-python` | Python | 8765 | **Home Thermal Comfort**: Room heat loss & bang-bang heating hysteresis | Navigator Mode | Board Wave plots, scalar float wires, `station.toml` (format = 0) |
 | **02** | `02-cart-pole-cpp` | C++ | 8766 | **Modernized Cart-Pole Control**: Inverted pendulum balancing on precision rail | Commander Split View | Variables sheet (`Alt+V`) formulas (`kd = kp / 5`), high-frequency C++ RK4, PID |
 | **03** | `03-low-poly-island-python` | Python | 8767 | **Creative Coding / Game Worlds**: Procedural archipelago terrain generation | Navigator Mode | One-shot static evaluation (`solver = "discrete"`), list/array wires, block commenting (`Ctrl+/`) & bypass (`Ctrl+Shift+Y`) |
 | **04** | `04-cocktail-barista-python` | Python | 8768 | **Robotics / Process Automation**: Automated drink recipe execution | Inspector Mode | Step flow tokens, Visual Groups (`Ctrl+G`), Subsystems, emergency stop keyboard keys (`Key`), Console logs |
@@ -33,7 +33,7 @@ This RFC establishes the definitive **10-part numbered curriculum (`01` through 
 | **07** | `07-airfoil-cfd-python` | Python | 8771 | **Aerodynamics & Fluid Dynamics**: 2D Computational Fluid Dynamics over arbitrary shape | Navigator Mode | Lattice Boltzmann (D2Q9) grid, 2D velocity vector heatmap, streamlines, lift & drag polar gauges ($C_L, C_D$) |
 | **08** | `08-ping-pong-tracker-cpp` | C++ | 8772 | **Sports Analytics / Computer Vision**: Table tennis ball tracking & spin estimation | Commander Split View | OpenCV C++ toolkit integration, image wire buffers, Board Image View tiles, degraded fallback (`#ifdef PAPERBOAT_HAS_OPENCV`) |
 | **09** | `09-modular-synth-cpp` | C++ | 8773 | **Music Production & Audio Tech**: Polyphonic modular analog synth & vocoder | Lookout Mode (`Alt+L`) | Vector state wires `[6]`, advanced Scope (FFT spectrum, measurement cursors, triggers), knurled 3D Eurorack chassis |
-| **10** | `10-train-pantograph-cpp` | Modelica & C++ | 8774 | **High-Speed Rail / Multibody Dynamics**: High-speed train pantograph & catenary contact | Commander Split View | Squero Studio OM acausal schematic, catenary compliance, active force regulation, `.ppk` pack |
+| **10** | `10-train-pantograph-cpp` | Modelica & C++ | 8774 | **High-Speed Rail / Multibody Dynamics**: High-speed train pantograph & catenary contact | Commander Split View | Squero Studio OM acausal schematic, catenary compliance, active force regulation, `.pst` pack |
 
 ---
 
@@ -153,7 +153,7 @@ Cart-Pole is upgraded to modern Paperboat standards:
   $$\ddot{\theta} = \frac{g \sin\theta + \cos\theta \left( \frac{-F - m l \dot{\theta}^2 \sin\theta}{M + m} \right)}{l \left( \frac{4}{3} - \frac{m \cos^2\theta}{M + m} \right)}$$
   $$\ddot{x} = \frac{F + m l \left( \dot{\theta}^2 \sin\theta - \ddot{\theta}\cos\theta \right)}{M + m}$$
 
-### 5.2 Manifest Specification (`backend.toml`)
+### 5.2 Manifest Specification (`station.toml`)
 ```toml
 format = 0
 name = "02-cart-pole-cpp"
@@ -191,14 +191,14 @@ golden = "expected.json"
   - `09-modular-synth-cpp/`
   - `10-train-pantograph-cpp/`
 - Every directory must contain:
-  - `backend.toml` (format = 0)
+  - `station.toml` (format = 0)
   - `descriptor.toml` (ISA-88 state machines, signals, parameters)
   - `expected.json` (golden run data for validation)
   - `README.md` (tutorial instructions and step-by-step walk-through)
   - Domain implementation source files
 
 ### Phase 2: Engine CLI & Discovery Updates (`paperboat`)
-- Update `paperboat/engine/core/src/backend_manager.cpp` to discover numbered prefixes (`paperboat run 1` or `paperboat run 01` resolves to `01-smart-thermostat-python`).
+- Update `paperboat/engine/core/src/station_manager.cpp` to discover numbered prefixes (`paperboat run 1` or `paperboat run 01` resolves to `01-smart-thermostat-python`).
 - Update root `npm run example:<name>` scripts.
 
 ### Phase 3: Sphinx Documentation (`paperboat/docs/api/tutorials.rst`)
@@ -210,8 +210,8 @@ golden = "expected.json"
 
 - [x] All 10 visual Station mockups created in `paperboat-examples/assets/mockups/*.svg` and validated with `xmllint`.
 - [x] Comprehensive RFC & issue document written to `paperboat-examples/docs/issue_numbered_tutorials.md`.
-- [ ] 10 example backend directories scaffolded with `backend.toml`, `descriptor.toml`, `expected.json`, and `README.md`.
+- [ ] 10 example station directories scaffolded with `station.toml`, `descriptor.toml`, `expected.json`, and `README.md`.
 - [ ] Modernized Cart-Pole (`02-cart-pole-cpp`) compiles and balances stably under PID control.
-- [ ] Golden verification script `python3 paperboat/protocol/golden.py --examples paperboat-examples <name>` passes for all implemented backends.
-- [ ] `paperboat check` passes across all backend manifests.
+- [ ] Golden verification script `python3 paperboat/protocol/golden.py --examples paperboat-examples <name>` passes for all implemented stations.
+- [ ] `paperboat check` passes across all station manifests.
 - [ ] Sphinx documentation builds cleanly (`npm --prefix paperboat run docs`).

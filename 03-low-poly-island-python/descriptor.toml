@@ -3,7 +3,7 @@
 domain = "island"
 
 # Toolkit packages imported into the Flow palette
-import = ["base", "signal", "math", "dashboard"]
+import = ["base", "signal", "math", "board"]
 
 # Project variables (Variables sheet Alt+V)
 [[variables]]

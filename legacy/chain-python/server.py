@@ -1,4 +1,4 @@
-"""Example Paperboat backend: a chain of masses, springs and dampers (Python).
+"""Example Paperboat station: a chain of masses, springs and dampers (Python).
 
 The structure is built on the Station page, in its graph view: each element is a station
 object, wired to its neighbours through link slots (a spring's `a` and `b`). The Flow page
@@ -13,7 +13,7 @@ from domain.objects import OBJECTS
 import paperboat
 
 if __name__ == "__main__":
-    paperboat.serve(paperboat.Backend(
+    paperboat.serve(paperboat.Station(
         engine="python-chain",
         descriptor=Path(__file__).with_name("descriptor.toml"),
         objects=OBJECTS,

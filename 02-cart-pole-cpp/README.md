@@ -29,11 +29,11 @@ $$\ddot{x} = \frac{F + m l \left( \dot{\theta}^2 \sin\theta - \ddot{\theta}\cos\
 
 ## 2. Cockpit Exploration (The Web UI)
 
-Launch the backend and open the Paperboat Cockpit:
+Launch the station and open the Paperboat Cockpit:
 ```bash
 ./bin/paperboat run 02-cart-pole-cpp
 ```
-Navigate to `http://localhost:3047/?backend=ws://localhost:8766`.
+Navigate to `http://localhost:3047/?station=ws://localhost:8766`.
 
 ### 2.1 Commander Mode Split View (`Alt+C`)
 Switch to **Commander Mode** (`Alt+C`):
@@ -62,10 +62,10 @@ Press `Alt+V` to open the **Variables Sheet**:
 
 ## 3. C++ SDK Architecture
 
-The backend is organized as a standalone C++ project:
+The station is organized as a standalone C++ project:
 ```text
 02-cart-pole-cpp/
-├── backend.toml          # Format = 0 manifest (port = 8766, solver = "rk4")
+├── station.toml          # Format = 0 manifest (port = 8766, solver = "rk4")
 ├── descriptor.toml       # Variables, starter Station, and starter Flow wiring
 ├── CMakeLists.txt        # Native C++ build linking paperboat::core
 ├── main.cpp              # Canonical paperboat::main entrypoint
@@ -88,7 +88,7 @@ The cart-pole implements `paperboat::StationObject`:
 
 Run verification from the command line:
 ```bash
-# Verify backend manifest and catalog
+# Verify station manifest and catalog
 ./paperboat/bin/paperboat check paperboat-examples/02-cart-pole-cpp --fast
 
 # Run headless golden protocol test

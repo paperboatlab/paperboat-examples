@@ -1,12 +1,13 @@
-[backend]
+[station]
 format = 0
-name = "cart-pole"
+name = "09-modular-synth-cpp"
 version = "0.1.0"
 engine = ">=0.1"
 language = "cpp"
-run = "build/paperboat-cart-pole"
-port = 8766
+run = "build/paperboat-modular-synth"
+port = 8773
 descriptor = "descriptor.toml"
+solver = "rk4"
 
 [test]
 golden = "expected.json"

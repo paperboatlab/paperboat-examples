@@ -98,7 +98,7 @@ class BoxesOut(Block):
 
 
 class ListGraph(paperboat.Monitor):
-    """Plots a list by index on the Dashboard."""
+    """Plots a list by index on the Board."""
 
     type, label = "graph", "Graph (by index)"
     inputs = [Port("in", NUMBERS)]

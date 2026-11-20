@@ -1,6 +1,6 @@
-# Python example backend
+# Python example station
 
-A small reference backend that speaks the [Paperboat protocol](../../../protocol/README.md).
+A small reference station that speaks the [Paperboat protocol](../../../protocol/README.md).
 Use it to build and test the web app without the C++ engine. Its domain is one mass on
 a spring, with a force source `F1` and a probe `P1` on the mass.
 
@@ -11,7 +11,7 @@ descriptor.toml   the palette (imports, this domain's blocks) and the starter gr
 domain/
   state.py        the mass on its spring (semi-implicit Euler)
   blocks.py       F1 (force source) and P1 (probe)
-server.py         fills a paperboat.Backend and serves it: no logic
+server.py         fills a paperboat.Station and serves it: no logic
 ```
 
 Everything else (the protocol, graph checking, the runs, the toolkit blocks) is the C++
@@ -28,14 +28,14 @@ python3 server.py --port 8799
 
 ## Smoke test
 
-Start a backend, then run:
+Start a station, then run:
 
 ```sh
 python3 ../../../protocol/smoke_test.py --port 8765
 ```
 
-It knows no domain: it checks the handshake, runs the starter graph the backend sends in
+It knows no domain: it checks the handshake, runs the starter graph the station sends in
 `graph.load` (signals for every monitor node, scene patches, progress up to 1),
 checks that a graph with a cycle is rejected, and cancels a run.
 
-The C++ engine must pass this same smoke test, so both backends stay in step with the protocol.
+The C++ engine must pass this same smoke test, so both stations stay in step with the protocol.

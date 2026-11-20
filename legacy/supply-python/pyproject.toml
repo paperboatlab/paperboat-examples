@@ -1,5 +1,5 @@
 [project]
-name = "paperboat-backend-supply"
+name = "paperboat-station-supply"
 version = "0.0.1"
 description = "A supply network built on the Station graph, with an ordering policy on the Flow page"
 requires-python = ">=3.11"

@@ -1,6 +1,6 @@
 # An air-hockey puck tracker: a synthetic overhead camera, the optional OpenCV toolkit's
 # threshold/morphology/centroid blocks and a ballistic tracker. OpenCV is optional: without
-# paperboat::toolkit_opencv the backend builds with `descriptor-degraded.toml`, a synthetic
+# paperboat::toolkit_opencv the station builds with `descriptor-degraded.toml`, a synthetic
 # centroid path that runs the same graph shape.
 cmake_minimum_required(VERSION 3.25)
 project(paperboat_air_hockey LANGUAGES CXX)

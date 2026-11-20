@@ -1,13 +1,12 @@
-[backend]
+[station]
 format = 0
-name = "06-robot-pick-place-python"
+name = "runner"
 version = "0.1.0"
 engine = ">=0.1"
 language = "python"
 run = "server.py"
-port = 8770
+port = 8768
 descriptor = "descriptor.toml"
-solver = "euler"
 
 [test]
 golden = "expected.json"

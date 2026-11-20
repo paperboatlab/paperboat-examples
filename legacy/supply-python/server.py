@@ -1,4 +1,4 @@
-"""Example Paperboat backend: a supply network (Python). Not a simulation of physics, not
+"""Example Paperboat station: a supply network (Python). Not a simulation of physics, not
 a game: stock moving between sites, and an ordering policy to try.
 
 The network is built on the Station page as a graph: sites (domain/sites.py) linked to
@@ -13,7 +13,7 @@ from domain.sites import SITES
 import paperboat
 
 if __name__ == "__main__":
-    paperboat.serve(paperboat.Backend(
+    paperboat.serve(paperboat.Station(
         engine="python-supply",
         descriptor=Path(__file__).with_name("descriptor.toml"),
         objects=SITES,

@@ -1,4 +1,4 @@
-# A Paperboat backend as a project of its own (see ../cart-pole-cpp/CMakeLists.txt): it
+# A Paperboat station as a project of its own (see ../cart-pole-cpp/CMakeLists.txt): it
 # uses the engine and its optional opencv package, so it needs OpenCV.
 cmake_minimum_required(VERSION 3.25)
 project(paperboat_parts LANGUAGES CXX)

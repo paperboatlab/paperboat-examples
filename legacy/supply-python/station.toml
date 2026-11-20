@@ -1,13 +1,12 @@
-[backend]
+[station]
 format = 0
-name = "08-air-hockey-tracker-cpp"
+name = "supply"
 version = "0.1.0"
 engine = ">=0.1"
-language = "cpp"
-run = "build/paperboat-air-hockey"
+language = "python"
+run = "server.py"
 port = 8772
 descriptor = "descriptor.toml"
-solver = "rk4"
 
 [test]
 golden = "expected.json"

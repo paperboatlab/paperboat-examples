@@ -1,17 +1,17 @@
-# Cart-pole backend (C++)
+# Cart-pole station (C++)
 
 A cart-pole on the [Paperboat protocol](../../../protocol/README.md), built on the C++
 [toolkit](../../../engine/toolkit/README.md). It shows how the pieces split:
 
 | Piece | From |
 | --- | --- |
-| Catalog (palette, station objects) | [`descriptor.toml`](descriptor.toml) (imports `signal`, `math`, `control` and `dashboard`), via `load_descriptor_file` |
+| Catalog (palette, station objects) | [`descriptor.toml`](descriptor.toml) (imports `signal`, `math`, `control` and `board`), via `load_descriptor_file` |
 | Sine, gain, sum, PID, key, graph… | toolkit blocks: `catalog.find(type)->make(params)` |
 | Cart-poles and their physics | this domain's station object, in [`domain/cart_pole.cpp`](domain/cart_pole.cpp): physics, drawing, linked block; registered with `define_object` |
 | Starter station, starter graph | `[station]` and `[graph]` in `descriptor.toml` |
 | Protocol, server, graph checking, run loop | `engine/core` (`paperboat::core`) |
 
-It is the reference **simple backend** (GUIDELINES §6.1): `main.cpp` adds the domain's
+It is the reference **simple station** (GUIDELINES §6.1): `main.cpp` adds the domain's
 own station object to the toolkit's registry, loads the descriptor and calls
 `paperboat::main()`. The domain's code is one file, [`domain/cart_pole.cpp`](domain/cart_pole.cpp):
 a `StationObject` (its state, `step`, `read` and the shapes it draws) registered with
@@ -24,7 +24,7 @@ length, force limit and initial conditions (`x0`, `theta0`) there; add more with
 x, v, theta, omega out): wire a controller to it. An unwired one just falls.
 
 The starter graph balances the pole with two PID blocks. Its results match the earlier
-Python, TypeScript and Ruby versions of this backend to the last printed digit.
+Python, TypeScript and Ruby versions of this station to the last printed digit.
 
 ## Build and run
 
@@ -33,7 +33,7 @@ A project of its own: its `CMakeLists.txt` pulls in the engine from
 links. Copy the folder anywhere and point `PAPERBOAT_ENGINE_DIR` at an engine.
 
 ```sh
-npm run backend:cart-pole            # from the repo root: builds, then serves ws://localhost:8766
+npm run station:cart-pole            # from the repo root: builds, then serves ws://localhost:8766
 # or by hand, from this folder:
 cmake -S . -B build                  # add -DPAPERBOAT_ENGINE_DIR=… when copied elsewhere
 cmake --build build

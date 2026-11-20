@@ -32,7 +32,7 @@ Overhead Camera → HSV range → Open → Close → Centroid → Puck Tracker
 
 ### Optional toolkit and degraded mode
 
-`backend.toml` does **not** hard-require OpenCV. CMake links `paperboat::toolkit_opencv` when
+`station.toml` does **not** hard-require OpenCV. CMake links `paperboat::toolkit_opencv` when
 it is available (an installed `engine/toolkit/opencv`, or the `paperboat-toolkit-opencv`
 checkout next to this repo) and defines `PAPERBOAT_HAS_OPENCV`. With it, `main.cpp` loads
 `descriptor.toml`. Without it, it loads `descriptor-degraded.toml`, which uses the domain's
@@ -49,7 +49,7 @@ next to Paperboat rather than inside it.
 
 ```sh
 ./bin/paperboat run 08
-# http://localhost:3047/?backend=ws://localhost:8772
+# http://localhost:3047/?station=ws://localhost:8772
 ```
 
 1. **Commander view** (`Alt+C`) — the 3D rink, mallets, puck and trail on the left; the
@@ -68,7 +68,7 @@ next to Paperboat rather than inside it.
 
 ```text
 08-air-hockey-tracker-cpp/
-├── backend.toml               # format = 0, port 8772, solver = rk4
+├── station.toml               # format = 0, port 8772, solver = rk4
 ├── descriptor.toml            # full OpenCV pipeline
 ├── descriptor-degraded.toml   # synthetic vision path, no OpenCV
 ├── CMakeLists.txt             # optional paperboat::toolkit_opencv detection

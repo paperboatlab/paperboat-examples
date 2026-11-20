@@ -1,8 +1,8 @@
-// Example Paperboat backend: count and sort the parts in a photo with classic image
+// Example Paperboat station: count and sort the parts in a photo with classic image
 // processing. Not a simulation: the flow is evaluated once.
 //
-// A simple backend on the SDK (GUIDELINES §6.1). The domain is descriptor.toml (the
-// opencv and dashboard packages, the starter station and graph) plus one block of its own,
+// A simple station on the SDK (GUIDELINES §6.1). The domain is descriptor.toml (the
+// opencv and board packages, the starter station and graph) plus one block of its own,
 // Count parts, defined in code (domain/). Gray, blur, threshold, morphology and Image view
 // are the toolkit's opencv package; the photo is an Image station object.
 
@@ -25,11 +25,11 @@ int main(int argc, char** argv) {
   }();
   static const paperboat::Catalog catalog =
       paperboat::load_descriptor_file(PAPERBOAT_DESCRIPTOR, registry, {.optional_imports = {"opencv"}});
-  const paperboat::Backend backend{
+  const paperboat::Station station{
       .engine = "cpp-parts",
       .catalog = &catalog,
-      .view = {{"mode", "2d"}, {"center", {0, 0}}, {"height", 5.6}},  // the photo; results go to the Dashboard
+      .view = {{"mode", "2d"}, {"center", {0, 0}}, {"height", 5.6}},  // the photo; results go to the Board
       .run = {.mode = paperboat::RunSettings::Mode::Once},
   };
-  return paperboat::main(backend, argc, argv, 8770);
+  return paperboat::main(station, argc, argv, 8770);
 }

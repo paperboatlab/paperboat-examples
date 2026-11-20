@@ -1,8 +1,8 @@
 """Recipes loaded from the bar's Excel workbook (`data/recipes.xlsx`).
 
 The workbook is the manager's recipe sheet: one row per pour, with the drink name repeated.
-The reader uses only the standard library (``zipfile`` + XML), so the backend does not need
-``openpyxl`` at run time. Edit the workbook and restart the backend to change the menu.
+The reader uses only the standard library (``zipfile`` + XML), so the station does not need
+``openpyxl`` at run time. Edit the workbook and restart the station to change the menu.
 """
 
 from dataclasses import dataclass
@@ -111,7 +111,7 @@ def load(path: Path = DATA) -> list[Recipe]:
 
 
 RECIPES = load()
-if not RECIPES:  # keep the backend importable if the workbook is missing
+if not RECIPES:  # keep the station importable if the workbook is missing
     RECIPES = [Recipe("Negroni", (Pour("gin", 30, 1), Pour("vermouth", 30, 1), Pour("campari", 30, 1)), 1.5, "orange peel")]
 BY_NAME = {recipe.name.lower(): recipe for recipe in RECIPES}
 NEGRONI = RECIPES[0]

@@ -7,7 +7,7 @@ from domain.state import RoomThermostat
 import paperboat
 
 if __name__ == "__main__":
-    paperboat.serve(paperboat.Backend(
+    paperboat.serve(paperboat.Station(
         engine="01-smart-thermostat-python",
         descriptor=Path(__file__).with_name("descriptor.toml"),
         state=RoomThermostat,

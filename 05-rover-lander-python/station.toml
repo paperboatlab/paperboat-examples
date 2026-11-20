@@ -1,11 +1,11 @@
-[backend]
+[station]
 format = 0
-name = "10-train-pantograph-cpp"
+name = "05-rover-lander-python"
 version = "0.1.0"
 engine = ">=0.1"
-language = "cpp"
-run = "build/paperboat-train-pantograph"
-port = 8774
+language = "python"
+run = "server.py"
+port = 8769
 descriptor = "descriptor.toml"
 solver = "rk4"
 

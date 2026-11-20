@@ -5,7 +5,7 @@
 > **Language**: Python  
 > **Port**: 8765  
 > **UI Cockpit**: Navigator Mode  
-> **Core Concepts**: Continuous ODE clock flow, scalar signal wiring, Board Wave Plot, `backend.toml` (format = 0).
+> **Core Concepts**: Continuous ODE clock flow, scalar signal wiring, Board Wave Plot, `station.toml` (format = 0).
 
 ---
 
@@ -26,11 +26,11 @@ This tutorial introduces the foundations of the Paperboat platform. You will bui
 
 ## 2. Cockpit Exploration (The Web UI)
 
-Launch the backend and open the Paperboat Cockpit:
+Launch the station and open the Paperboat Cockpit:
 ```bash
 ./bin/paperboat run 01-smart-thermostat-python
 ```
-Navigate to `http://localhost:3047/?backend=ws://localhost:8765`.
+Navigate to `http://localhost:3047/?station=ws://localhost:8765`.
 
 ### 2.1 The Navigator Mode
 Paperboat opens in **Navigator Mode**, designed for clean signal flow observation:
@@ -45,7 +45,7 @@ Paperboat opens in **Navigator Mode**, designed for clean signal flow observatio
    - Left-click and drag to orbit around the room.
    - Observe the baseboard heater on the left wall: when the heater activates, it glows bright orange (`#f97316`) and convective heat plumes rise.
    - The scenic window and round thermostat dial are mounted along the back wall. The dial glows emerald green when within comfort bounds.
-3. **Dashboard Telemetry**:
+3. **Board Telemetry**:
    - The **Scope** instrument graphs setpoint, control signal, and indoor temperature together.
    - The **Target Label** readout displays the current target setpoint.
    - The **Console** pane displays real-time execution logs.
@@ -59,10 +59,10 @@ Paperboat opens in **Navigator Mode**, designed for clean signal flow observatio
 
 ## 3. API & Code Structure
 
-The backend directory contains:
+The station directory contains:
 ```text
 01-smart-thermostat-python/
-├── backend.toml          # Declarative format = 0 manifest
+├── station.toml          # Declarative format = 0 manifest
 ├── descriptor.toml       # Imports, variables, and starter Flow wiring
 ├── server.py             # Minimal Python entrypoint (paperboat.serve)
 ├── domain/
@@ -73,10 +73,10 @@ The backend directory contains:
 └── README.md
 ```
 
-### 3.1 Backend Manifest (`backend.toml`)
-Every Paperboat backend is declared with a `backend.toml` manifest:
+### 3.1 Station Manifest (`station.toml`)
+Every Paperboat station is declared with a `station.toml` manifest:
 ```toml
-[backend]
+[station]
 format = 0
 name = "01-smart-thermostat-python"
 version = "0.1.0"
@@ -92,7 +92,7 @@ golden = "expected.json"
 ```
 
 ### 3.2 Running Headless & Verifying
-Verify this backend from the command line without opening a browser:
+Verify this station from the command line without opening a browser:
 ```bash
 # Run 4-stage verification
 ./paperboat/bin/paperboat check paperboat-examples/01-smart-thermostat-python --fast

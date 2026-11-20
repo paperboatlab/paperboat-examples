@@ -33,7 +33,7 @@ Web Audio. Browsers keep audio suspended until a click, so press **Click for sou
 
 ```sh
 ./bin/paperboat run 09
-# http://localhost:3047/?backend=ws://localhost:8773
+# http://localhost:3047/?station=ws://localhost:8773
 ```
 
 1. **Lookout mode** (`Alt+L`) — the Board alone, full screen, for the Scope and readouts.
@@ -44,7 +44,7 @@ Web Audio. Browsers keep audio suspended until a click, so press **Click for sou
 4. **Flow** — open the `6-Voice Voice Card` subsystem to see VCO → VCA with the ADSR feeding
    its envelope; the `VCF & LFO` frame shows the modulation path.
 5. **Speaker** — press **Click for sound** on the Board once (browsers keep audio suspended
-   until a click); the backend sends one PCM buffer per two control passes and the
+   until a click); the station sends one PCM buffer per two control passes and the
    instrument queues them back to back.
 
 `Mixer` writes the six levels into the domain state; the station object patches only the VU
@@ -56,8 +56,8 @@ bars each frame.
 
 ```text
 09-modular-synth-cpp/
-├── backend.toml          # format = 0, port 8773, solver = rk4
-├── descriptor.toml       # six-voice vector graph, variables, dashboard
+├── station.toml          # format = 0, port 8773, solver = rk4
+├── descriptor.toml       # six-voice vector graph, variables, board
 ├── CMakeLists.txt        # native C++ linking paperboat::core
 ├── main.cpp              # paperboat::main, domain state factory
 ├── domain/

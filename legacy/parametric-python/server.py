@@ -1,4 +1,4 @@
-"""Example Paperboat backend: parametric geometry, no simulation (Python).
+"""Example Paperboat station: parametric geometry, no simulation (Python).
 
 Unlike the other examples there is no clock: a run evaluates the graph once. Wires carry
 lists (a grid of points, one height per point), and the Boxes block writes its result
@@ -14,7 +14,7 @@ from domain.state import Boxes
 import paperboat
 
 if __name__ == "__main__":
-    paperboat.serve(paperboat.Backend(
+    paperboat.serve(paperboat.Station(
         engine="python-parametric",
         descriptor=Path(__file__).with_name("descriptor.toml"),
         state=Boxes,

@@ -4,7 +4,7 @@
 # and its golden result still passes; the Image tiles say that OpenCV is not built.
 domain = "air-hockey"
 
-import = ["base", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "board", "math", "signal", "step", "string"]
 
 # The OpenCV toolkit brings an Image station object, so the catalog has objects; an
 # explicit empty station keeps the handshake complete when the starter uses none.
@@ -45,7 +45,7 @@ groups = [
   { id = "tracking", kind = "visual", label = "Puck Tracking", nodes = ["tracker-1", "display-x", "display-z", "display-bounces", "display-truth-bounces", "scope-1"] },
 ]
 
-[dashboard]
+[board]
 columns = 8
 instruments = [
   { block = "view-fallback", size = "large", at = [0, 0] },

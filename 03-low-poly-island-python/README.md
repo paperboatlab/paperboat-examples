@@ -28,15 +28,15 @@ Unlike time-series physical simulations driven by continuous ODE integration clo
 
 ## 2. Cockpit UI Exploration
 
-Launch the backend and open the Paperboat Cockpit:
+Launch the station and open the Paperboat Cockpit:
 ```bash
 ./bin/paperboat run 03-low-poly-island-python
 ```
-Navigate to `http://localhost:3047/?backend=ws://localhost:8767`.
+Navigate to `http://localhost:3047/?station=ws://localhost:8767`.
 
 ### 2.1 One-Shot Static Evaluation
-In continuous backends, a simulation clock steps forward in time. In this procedural backend:
-- The backend manifest specifies `solver = "discrete"` and server mode `"once"`.
+In continuous stations, a simulation clock steps forward in time. In this procedural station:
+- The station manifest specifies `solver = "discrete"` and server mode `"once"`.
 - The entire pipeline evaluates in dependency order whenever a parameter or wire changes.
 
 ### 2.2 List & Array Wires
@@ -79,7 +79,7 @@ Press `Alt+V` to open the Variables sheet:
 
 ```text
 03-low-poly-island-python/
-├── backend.toml          # Declarative format = 0 manifest (port = 8767, solver = "discrete")
+├── station.toml          # Declarative format = 0 manifest (port = 8767, solver = "discrete")
 ├── descriptor.toml       # Variables sheet (seed, octaves, scale), Flow starter graph
 ├── server.py             # Minimal Python entrypoint (paperboat.serve)
 ├── domain/

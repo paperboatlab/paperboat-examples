@@ -1,4 +1,4 @@
-# Animation backend (Python): the Step flow example
+# Animation station (Python): the Step flow example
 
 A 3D actor (a box with a nose) animated by a **Step flow** on the
 [Paperboat protocol](../../../protocol/README.md). Blocks with **step ports** (square,
@@ -15,7 +15,7 @@ Scratch, and the Flow page lights up the block it is at.
   its time, and a `progress` output. Wire progress → a signal block (Ease, Sine, f(t)…) →
   curve to shape the motion; a steady 0.5 jumps halfway at once, holds, and ends at 1.
 - **Signal blocks** work here too: Pose (probe) and the `base`, `signal`, `math` and
-  `dashboard` packages (Key, Clock, Threshold, Graph…). They are sampled once per clock step and feed conditions and
+  `board` packages (Key, Clock, Threshold, Graph…). They are sampled once per clock step and feed conditions and
   monitors.
 
 The palette and the starter graph come from `descriptor.toml` (it imports `step` and
@@ -28,7 +28,7 @@ expected.json     what the starter run must produce (npm run golden)
 domain/
   state.py        the actor: position, orientation (quaternion), size
   blocks.py       Move, Rotate, Scale (steps), Pose (a probe) and Spin (a signal block)
-server.py         fills a paperboat.Backend and serves it: no logic
+server.py         fills a paperboat.Station and serves it: no logic
 ```
 
 Everything else (the protocol, graph checking, the runs, the toolkit blocks) is the C++
@@ -41,7 +41,7 @@ engine, through the Python bindings (`pip install ./python` from the repo root, 
 1. Start → **Walk a square** (a visual group: Repeat ×4 of Move 2 m, Rotate 90°) →
    **Spin** (a *story group*, 2 s: Constant 45 → Spin, a signal block that turns the actor
    while it runs: 90° in all) → **Report** (a story group that runs once: Pose → the final
-   heading and x on the Dashboard). A story is one step on the path: its blocks run only
+   heading and x on the Board). A story is one step on the path: its blocks run only
    while the path is there, and what they computed stays for the next story.
 2. **Pop on Space** (a visual group): When Key (Space) → pop bigger and back
    (Scale → Scale), any time you press it, alongside the story.

@@ -12,7 +12,7 @@ from domain.state import RobotCell
 import paperboat
 
 if __name__ == "__main__":
-    paperboat.serve(paperboat.Backend(
+    paperboat.serve(paperboat.Station(
         engine="06-robot-pick-place-python",
         descriptor=Path(__file__).with_name("descriptor.toml"),
         state=RobotCell,

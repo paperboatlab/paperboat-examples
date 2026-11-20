@@ -81,7 +81,7 @@ class Pendulum final : public paperboat::Model {
 
   Values read() const override {
     // Keep integrated angles continuous internally for the solver, but publish the vector
-    // and scalar readouts in one revolution so the Dashboard says 0 rad when upright.
+    // and scalar readouts in one revolution so the Board says 0 rad when upright.
     paperboat::Vector public_state = x();
     public_state[1] = wrap(public_state[1]);
     public_state[2] = wrap(public_state[2]);
