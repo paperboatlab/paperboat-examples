@@ -11,7 +11,7 @@
 
 ## 1. Overview
 
-The backend runs a 2-D **D2Q9 lattice-Boltzmann** wind tunnel around a NACA 0012 profile at
+The station runs a 2-D **D2Q9 lattice-Boltzmann** wind tunnel around a NACA 0012 profile at
 a variable angle of attack.
 
 - **Lattice**: 160 × 80 cells, nine discrete velocities, BGK collision with `τ = 0.53`.
@@ -41,7 +41,7 @@ airfoil outline, the chord line and lift/drag arrows.
 
 ```sh
 ./bin/paperboat run 07
-# http://localhost:3047/?backend=ws://localhost:8771
+# http://localhost:3047/?station=ws://localhost:8771
 ```
 
 1. **Variables** (`Alt+V`) — `alpha` is tunable: try `0°`, `6°`, `14°`, `20°`, `25°`.
@@ -59,8 +59,8 @@ The lattice is pure NumPy; a full run is a few seconds on a laptop.
 
 ```text
 07-airfoil-cfd-python/
-├── backend.toml          # format = 0, port 8771, solver = discrete
-├── descriptor.toml       # wind-tunnel variables, LBM flow, dashboard
+├── station.toml          # format = 0, port 8771, solver = discrete
+├── descriptor.toml       # wind-tunnel variables, LBM flow, board
 ├── server.py             # paperboat.serve (dt = 0.1, duration = 9 s)
 ├── domain/
 │   ├── __init__.py

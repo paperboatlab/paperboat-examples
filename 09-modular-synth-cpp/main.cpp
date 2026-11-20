@@ -15,12 +15,12 @@ int main(int argc, char** argv) {
     return r;
   }();
   static const paperboat::Catalog catalog = paperboat::load_descriptor_file(PAPERBOAT_DESCRIPTOR, registry);
-  const paperboat::Backend backend{
+  const paperboat::Station station{
       .engine = "09-modular-synth-cpp",
       .catalog = &catalog,
       .state = [] { return std::make_unique<synth::Synth>(); },
       .view = {{"mode", "3d"}, {"camera", {{"eye", {0.4, 1.4, 4.2}}, {"target", {0, 0.55, 0}}}}},
       .run = {.dt = 1.0 / 60.0, .duration = 6.0, .emit_every = 2},
   };
-  return paperboat::main(backend, argc, argv, 8773);
+  return paperboat::main(station, argc, argv, 8773);
 }

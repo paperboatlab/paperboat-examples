@@ -23,7 +23,7 @@ else()
   target_link_libraries(paperboat_warnings INTERFACE paperboat::warnings)
 endif()
 
-# The optional toolkits this backend imports: control (the PID blocks) and the optimization
+# The optional toolkits this station imports: control (the PID blocks) and the optimization
 # toolkit its Workspace links. They are installed into the engine with
 # `paperboat toolkit install optimization` and `paperboat toolkit install control`.
 foreach(toolkit optimization control)

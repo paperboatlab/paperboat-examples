@@ -8,7 +8,7 @@
 # not part of the Station API yet); the IK, quintic paths and fork logic are the tutorial.
 domain = "robot-cell"
 
-import = ["base", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "board", "math", "signal", "step", "string"]
 
 [[variables]]
 name = "transfer_seconds"
@@ -84,7 +84,7 @@ groups = [
   { id = "ik", kind = "visual", label = "IK Solver", nodes = ["target-x", "target-y", "target-z", "ik-1", "display-t1", "display-t2", "display-t3"] },
 ]
 
-[dashboard]
+[board]
 columns = 6
 instruments = [
   { block = "scope-rates", size = "xlarge", at = [0, 0] },

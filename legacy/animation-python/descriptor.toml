@@ -1,10 +1,10 @@
-# A 3D actor animated by a Step flow. Served by examples/backends/animation-python.
+# A 3D actor animated by a Step flow. Served by examples/stations/animation-python.
 domain = "animation"
 
 # Every block of these toolkit packages is in the palette: the Step flow's path (start,
 # when, wait, if, repeat, stop) and the base signal blocks (conditions, keys, clock,
 # graphs).
-import = ["base", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "board", "math", "signal", "step", "string"]
 
 # The domain's own steps (Move, Rotate, Scale, each over `seconds`, in the actor's frame)
 # and its Pose probe are defined in code, domain/blocks.py.
@@ -14,7 +14,7 @@ import = ["base", "dashboard", "math", "signal", "step", "string"]
 #   Start → [Walk a square] (a visual group: Repeat ×4 of Move 2 m, Rotate 90°; each Move
 #           eases in and out: its progress → Ease → its curve)
 #         → [Spin] (a story group, 2 s: Constant 45 → Spin, the actor turns 90°)
-#         → [Report] (a story group, once: Pose → the final heading and x on the Dashboard).
+#         → [Report] (a story group, once: Pose → the final heading and x on the Board).
 # Alongside: [Pop on Space] (When Key → Scale up and back, any time) and [End at 10 s]
 # (collapsed: Clock → Threshold → When → Stop). Pose → Graph plots the whole run.
 [graph]

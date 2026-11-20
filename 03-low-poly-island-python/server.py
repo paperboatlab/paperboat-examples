@@ -10,7 +10,7 @@ from domain import BLOCKS, IslandState
 import paperboat
 
 if __name__ == "__main__":
-    paperboat.serve(paperboat.Backend(
+    paperboat.serve(paperboat.Station(
         engine="03-low-poly-island-python",
         descriptor=Path(__file__).with_name("descriptor.toml"),
         state=IslandState,

@@ -1,11 +1,11 @@
-# Pole on a cart, balanced by PID blocks. Served by examples/backends/cart-pole-cpp.
+# Pole on a cart, balanced by PID blocks. Served by examples/stations/cart-pole-cpp.
 domain = "cart-pole"
 
 # Every block of these toolkit packages (control brings PID). The Cart-pole station object
 # is this domain's own (domain/cart_pole.cpp), so it needs no import: add one or more on
 # the Station page, set their properties and initial conditions there, and each spawns a
 # linked Cart-pole block on the Flow page (force in; x, v, theta, omega out).
-import = ["base", "control", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "control", "board", "math", "signal", "step", "string"]
 
 # Toolkit templates with this domain's defaults (they replace the imported ones).
 [[blocks]]

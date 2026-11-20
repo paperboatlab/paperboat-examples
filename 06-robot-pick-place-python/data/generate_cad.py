@@ -5,7 +5,7 @@ turret, two arms and a fork. Run this script after changing a dimension:
 
     python3 data/generate_cad.py
 
-It writes data/cad/*.stl next to the backend; the Python example loads them with
+It writes data/cad/*.stl next to the station; the Python example loads them with
 domain/stl.py and sends them as Station mesh entities.
 """
 

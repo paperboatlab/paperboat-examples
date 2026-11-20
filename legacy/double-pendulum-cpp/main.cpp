@@ -1,4 +1,4 @@
-// Example Paperboat backend: a double pendulum on a cart with an unknown payload.
+// Example Paperboat station: a double pendulum on a cart with an unknown payload.
 //
 // Three stories run in order (GUIDELINES §6): identify the payload by gray-box recursive
 // least squares, swing the links up by energy shaping, and balance them with an LQR whose
@@ -16,8 +16,8 @@ int main(int argc, char** argv) {
     return r;
   }();
   static const paperboat::Catalog catalog = paperboat::load_descriptor_file(PAPERBOAT_DESCRIPTOR, registry);
-  const paperboat::Backend backend{.engine = "cpp-double-pendulum",
+  const paperboat::Station station{.engine = "cpp-double-pendulum",
                                    .catalog = &catalog,
                                    .run = {.dt = 0.01, .duration = 45.0, .emit_every = 4}};
-  return paperboat::main(backend, argc, argv, 8767);
+  return paperboat::main(station, argc, argv, 8767);
 }

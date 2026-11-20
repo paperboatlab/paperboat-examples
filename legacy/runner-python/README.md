@@ -1,8 +1,8 @@
-# Runner backend (Python)
+# Runner station (Python)
 
 A 2D side-scroller on the [Paperboat protocol](../../../protocol/README.md): a runner
 jumps over crates and ducks under the occasional bar that slides toward it. The runner and obstacles
-live in the backend (setup); the flow decides when to jump or duck (control).
+live in the station (setup); the flow decides when to jump or duck (control).
 
 - **Starter graph: autopilot.** Next crate `dx` → Gain (−1) → Threshold (−1.6) → Jump,
   so it jumps when a crate is closer than 1.6 m. The same chain from Next bar → Duck
@@ -15,7 +15,7 @@ live in the backend (setup); the flow decides when to jump or duck (control).
 You can't jump while ducking. Keep running for 20 s to win.
 
 - **Its Station is a web page** (`[station] view = "web"` in the descriptor): the engine
-  serves `station/` on the backend's port, and the Station page shows it in place of the
+  serves `station/` on the station's port, and the Station page shows it in place of the
   built-in scene. The page draws the same entities the engine sends (`runner`,
   `obstacle-N`) in its own paper-cut look; it decides nothing. Keys pressed on it still
   reach the Key blocks.
@@ -29,7 +29,7 @@ expected.json     what the starter run must produce (npm run golden)
 domain/
   state.py        the game: runner, crates and bars
   blocks.py       Runner, Next crate, Next bar (probes); Jump, Duck (sources)
-server.py         fills a paperboat.Backend and serves it: no logic
+server.py         fills a paperboat.Station and serves it: no logic
 ```
 
 Everything else (the protocol, graph checking, the runs, the toolkit blocks) is the C++

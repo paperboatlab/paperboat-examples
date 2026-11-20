@@ -1,4 +1,4 @@
-"""Example Paperboat backend: a 2D runner that jumps over crates and ducks under bars (Python).
+"""Example Paperboat station: a 2D runner that jumps over crates and ducks under bars (Python).
 
 The runner and obstacles are the domain state (domain/state.py); the flow decides when to jump or
 duck (control). The starter graph in descriptor.toml is an autopilot. Wire the Key blocks
@@ -14,7 +14,7 @@ from domain.state import Game
 import paperboat
 
 if __name__ == "__main__":
-    paperboat.serve(paperboat.Backend(
+    paperboat.serve(paperboat.Station(
         engine="python-runner",
         descriptor=Path(__file__).with_name("descriptor.toml"),
         state=Game,

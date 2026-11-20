@@ -1,7 +1,7 @@
 // LZ-1 cockpit: a phosphor CRT drawn from the engine's entities and signals.
 //
-// The page is a Station view only: it draws what the backend sends and forwards key
-// presses. The GNC law and the vehicle are in the backend; nothing here decides.
+// The page is a Station view only: it draws what the station sends and forwards key
+// presses. The GNC law and the vehicle are in the station; nothing here decides.
 "use strict";
 
 const canvas = document.getElementById("view");

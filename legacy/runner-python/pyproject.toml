@@ -1,6 +1,6 @@
 [project]
-name = "paperboat-backend-runner"
+name = "paperboat-station-runner"
 version = "0.0.1"
-description = "2D runner (jump over crates) backend for the Paperboat protocol"
+description = "2D runner (jump over crates) station for the Paperboat protocol"
 requires-python = ">=3.11"
 dependencies = ["paperboat"]  # the Python runtime: pip install ./python from the repo root

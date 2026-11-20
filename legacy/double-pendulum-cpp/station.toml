@@ -1,13 +1,12 @@
-[backend]
+[station]
 format = 0
-name = "09-modular-synth-cpp"
+name = "double-pendulum"
 version = "0.1.0"
 engine = ">=0.1"
 language = "cpp"
-run = "build/paperboat-modular-synth"
+run = "build/paperboat-double-pendulum"
 port = 8773
 descriptor = "descriptor.toml"
-solver = "rk4"
 
 [test]
 golden = "expected.json"

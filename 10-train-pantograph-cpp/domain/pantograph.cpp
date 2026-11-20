@@ -1,6 +1,6 @@
 // The pantograph's multibody head, the compliant catenary and the active regulator.
 //
-// The reference acausal model is modelica/PantographCatenary.mo. This backend carries the
+// The reference acausal model is modelica/PantographCatenary.mo. This station carries the
 // same equations in code: a head mass on a suspension spring/damper, a contact spring with
 // the wire, aerodynamic uplift growing with v², and a PI pneumatic actuator.
 
@@ -160,7 +160,7 @@ class Pantograph final : public StationObject {
   bool arcing_ = false, overforce_ = false;
 };
 
-// The pneumatic actuator: target contact force, PI on the measured force. A dashboard
+// The pneumatic actuator: target contact force, PI on the measured force. A board
 // switch bypasses it to a fixed 150 N, which loses contact at high speed.
 class Regulator final : public Block {
  public:

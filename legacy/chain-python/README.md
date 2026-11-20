@@ -1,4 +1,4 @@
-# Chain backend (Python)
+# Chain station (Python)
 
 A structure and a test of it, on the [Paperboat protocol](../../../protocol/README.md): a
 chain of masses, springs and dampers anchored to a wall.
@@ -22,7 +22,7 @@ at 2.5 m and spring-1 at 5 N.
 descriptor.toml   imports for the test logic, the starter station (a graph) and test
 domain/
   objects.py      Wall, Mass, Spring, Damper: station objects, linked to each other
-server.py         fills a paperboat.Backend and serves it: no logic
+server.py         fills a paperboat.Station and serves it: no logic
 expected.json     what the starter run must produce (npm run golden)
 ```
 

@@ -44,7 +44,7 @@ The C++ implementation in `domain/pantograph.cpp` carries the same equations; op
 
 ```sh
 ./bin/paperboat run 10
-# http://localhost:3047/?backend=ws://localhost:8774
+# http://localhost:3047/?station=ws://localhost:8774
 ```
 
 1. **Commander view** (`Alt+C`) — the train/pantograph on the left, the regulator on the
@@ -64,7 +64,7 @@ The C++ implementation in `domain/pantograph.cpp` carries the same equations; op
 
 ```text
 10-train-pantograph-cpp/
-├── backend.toml          # format = 0, port 8774, solver = rk4
+├── station.toml          # format = 0, port 8774, solver = rk4
 ├── descriptor.toml       # station object, regulator graph, variables
 ├── CMakeLists.txt        # native C++ linking paperboat::core
 ├── main.cpp              # paperboat::main

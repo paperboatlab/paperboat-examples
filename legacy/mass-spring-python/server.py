@@ -1,4 +1,4 @@
-"""Example Paperboat backend: a mass on a spring (Python).
+"""Example Paperboat station: a mass on a spring (Python).
 
 One mass on a spring along x; F1 pushes it and P1 reads it. The physics is the domain state
 (domain/state.py), not the graph: setup says where, flow says what. The palette and the
@@ -13,7 +13,7 @@ from domain.state import MassSpring
 import paperboat
 
 if __name__ == "__main__":
-    paperboat.serve(paperboat.Backend(
+    paperboat.serve(paperboat.Station(
         engine="python-mass-spring",
         descriptor=Path(__file__).with_name("descriptor.toml"),
         state=MassSpring,

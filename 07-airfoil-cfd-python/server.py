@@ -13,7 +13,7 @@ from domain.state import WindTunnel
 import paperboat
 
 if __name__ == "__main__":
-    paperboat.serve(paperboat.Backend(
+    paperboat.serve(paperboat.Station(
         engine="07-airfoil-cfd-python",
         descriptor=Path(__file__).with_name("descriptor.toml"),
         state=WindTunnel,

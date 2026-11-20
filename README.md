@@ -1,6 +1,6 @@
 # Paperboat examples
 
-Example backends for [Paperboat](https://github.com/paperboatlab/paperboat): each folder is a
+Example stations for [Paperboat](https://github.com/paperboatlab/paperboat): each folder is a
 project of its own that uses the Paperboat engine (C++) or its Python bindings, and turns the
 same domain-free UI into a different app. They exist to prove the framework: every one must
 pass the protocol smoke test and its own golden result.
@@ -22,7 +22,7 @@ and an acausal Modelica reference.
 | 09 | `09-modular-synth-cpp/` | 8773 | C++ | Vector wires `[6]`: six-voice synth, per-voice filters, Scope and PCM Speaker |
 | 10 | `10-train-pantograph-cpp/` | 8774 | C++/Modelica | Active contact-force regulator, compliant catenary, bypass and arcing |
 
-The nine legacy backends are archived under [`legacy/`](legacy/) for reference; they are not
+The nine legacy stations are archived under [`legacy/`](legacy/) for reference; they are not
 part of the curriculum, the CLI's example list or the golden run.
 
 ## Set up
@@ -55,18 +55,18 @@ cmake -S 09-modular-synth-cpp -B 09-modular-synth-cpp/build && cmake --build 09-
 ```
 
 Then, in `../paperboat`, `npm run dev` and open
-`http://localhost:5173/?backend=ws://localhost:<port>`. Every backend also runs its starter
+`http://localhost:5173/?station=ws://localhost:<port>`. Every station also runs its starter
 headless with `--run` (protocol messages as JSON lines).
 
 ## Test
 
 ```sh
 python3 ../paperboat/protocol/golden.py --examples .        # every starter run vs expected.json
-python3 ../paperboat/protocol/smoke_test.py --port <port>   # a running backend vs the protocol
+python3 ../paperboat/protocol/smoke_test.py --port <port>   # a running station vs the protocol
 ./paperboat/bin/paperboat check <folder>                    # manifest, catalog, smoke, golden
 ```
 
-Writing your own backend: see Paperboat's API reference (`docs/api`, quickstart) and the
-numbered README next to each backend.
+Writing your own station: see Paperboat's API reference (`docs/api`, quickstart) and the
+numbered README next to each station.
 
-This repository is published from Paperboat's development tree (`examples/backends`).
+This repository is published from Paperboat's development tree (`examples/stations`).

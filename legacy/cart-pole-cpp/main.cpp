@@ -1,7 +1,7 @@
-// Example Paperboat backend: cart-poles balanced by PID blocks.
+// Example Paperboat station: cart-poles balanced by PID blocks.
 //
-// A simple backend on the SDK (GUIDELINES §6.1). The domain is descriptor.toml, next to
-// this file (the signal, math, control and dashboard packages, the starter station and
+// A simple station on the SDK (GUIDELINES §6.1). The domain is descriptor.toml, next to
+// this file (the signal, math, control and board packages, the starter station and
 // graph), plus one station object of its own, the Cart-pole, defined in code (domain/):
 // its physics, how it's drawn, and the linked block a flow drives it through.
 

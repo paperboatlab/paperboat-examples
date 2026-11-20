@@ -32,7 +32,7 @@ control on the Board (or the Variables dock); the recipe stages read the same wo
 
 ```sh
 ./bin/paperboat run 04
-# http://localhost:3047/?backend=ws://localhost:8768
+# http://localhost:3047/?station=ws://localhost:8768
 ```
 
 1. **Flow** — watch the token walk `Start → Detect Cup → Pour Base → Shake & Chill →
@@ -43,7 +43,7 @@ control on the Board (or the Variables dock); the recipe stages read the same wo
    mushroom turns red, and the Console records the rinse. The recipe path resumes when the
    rinse ends; press Space again to interrupt it.
 4. **Menu** — the Board's Choice control selects a drink from the Excel workbook. Edit
-   `data/recipes.xlsx` and restart the backend to add a row or a new drink; the dispense and
+   `data/recipes.xlsx` and restart the station to add a row or a new drink; the dispense and
    shake times are read from the sheet.
 5. **Station** — the stainless counter, four-valve gantry with LEDs, rotary shaker and the
    rising liquid level in the serving glass.
@@ -56,8 +56,8 @@ control on the Board (or the Variables dock); the recipe stages read the same wo
 
 ```text
 04-cocktail-barista-python/
-├── backend.toml          # format = 0, port 8768, solver = discrete
-├── descriptor.toml       # variables, Step-flow starter, groups, dashboard
+├── station.toml          # format = 0, port 8768, solver = discrete
+├── descriptor.toml       # variables, Step-flow starter, groups, board
 ├── server.py             # paperboat.serve (mode = "clock", step blocks)
 ├── data/
 │   └── recipes.xlsx      # the bar manager's recipe sheet

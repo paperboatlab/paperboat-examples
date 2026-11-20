@@ -9,7 +9,7 @@
 # curve breaks past 14°. The Station page plots arrows, streamlines and force vectors.
 domain = "airfoil"
 
-import = ["base", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "board", "math", "signal", "step", "string"]
 
 [[variables]]
 name = "alpha"
@@ -68,7 +68,7 @@ groups = [
   { id = "polars", kind = "visual", label = "Aerodynamic Polars", nodes = ["forces-1", "display-cl", "display-cd", "display-ld", "display-steps", "scope-1"] },
 ]
 
-[dashboard]
+[board]
 columns = 6
 instruments = [
   { block = "scope-1", size = "xlarge", at = [0, 0] },

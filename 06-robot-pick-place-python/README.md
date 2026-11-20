@@ -35,7 +35,7 @@ S-curve to bin → vacuum off) → Stop`.
 
 ```sh
 ./bin/paperboat run 06
-# http://localhost:3047/?backend=ws://localhost:8770
+# http://localhost:3047/?station=ws://localhost:8770
 ```
 
 1. **Flow** — open the `Pick & Place Cycle ×3` frame; each S-curve block shows its progress.
@@ -56,8 +56,8 @@ S-curve to bin → vacuum off) → Stop`.
 
 ```text
 06-robot-pick-place-python/
-├── backend.toml          # format = 0, port 8770, solver = euler
-├── descriptor.toml       # variables, Step-flow cycle, IK demo, dashboard
+├── station.toml          # format = 0, port 8770, solver = euler
+├── descriptor.toml       # variables, Step-flow cycle, IK demo, board
 ├── server.py             # paperboat.serve (dt = 1/50, duration = 22 s)
 ├── domain/
 │   ├── __init__.py

@@ -7,7 +7,7 @@
 # Open Lookout mode (Alt+L) for the full-screen Scope and jam with the Variables sheet.
 domain = "synth"
 
-import = ["base", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "board", "math", "signal", "step", "string"]
 
 [[variables]]
 name = "root_note"
@@ -102,7 +102,7 @@ groups = [
   { id = "audio", kind = "visual", label = "Speaker (PCM)", nodes = ["audio-1", "speaker-1", "display-audio-rms"] },
 ]
 
-[dashboard]
+[board]
 columns = 8
 instruments = [
   { block = "scope-1", size = "xlarge", at = [0, 0] },

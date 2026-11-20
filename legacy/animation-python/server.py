@@ -1,4 +1,4 @@
-"""Example Paperboat backend: a Step flow that animates a 3D actor (Python).
+"""Example Paperboat station: a Step flow that animates a 3D actor (Python).
 
 The Step flow example: blocks with step ports form paths (Start → Repeat → Move →
 Rotate → …) and each path moves along one block at a time, like a flowchart or Scratch.
@@ -19,7 +19,7 @@ from domain.state import Actor
 import paperboat
 
 if __name__ == "__main__":
-    paperboat.serve(paperboat.Backend(
+    paperboat.serve(paperboat.Station(
         engine="python-animation",
         descriptor=Path(__file__).with_name("descriptor.toml"),
         state=Actor,

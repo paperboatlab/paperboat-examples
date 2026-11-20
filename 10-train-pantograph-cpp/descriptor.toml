@@ -6,7 +6,7 @@
 # to a fixed 150 N and the console reports arcing at speed.
 domain = "train"
 
-import = ["base", "dashboard", "math", "signal", "step", "string"]
+import = ["base", "board", "math", "signal", "step", "string"]
 
 [[variables]]
 name = "target_force"
@@ -76,7 +76,7 @@ groups = [
   { id = "telemetry", kind = "visual", label = "Contact Telemetry", nodes = ["probe-1", "display-force", "display-speed", "display-losses", "display-window", "display-uplift", "display-command", "scope-1"] },
 ]
 
-[dashboard]
+[board]
 columns = 8
 instruments = [
   { block = "scope-1", size = "xlarge", at = [0, 0] },
