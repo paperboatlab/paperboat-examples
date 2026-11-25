@@ -3,7 +3,7 @@
 > **Level**: 03 · Elementary  
 > **Domain**: Creative Coding & Procedural Game Worlds  
 > **Language**: Python  
-> **Port**: 8767  
+> **Port**: 51303  
 > **UI Cockpit**: Navigator Mode  
 > **Core Concepts**: One-shot static evaluation (`solver = "discrete"`), list/array wires, block commenting (`Ctrl+/`), block bypassing (`Ctrl+Shift+Y`).
 
@@ -32,7 +32,7 @@ Launch the station and open the Paperboat Cockpit:
 ```bash
 ./bin/paperboat run 03-low-poly-island-python
 ```
-Navigate to `http://localhost:3047/?station=ws://localhost:8767`.
+Navigate to `http://localhost:30471/?station=ws://localhost:51303`.
 
 ### 2.1 One-Shot Static Evaluation
 In continuous stations, a simulation clock steps forward in time. In this procedural station:
@@ -79,7 +79,7 @@ Press `Alt+V` to open the Variables sheet:
 
 ```text
 03-low-poly-island-python/
-├── station.toml          # Declarative format = 0 manifest (port = 8767, solver = "discrete")
+├── station.toml          # Declarative format = 0 manifest (port = 51303, solver = "discrete")
 ├── descriptor.toml       # Variables sheet (seed, octaves, scale), Flow starter graph
 ├── server.py             # Minimal Python entrypoint (paperboat.serve)
 ├── domain/

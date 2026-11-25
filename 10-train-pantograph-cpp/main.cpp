@@ -21,5 +21,5 @@ int main(int argc, char** argv) {
       .view = {{"mode", "3d"}, {"camera", {{"eye", {7.0, 5.6, 8.5}}, {"target", {0.5, 4.6, 0}}}}},
       .run = {.dt = 1.0 / 60.0, .duration = 30.0, .emit_every = 3, .speed = 6.0},
   };
-  return paperboat::main(station, argc, argv, 8774);
+  return paperboat::main(station, argc, argv, 51310);
 }

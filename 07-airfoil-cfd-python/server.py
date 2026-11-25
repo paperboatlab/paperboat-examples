@@ -23,5 +23,5 @@ if __name__ == "__main__":
         duration=9.0,
         emit_every=1,
         view={"mode": "2d", "center": [1.8, 0.95], "height": 2.4},
-        port=8771,
+        port=51307,
     ))

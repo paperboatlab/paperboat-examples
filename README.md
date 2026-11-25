@@ -11,16 +11,19 @@ and an acausal Modelica reference.
 
 | Level | Folder | Port | Language | What it shows |
 | --- | --- | --- | --- | --- |
-| 01 | `01-smart-thermostat-python/` | 8765 | Python | Signal flow on a clock: bang-bang heating hysteresis, Board plots, Variables |
-| 02 | `02-cart-pole-cpp/` | 8766 | C++ | Station object in code: PID balances a cart-pole; Variables formulas |
-| 03 | `03-low-poly-island-python/` | 8767 | Python | Evaluated once: procedural terrain, list/array wires, block commenting |
-| 04 | `04-cocktail-barista-python/` | 8768 | Python | Step flow: Excel menu, Board Choice, visual groups, subsystem, E-stop key |
-| 05 | `05-rover-lander-python/` | 8769 | Python | Custom HTML5 web station: manual pilot vs autonomous lunar landing |
-| 06 | `06-robot-pick-place-python/` | 8770 | Python | ABB-style palletizer: analytical IK, quintic trajectories, fork pick-and-place |
-| 07 | `07-airfoil-cfd-python/` | 8771 | Python | Lattice-Boltzmann wind tunnel: velocity field, streamlines, lift/drag |
-| 08 | `08-air-hockey-tracker-cpp/` | 8772 | C++ | Optional OpenCV toolkit: image wires, HSV→centroid pipeline, air-hockey tracking |
-| 09 | `09-modular-synth-cpp/` | 8773 | C++ | Vector wires `[6]`: six-voice synth, per-voice filters, Scope and PCM Speaker |
-| 10 | `10-train-pantograph-cpp/` | 8774 | C++/Modelica | Active contact-force regulator, compliant catenary, bypass and arcing |
+| 01 | `01-smart-thermostat-python/` | 51301 | Python | Signal flow on a clock: bang-bang heating hysteresis, Board plots, Variables |
+| 02 | `02-cart-pole-cpp/` | 51302 | C++ | Station object in code: PID balances a cart-pole; Variables formulas |
+| 03 | `03-low-poly-island-python/` | 51303 | Python | Evaluated once: procedural terrain, list/array wires, block commenting |
+| 04 | `04-cocktail-barista-python/` | 51304 | Python | Step flow: Excel menu, Board Choice, visual groups, subsystem, E-stop key |
+| 05 | `05-rover-lander-python/` | 51305 | Python | Custom HTML5 web station: manual pilot vs autonomous lunar landing |
+| 06 | `06-robot-pick-place-python/` | 51306 | Python | ABB-style palletizer: analytical IK, quintic trajectories, fork pick-and-place |
+| 07 | `07-airfoil-cfd-python/` | 51307 | Python | Lattice-Boltzmann wind tunnel: velocity field, streamlines, lift/drag |
+| 08 | `08-air-hockey-tracker-cpp/` | 51308 | C++ | Optional OpenCV toolkit: image wires, HSV→centroid pipeline, air-hockey tracking |
+| 09 | `09-modular-synth-cpp/` | 51309 | C++ | Vector wires `[6]`: six-voice synth, per-voice filters, Scope and PCM Speaker |
+| 10 | `10-train-pantograph-cpp/` | 51310 | C++/Modelica | Active contact-force regulator, compliant catenary, bypass and arcing |
+
+Station ports start at 51301 and follow the level number; a new example takes the next free
+number from 51301 (51311 is the default of Articula's generated stations).
 
 The nine legacy stations are archived under [`legacy/`](legacy/) for reference; they are not
 part of the curriculum, the CLI's example list or the golden run.

@@ -3,7 +3,7 @@
 > **Level**: 05 · Intermediate  
 > **Domain**: Spacecraft Arcade Simulation  
 > **Language**: Python  
-> **Port**: 8769  
+> **Port**: 51305  
 > **UI Cockpit**: Custom Web Station  
 > **Core Concepts**: `[station] view = "web"` custom HTML5/Canvas cockpit, human keyboard play vs an autonomous GNC autopilot on the Flow page.
 
@@ -39,7 +39,7 @@ floating run dock, and the **⛶** button opens it fullscreen when the Station p
 
 ```sh
 ./bin/paperboat run 05
-# http://localhost:3047/?station=ws://localhost:8769
+# http://localhost:30471/?station=ws://localhost:51305
 ```
 
 1. **Watch the autopilot** land: the flame grows and shrinks as the GNC law follows the
@@ -60,7 +60,7 @@ floating run dock, and the **⛶** button opens it fullscreen when the Station p
 
 ```text
 05-rover-lander-python/
-├── station.toml          # format = 0, port 8769, solver = rk4
+├── station.toml          # format = 0, port 51305, solver = rk4
 ├── descriptor.toml       # [station] view = "web", guidance graph, variables
 ├── server.py             # paperboat.serve (dt = 1/60, duration = 50 s, speed 4×)
 ├── domain/

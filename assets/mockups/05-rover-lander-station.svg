@@ -34,7 +34,7 @@
   <text x="428" y="66" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="10">SOLVER: RK4</text>
   <rect x="525" y="53" width="125" height="18" rx="3" fill="#05140b" stroke="#166534" stroke-width="1" />
   <text x="533" y="66" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="10">VIEW: WEB/CANVAS</text>
-  <text x="800" y="66" fill="#15803d" font-family="'JetBrains Mono', monospace" font-size="11">PORT: 8769</text>
+  <text x="800" y="66" fill="#15803d" font-family="'JetBrains Mono', monospace" font-size="11">PORT: 51305</text>
 
   <!-- Jagged Lunar Surface & Craters -->
   <g transform="translate(25, 400)">

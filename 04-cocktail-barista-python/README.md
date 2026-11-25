@@ -3,7 +3,7 @@
 > **Level**: 04 · Intermediate  
 > **Domain**: Beverage Process Automation  
 > **Language**: Python  
-> **Port**: 8768  
+> **Port**: 51304  
 > **UI Cockpit**: Inspector / Step Flow  
 > **Core Concepts**: Step-flow tokens, visual groups (`Ctrl+G`), subsystems, priority keyboard interrupts, Console logs.
 
@@ -32,7 +32,7 @@ control on the Board (or the Variables dock); the recipe stages read the same wo
 
 ```sh
 ./bin/paperboat run 04
-# http://localhost:3047/?station=ws://localhost:8768
+# http://localhost:30471/?station=ws://localhost:51304
 ```
 
 1. **Flow** — watch the token walk `Start → Detect Cup → Pour Base → Shake & Chill →
@@ -56,7 +56,7 @@ control on the Board (or the Variables dock); the recipe stages read the same wo
 
 ```text
 04-cocktail-barista-python/
-├── station.toml          # format = 0, port 8768, solver = discrete
+├── station.toml          # format = 0, port 51304, solver = discrete
 ├── descriptor.toml       # variables, Step-flow starter, groups, board
 ├── server.py             # paperboat.serve (mode = "clock", step blocks)
 ├── data/

@@ -34,7 +34,7 @@
   <text x="433" y="66" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">SOLVER: RK4</text>
   <rect x="530" y="53" width="135" height="18" rx="3" fill="#0f172a" stroke="#334155" stroke-width="1" />
   <text x="538" y="66" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">KIT: OPENCV (C++)</text>
-  <text x="800" y="66" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="11">PORT: 8772</text>
+  <text x="800" y="66" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="11">PORT: 51308</text>
 
   <!-- Isometric Floor Grid -->
   <g transform="translate(450, 340)">

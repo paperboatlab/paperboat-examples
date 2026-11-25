@@ -23,5 +23,5 @@ if __name__ == "__main__":
         duration=18.0,
         emit_every=2,
         view={"mode": "3d", "camera": {"eye": [2.6, 1.6, 3.4], "target": [0, 0.1, 0]}},
-        port=8768,
+        port=51304,
     ))
