@@ -3,7 +3,7 @@
 > **Level**: 09 · Expert  
 > **Domain**: Music Production & Audio Technology  
 > **Language**: C++  
-> **Port**: 8773  
+> **Port**: 51309  
 > **UI Cockpit**: Lookout Mode (`Alt+L`)  
 > **Core Concepts**: vector wires `[6]`, polyphonic CV/gate, per-voice ADSR/VCA/VCF, multi-channel Scope, Eurorack scene.
 
@@ -33,7 +33,7 @@ Web Audio. Browsers keep audio suspended until a click, so press **Click for sou
 
 ```sh
 ./bin/paperboat run 09
-# http://localhost:3047/?station=ws://localhost:8773
+# http://localhost:30471/?station=ws://localhost:51309
 ```
 
 1. **Lookout mode** (`Alt+L`) — the Board alone, full screen, for the Scope and readouts.
@@ -56,7 +56,7 @@ bars each frame.
 
 ```text
 09-modular-synth-cpp/
-├── station.toml          # format = 0, port 8773, solver = rk4
+├── station.toml          # format = 0, port 51309, solver = rk4
 ├── descriptor.toml       # six-voice vector graph, variables, board
 ├── CMakeLists.txt        # native C++ linking paperboat::core
 ├── main.cpp              # paperboat::main, domain state factory

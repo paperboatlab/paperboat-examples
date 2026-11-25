@@ -5,7 +5,7 @@ version = "0.2.0"
 engine = ">=0.1"
 language = "cpp"
 run = "build/paperboat-cart-pole"
-port = 8766
+port = 51302
 descriptor = "descriptor.toml"
 solver = "rk4"
 

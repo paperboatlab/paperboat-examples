@@ -24,16 +24,16 @@ This RFC establishes the definitive **10-part numbered curriculum (`01` through 
 
 | Level | Directory | Language | Port | Domain & Core Theme | UI Cockpit Paradigm | Core Platform Feature |
 |---|---|---|---|---|---|---|
-| **01** | `01-smart-thermostat-python` | Python | 8765 | **Home Thermal Comfort**: Room heat loss & bang-bang heating hysteresis | Navigator Mode | Board Wave plots, scalar float wires, `station.toml` (format = 0) |
-| **02** | `02-cart-pole-cpp` | C++ | 8766 | **Modernized Cart-Pole Control**: Inverted pendulum balancing on precision rail | Commander Split View | Variables sheet (`Alt+V`) formulas (`kd = kp / 5`), high-frequency C++ RK4, PID |
-| **03** | `03-low-poly-island-python` | Python | 8767 | **Creative Coding / Game Worlds**: Procedural archipelago terrain generation | Navigator Mode | One-shot static evaluation (`solver = "discrete"`), list/array wires, block commenting (`Ctrl+/`) & bypass (`Ctrl+Shift+Y`) |
-| **04** | `04-cocktail-barista-python` | Python | 8768 | **Robotics / Process Automation**: Automated drink recipe execution | Inspector Mode | Step flow tokens, Visual Groups (`Ctrl+G`), Subsystems, emergency stop keyboard keys (`Key`), Console logs |
-| **05** | `05-rover-lander-python` | Python | 8769 | **Spacecraft Arcade Simulation**: Lunar module soft-touchdown autopilot | Custom Web Station | Custom HTML5/Canvas CRT cockpit (`[station] view = "web"`), human keyboard play vs autonomous thruster autopilot |
-| **06** | `06-robot-pick-place-python` | Python | 8770 | **Articulated Industrial Robotics**: 3-DOF robot arm pick-and-place | Commander Split View | Inverse kinematics (IK) block, quintic S-curve trajectory planning, vacuum gripper picking |
-| **07** | `07-airfoil-cfd-python` | Python | 8771 | **Aerodynamics & Fluid Dynamics**: 2D Computational Fluid Dynamics over arbitrary shape | Navigator Mode | Lattice Boltzmann (D2Q9) grid, 2D velocity vector heatmap, streamlines, lift & drag polar gauges ($C_L, C_D$) |
-| **08** | `08-ping-pong-tracker-cpp` | C++ | 8772 | **Sports Analytics / Computer Vision**: Table tennis ball tracking & spin estimation | Commander Split View | OpenCV C++ toolkit integration, image wire buffers, Board Image View tiles, degraded fallback (`#ifdef PAPERBOAT_HAS_OPENCV`) |
-| **09** | `09-modular-synth-cpp` | C++ | 8773 | **Music Production & Audio Tech**: Polyphonic modular analog synth & vocoder | Lookout Mode (`Alt+L`) | Vector state wires `[6]`, advanced Scope (FFT spectrum, measurement cursors, triggers), knurled 3D Eurorack chassis |
-| **10** | `10-train-pantograph-cpp` | Modelica & C++ | 8774 | **High-Speed Rail / Multibody Dynamics**: High-speed train pantograph & catenary contact | Commander Split View | Squero Studio OM acausal schematic, catenary compliance, active force regulation, `.pst` pack |
+| **01** | `01-smart-thermostat-python` | Python | 51301 | **Home Thermal Comfort**: Room heat loss & bang-bang heating hysteresis | Navigator Mode | Board Wave plots, scalar float wires, `station.toml` (format = 0) |
+| **02** | `02-cart-pole-cpp` | C++ | 51302 | **Modernized Cart-Pole Control**: Inverted pendulum balancing on precision rail | Commander Split View | Variables sheet (`Alt+V`) formulas (`kd = kp / 5`), high-frequency C++ RK4, PID |
+| **03** | `03-low-poly-island-python` | Python | 51303 | **Creative Coding / Game Worlds**: Procedural archipelago terrain generation | Navigator Mode | One-shot static evaluation (`solver = "discrete"`), list/array wires, block commenting (`Ctrl+/`) & bypass (`Ctrl+Shift+Y`) |
+| **04** | `04-cocktail-barista-python` | Python | 51304 | **Robotics / Process Automation**: Automated drink recipe execution | Inspector Mode | Step flow tokens, Visual Groups (`Ctrl+G`), Subsystems, emergency stop keyboard keys (`Key`), Console logs |
+| **05** | `05-rover-lander-python` | Python | 51305 | **Spacecraft Arcade Simulation**: Lunar module soft-touchdown autopilot | Custom Web Station | Custom HTML5/Canvas CRT cockpit (`[station] view = "web"`), human keyboard play vs autonomous thruster autopilot |
+| **06** | `06-robot-pick-place-python` | Python | 51306 | **Articulated Industrial Robotics**: 3-DOF robot arm pick-and-place | Commander Split View | Inverse kinematics (IK) block, quintic S-curve trajectory planning, vacuum gripper picking |
+| **07** | `07-airfoil-cfd-python` | Python | 51307 | **Aerodynamics & Fluid Dynamics**: 2D Computational Fluid Dynamics over arbitrary shape | Navigator Mode | Lattice Boltzmann (D2Q9) grid, 2D velocity vector heatmap, streamlines, lift & drag polar gauges ($C_L, C_D$) |
+| **08** | `08-ping-pong-tracker-cpp` | C++ | 51308 | **Sports Analytics / Computer Vision**: Table tennis ball tracking & spin estimation | Commander Split View | OpenCV C++ toolkit integration, image wire buffers, Board Image View tiles, degraded fallback (`#ifdef PAPERBOAT_HAS_OPENCV`) |
+| **09** | `09-modular-synth-cpp` | C++ | 51309 | **Music Production & Audio Tech**: Polyphonic modular analog synth & vocoder | Lookout Mode (`Alt+L`) | Vector state wires `[6]`, advanced Scope (FFT spectrum, measurement cursors, triggers), knurled 3D Eurorack chassis |
+| **10** | `10-train-pantograph-cpp` | Modelica & C++ | 51310 | **High-Speed Rail / Multibody Dynamics**: High-speed train pantograph & catenary contact | Commander Split View | Squero Studio OM acausal schematic, catenary compliance, active force regulation, `.pst` pack |
 
 ---
 
@@ -160,7 +160,7 @@ name = "02-cart-pole-cpp"
 version = "0.2.0"
 language = "cpp"
 run = "build/paperboat-cart-pole"
-port = 8766
+port = 51302
 descriptor = "descriptor.toml"
 solver = "rk4"
 

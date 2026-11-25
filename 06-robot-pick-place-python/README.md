@@ -3,7 +3,7 @@
 > **Level**: 06 · Intermediate  
 > **Domain**: Articulated Industrial Robotics  
 > **Language**: Python  
-> **Port**: 8770  
+> **Port**: 51306  
 > **UI Cockpit**: Commander Split View  
 > **Core Concepts**: 3-DOF forward/inverse kinematics, quintic S-curve trajectories, vacuum gripper state machine, joint-rate scopes.
 
@@ -35,7 +35,7 @@ S-curve to bin → vacuum off) → Stop`.
 
 ```sh
 ./bin/paperboat run 06
-# http://localhost:3047/?station=ws://localhost:8770
+# http://localhost:30471/?station=ws://localhost:51306
 ```
 
 1. **Flow** — open the `Pick & Place Cycle ×3` frame; each S-curve block shows its progress.
@@ -56,7 +56,7 @@ S-curve to bin → vacuum off) → Stop`.
 
 ```text
 06-robot-pick-place-python/
-├── station.toml          # format = 0, port 8770, solver = euler
+├── station.toml          # format = 0, port 51306, solver = euler
 ├── descriptor.toml       # variables, Step-flow cycle, IK demo, board
 ├── server.py             # paperboat.serve (dt = 1/50, duration = 22 s)
 ├── domain/

@@ -5,7 +5,7 @@ version = "0.1.0"
 engine = ">=0.1"
 language = "python"
 run = "server.py"
-port = 8768
+port = 51304
 descriptor = "descriptor.toml"
 solver = "discrete"
 

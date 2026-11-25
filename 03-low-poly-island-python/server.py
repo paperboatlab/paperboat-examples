@@ -16,6 +16,6 @@ if __name__ == "__main__":
         state=IslandState,
         blocks=BLOCKS,
         mode="once",
-        port=8767,
+        port=51303,
         solver="discrete",
     ))

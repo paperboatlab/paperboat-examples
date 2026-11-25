@@ -5,7 +5,7 @@ version = "0.1.0"
 engine = ">=0.1"
 language = "cpp"
 run = "build/paperboat-modular-synth"
-port = 8773
+port = 51309
 descriptor = "descriptor.toml"
 solver = "rk4"
 

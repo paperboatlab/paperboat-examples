@@ -34,5 +34,5 @@ int main(int argc, char** argv) {
       .view = {{"mode", "3d"}, {"camera", {{"eye", {2.4, 2.9, 2.4}}, {"target", {0, 0.1, 0}}}}},
       .run = {.dt = 1.0 / 60.0, .duration = 8.0, .emit_every = 2, .speed = 2.0},
   };
-  return paperboat::main(station, argc, argv, 8772);
+  return paperboat::main(station, argc, argv, 51308);
 }

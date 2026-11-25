@@ -3,7 +3,7 @@
 > **Level**: 10 · Master  
 > **Domain**: Rail Electrification & Multibody Dynamics  
 > **Language**: C++ & Modelica reference  
-> **Port**: 8774  
+> **Port**: 51310  
 > **UI Cockpit**: Commander Split View  
 > **Core Concepts**: articulated pantograph, compliant catenary, aerodynamic uplift, active pneumatic force regulation, bypass and arcing.
 
@@ -44,7 +44,7 @@ The C++ implementation in `domain/pantograph.cpp` carries the same equations; op
 
 ```sh
 ./bin/paperboat run 10
-# http://localhost:3047/?station=ws://localhost:8774
+# http://localhost:30471/?station=ws://localhost:51310
 ```
 
 1. **Commander view** (`Alt+C`) — the train/pantograph on the left, the regulator on the
@@ -64,7 +64,7 @@ The C++ implementation in `domain/pantograph.cpp` carries the same equations; op
 
 ```text
 10-train-pantograph-cpp/
-├── station.toml          # format = 0, port 8774, solver = rk4
+├── station.toml          # format = 0, port 51310, solver = rk4
 ├── descriptor.toml       # station object, regulator graph, variables
 ├── CMakeLists.txt        # native C++ linking paperboat::core
 ├── main.cpp              # paperboat::main

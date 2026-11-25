@@ -3,7 +3,7 @@
 > **Level**: 01 · Beginner  
 > **Domain**: Thermal Comfort & Bang-Bang Hysteresis  
 > **Language**: Python  
-> **Port**: 8765  
+> **Port**: 51301  
 > **UI Cockpit**: Navigator Mode  
 > **Core Concepts**: Continuous ODE clock flow, scalar signal wiring, Board Wave Plot, `station.toml` (format = 0).
 
@@ -30,7 +30,7 @@ Launch the station and open the Paperboat Cockpit:
 ```bash
 ./bin/paperboat run 01-smart-thermostat-python
 ```
-Navigate to `http://localhost:3047/?station=ws://localhost:8765`.
+Navigate to `http://localhost:30471/?station=ws://localhost:51301`.
 
 ### 2.1 The Navigator Mode
 Paperboat opens in **Navigator Mode**, designed for clean signal flow observation:
@@ -83,7 +83,7 @@ version = "0.1.0"
 engine = ">=0.1"
 language = "python"
 run = "server.py"
-port = 8765
+port = 51301
 descriptor = "descriptor.toml"
 solver = "euler"
 

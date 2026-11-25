@@ -3,7 +3,7 @@
 > **Level**: 07 · Advanced  
 > **Domain**: Aerodynamics & Fluid Dynamics  
 > **Language**: Python  
-> **Port**: 8771  
+> **Port**: 51307  
 > **UI Cockpit**: Navigator Mode  
 > **Core Concepts**: D2Q9 lattice-Boltzmann solver, NACA 0012 mask, 2-D velocity field, lift/drag polars, stall.
 
@@ -41,7 +41,7 @@ airfoil outline, the chord line and lift/drag arrows.
 
 ```sh
 ./bin/paperboat run 07
-# http://localhost:3047/?station=ws://localhost:8771
+# http://localhost:30471/?station=ws://localhost:51307
 ```
 
 1. **Variables** (`Alt+V`) — `alpha` is tunable: try `0°`, `6°`, `14°`, `20°`, `25°`.
@@ -59,7 +59,7 @@ The lattice is pure NumPy; a full run is a few seconds on a laptop.
 
 ```text
 07-airfoil-cfd-python/
-├── station.toml          # format = 0, port 8771, solver = discrete
+├── station.toml          # format = 0, port 51307, solver = discrete
 ├── descriptor.toml       # wind-tunnel variables, LBM flow, board
 ├── server.py             # paperboat.serve (dt = 0.1, duration = 9 s)
 ├── domain/

@@ -5,7 +5,7 @@ version = "0.1.0"
 engine = ">=0.1"
 language = "cpp"
 run = "build/paperboat-train-pantograph"
-port = 8774
+port = 51310
 descriptor = "descriptor.toml"
 solver = "rk4"
 

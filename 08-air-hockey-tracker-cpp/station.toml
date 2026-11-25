@@ -5,7 +5,7 @@ version = "0.1.0"
 engine = ">=0.1"
 language = "cpp"
 run = "build/paperboat-air-hockey"
-port = 8772
+port = 51308
 descriptor = "descriptor.toml"
 solver = "rk4"
 

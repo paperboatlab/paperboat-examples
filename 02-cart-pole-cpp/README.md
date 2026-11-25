@@ -3,7 +3,7 @@
 > **Level**: 02 · Elementary  
 > **Domain**: Inverted Pendulum Balancing on Precision Rail  
 > **Language**: C++  
-> **Port**: 8766  
+> **Port**: 51302  
 > **UI Cockpit**: Commander Mode Split View (`Alt+C`)  
 > **Core Concepts**: C++ SDK (`<paperboat/sdk.hpp>`), ISA-88 `StationObject`, Variables Sheet (`Alt+V`) formula bindings (`kd = kp / 5`), closed-loop PID control.
 
@@ -33,7 +33,7 @@ Launch the station and open the Paperboat Cockpit:
 ```bash
 ./bin/paperboat run 02-cart-pole-cpp
 ```
-Navigate to `http://localhost:3047/?station=ws://localhost:8766`.
+Navigate to `http://localhost:30471/?station=ws://localhost:51302`.
 
 ### 2.1 Commander Mode Split View (`Alt+C`)
 Switch to **Commander Mode** (`Alt+C`):
@@ -65,7 +65,7 @@ Press `Alt+V` to open the **Variables Sheet**:
 The station is organized as a standalone C++ project:
 ```text
 02-cart-pole-cpp/
-├── station.toml          # Format = 0 manifest (port = 8766, solver = "rk4")
+├── station.toml          # Format = 0 manifest (port = 51302, solver = "rk4")
 ├── descriptor.toml       # Variables, starter Station, and starter Flow wiring
 ├── CMakeLists.txt        # Native C++ build linking paperboat::core
 ├── main.cpp              # Canonical paperboat::main entrypoint

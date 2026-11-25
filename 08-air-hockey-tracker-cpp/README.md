@@ -3,7 +3,7 @@
 > **Level**: 08 · Advanced  
 > **Domain**: Sports Analytics & Computer Vision  
 > **Language**: C++ (optional OpenCV)  
-> **Port**: 8772  
+> **Port**: 51308  
 > **UI Cockpit**: Commander Split View  
 > **Core Concepts**: the optional `opencv` toolkit (HSV range → morphology → centroid → image view), image wires, alpha-beta tracking, degraded fallback.
 
@@ -49,7 +49,7 @@ next to Paperboat rather than inside it.
 
 ```sh
 ./bin/paperboat run 08
-# http://localhost:3047/?station=ws://localhost:8772
+# http://localhost:30471/?station=ws://localhost:51308
 ```
 
 1. **Commander view** (`Alt+C`) — the 3D rink, mallets, puck and trail on the left; the
@@ -68,7 +68,7 @@ next to Paperboat rather than inside it.
 
 ```text
 08-air-hockey-tracker-cpp/
-├── station.toml               # format = 0, port 8772, solver = rk4
+├── station.toml               # format = 0, port 51308, solver = rk4
 ├── descriptor.toml            # full OpenCV pipeline
 ├── descriptor-degraded.toml   # synthetic vision path, no OpenCV
 ├── CMakeLists.txt             # optional paperboat::toolkit_opencv detection
