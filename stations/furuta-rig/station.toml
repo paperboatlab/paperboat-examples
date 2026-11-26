@@ -1,0 +1,9 @@
+[station]
+format = 0
+name = "furuta-rig"
+version = "0.1.0"
+engine = ">=0.1"
+language = "cpp"
+run = "build/paperboat-rig"
+port = 51311
+descriptor = "descriptor.toml"

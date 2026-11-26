@@ -1,0 +1,5 @@
+# Malachite keeps only hub.toml in Git; the rest of .malachite/ is per machine
+**/.malachite/*
+!**/.malachite/hub.toml
+stations/*/build/
+*.tmp

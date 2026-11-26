@@ -1,0 +1,5 @@
+# design/lqr.jl with design/datasheet.toml: u = -K (x - x_ref), x = [θ, α, θ̇, α̇], Ts = 0.002 s
+K = [-9.6096, -70.902, -3.6493, -6.541]
+Ts = 0.002
+open_loop_poles = [-12.73, -1.58, 0.0, 11.71]
+closed_loop_radius = 0.98884
