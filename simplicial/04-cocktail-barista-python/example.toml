@@ -1,6 +1,6 @@
 # The golden harness's manifest (docs/golden.md): a Python station runs out of process, so the check
-# builds Simplicial's engine once (into the repository's build/, shared by every Python level), runs
-# the starter headless with `simplicial-engine host . --run`, which leases a Python runtime from
+# builds the checkout's engine where it keeps it (engine/build; once, for every Python level), runs the
+# starter headless with `bin/simplicial host . --run`, the engine leasing a Python runtime from
 # paperboatd, and compares the run with expected.json (the file `simplicial check` reads).
 kind = "simplicial"
 app = "simplicial"
@@ -11,10 +11,10 @@ description = "Step flow: Excel menu, Board Choice, visual groups, subsystem, E-
 name = "starter"
 requires = ["cmake", "paperboatd"]
 build = [
-  ["cmake", "-S", "{simplicial}/engine", "-B", "{repo}/build/simplicial", "-DCMAKE_BUILD_TYPE=Release", "-DPAPERBOAT_BUILD_TESTS=OFF"],
-  ["cmake", "--build", "{repo}/build/simplicial", "--target", "simplicial-engine"],
+  ["cmake", "-S", "{simplicial}/engine", "-B", "{simplicial}/engine/build", "-DCMAKE_BUILD_TYPE=Release", "-DPAPERBOAT_BUILD_TESTS=OFF"],
+  ["cmake", "--build", "{simplicial}/engine/build", "--target", "simplicial-engine"],
 ]
-run = ["{repo}/build/simplicial/tools/simplicial-engine", "host", ".", "--run"]
+run = ["{simplicial}/bin/simplicial", "host", ".", "--run"]
 timeout = 1800   # seconds per command: the first one builds the engine
 output = "simplicial"
 golden = "expected.json"

@@ -36,11 +36,11 @@ cmake -S 09-modular-synth-cpp -B 09-modular-synth-cpp/build && cmake --build 09-
 09-modular-synth-cpp/build/paperboat-modular-synth --run    # its starter, headless: protocol messages as JSON lines
 ```
 
-A Python level's code runs out of process, in a Python runtime `paperboatd` leases; the engine
-hosts it (`simplicial-engine` in a checkout's `engine/build/tools/`, or a release's `bin/`):
+A Python level's code runs out of process, in a Python runtime `paperboatd` leases; Simplicial's
+engine hosts it (with the checkout's engine built, `cmake -S engine -B engine/build && cmake --build engine/build`):
 
 ```sh
-cd 01-smart-thermostat-python && simplicial-engine host . --run   # its starter, headless
+cd 01-smart-thermostat-python && ../../../simplicial/bin/simplicial host . --run   # its starter, headless
 ```
 
 02 needs Simplicial's optional control and optimization toolkits, 08 runs the OpenCV pipeline when

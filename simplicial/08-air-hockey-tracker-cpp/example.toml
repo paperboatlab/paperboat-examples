@@ -1,7 +1,7 @@
 # The golden harness's manifest (docs/golden.md): build the station against a simplicial checkout,
 # run its starter headless and compare the run with expected.json (the file `simplicial check` reads).
-# With the optional OpenCV toolkit installed in that checkout it runs the OpenCV pipeline, without it
-# the degraded synthetic one (descriptor-degraded.toml); both give the same track.
+# With the optional OpenCV toolkit installed in that checkout it runs the OpenCV pipeline (as CI does),
+# without it the degraded synthetic one (descriptor-degraded.toml).
 kind = "simplicial"
 app = "simplicial"
 name = "08 Air Hockey Tracker"

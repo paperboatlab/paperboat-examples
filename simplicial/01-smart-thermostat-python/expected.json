@@ -3,9 +3,7 @@
   "status": "done",
   "run": "station.py",
   "signals": {
-    "scope-1": [21.02, 0.5]
+    "scope-1": [21.043647, 0.5]
   },
-  "logs": [
-    "room: t_amb = 2, t_room = 21.0"
-  ]
+  "logs": ["room: t_amb = 2, t_room = 21.0"]
 }
