@@ -71,7 +71,7 @@ The identified parameters, against the datasheet ([[e3-greybox]]):
   the arm loose. Add the one-step latency, and its strength, bounds on the input, had nothing to bound:
   the correction peaked at 2.3 V.
 - **Caveats.** One run per experiment. The flows were checked in Simplicial against the station
-  (E4 1.47°, E5 1.85°, E1 8.61°, without the bench's 2 ms delay), except the estimate flow, whose nlp
+  (E4 1.45°, E5 1.84°, E1 8.61°, without the bench's 2 ms delay), except the estimate flow, whose nlp
   block needs a toolkit built with Ipopt. $k_m$ is probably biased low by the amplifier's dead band
   ([[issue-km-bias]]). The arm hunts 2.4–4° at the holds in every run ([[issue-arm-hunting]]).
 

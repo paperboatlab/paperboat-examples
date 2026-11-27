@@ -1,4 +1,4 @@
-# The Furuta pendulum in Julia: the equations of Furuta.mo, for the Julix scripts and the tools.
+# The Furuta pendulum in Julia: the physics of Furuta.mo (MultiBody) as Lagrange equations, for the Julix scripts and the tools.
 #
 # State x = [θ, α, θ̇, α̇]: the arm's angle, the pendulum's angle from upright (rad), and their rates.
 # Input u: the motor voltage (V). Parameters: a NamedTuple read from a TOML file (design/datasheet.toml,

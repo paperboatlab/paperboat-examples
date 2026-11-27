@@ -22,7 +22,7 @@ LQR redesigned on the identified model does better still (1.6°). See [[report]]
 Nothing here has to run in sequence; this is the order the study went in, and the order to read it.
 
 1. **The rig.** [[rig-datasheet]]: what bench 3 is, the datasheet's numbers. The model in Articula:
-   `model/Furuta.mo` (`Furuta.Pendulum`, the equations; `Furuta.Rig`, the bench as the lab has it),
+   `model/Furuta.mo` (`Furuta.Pendulum`, MultiBody; `Furuta.Rig`, the bench as the lab has it),
    and the station Articula generated from it, `stations/furuta-rig/`.
 2. **The plan.** [[hypothesis]], and how every closed-loop run is done: [[protocol-balance-move]].
 3. **Design on the datasheet.** Julix: `design/lqr.jl` (the gain) and `design/trajectory.jl` (the
@@ -42,7 +42,7 @@ Nothing here has to run in sequence; this is the order the study went in, and th
 
 | Where | App | What |
 | --- | --- | --- |
-| `model/` | Articula | `Furuta.mo`; `furuta.jl`, the same equations for the Julia scripts |
+| `model/` | Articula | `Furuta.mo` (MultiBody); `furuta.jl`, its equations for the Julia scripts |
 | `stations/` | Articula → Simplicial | `furuta-rig/`, generated from `Furuta.Rig`; `furuta-rig-0.1.0.pst`, packed |
 | `design/` | Julix | the gain and the trajectory, on `datasheet.toml` or the identified parameters |
 | `flows/` | Simplicial | one flow per experiment, the NLP and MPC problems, `out/identified.toml` |

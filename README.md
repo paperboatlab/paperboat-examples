@@ -13,7 +13,7 @@ with it.
 
 ```text
 index.md, report.md, notes/   Malachite: the notebook (start at index.md)
-model/                        Articula: Furuta.mo (the model, and the rig); furuta.jl, the same in Julia
+model/                        Articula: Furuta.mo (MultiBody, and the rig); furuta.jl, its equations
 stations/furuta-rig/          the Simplicial station Articula generated from Furuta.Rig
 flows/                        Simplicial: one flow per experiment, the NLP and MPC problems
 design/                       Julix: the LQR gain and the planned trajectory

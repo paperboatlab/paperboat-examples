@@ -34,8 +34,16 @@ the encoder's magnet and its screw near the tip, which the kit's rod doesn't.
 
 ## The model
 
-Lagrange's equations for the arm and the pendulum, with $J_{\hat r} = J_r + m_p L_r^2$,
-$J_{\hat p} = J_p + m_p l_p^2$ and $h = m_p L_r l_p$:
+In Articula, `model/Furuta.mo`: `Furuta.Pendulum` is built from Modelica's MultiBody library. The arm
+is a vertical revolute joint, driven through the hub's inertia by a DC motor (armature resistance and
+EMF); the pendulum is a body on a second revolute joint at the arm's tip; both joints have viscous
+dampers, and the arm a smoothed Coulomb friction. `Furuta.Rig` wraps it with the amplifier (dead
+band, saturation). The station `stations/furuta-rig/` was generated from `Furuta.Rig` (Articula took
+the FMU path: the dead band is an event).
+
+The Julia scripts need the equations themselves, and `model/furuta.jl` writes the same physics as
+Lagrange's equations, with $J_{\hat r} = J_r + m_p L_r^2$, $J_{\hat p} = J_p + m_p l_p^2$ and
+$h = m_p L_r l_p$:
 
 $$
 \begin{aligned}
@@ -45,11 +53,9 @@ h\cos\alpha\,\ddot\theta + J_{\hat p}\,\ddot\alpha &= J_{\hat p}\sin\alpha\cos\a
 $$
 
 with the motor's torque less the arm's friction $\tau = k_m (u - k_m\dot\theta)/R_m - B_r\dot\theta - f_c\,\mathrm{sign}(\dot\theta)$.
-
-In Articula, `model/Furuta.mo`: `Furuta.Pendulum` is these equations, `Furuta.Rig` wraps it with the
-amplifier (dead band, saturation). The station `stations/furuta-rig/` was generated from `Furuta.Rig`
-(Articula took the FMU path: the dead band is an event). `model/furuta.jl` has the same equations for
-the Julia scripts; the two agree to 4 × 10⁻⁵ rad after half a second of free swing.
+The two agree to 4 × 10⁻⁹ rad over a second of driven swing, and OpenModelica's linearization of
+`Furuta.Pendulum` at the upright (`linearize`, written out as Julia) matches `linearize` in
+`furuta.jl` to 10⁻¹⁰.
 
 About the upright the linear model has one unstable pole, the pendulum falling:
 

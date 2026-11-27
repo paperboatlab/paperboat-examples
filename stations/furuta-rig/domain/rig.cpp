@@ -32,14 +32,14 @@ void log_nothing(void*, const char*, int, const char*, const char*, ...) {}
 
 constexpr const char* kLibrary = PAPERBOAT_FMU_DIR "/binaries/" PAPERBOAT_FMU_PLATFORM "/Rig" PAPERBOAT_FMU_SUFFIX;
 constexpr const char* kResources = "file://" PAPERBOAT_FMU_DIR "/resources";
-constexpr const char* kGuid = "{a633c213-4d3d-4857-8107-23bf4f9a80b5}";
+constexpr const char* kGuid = "{088313cd-9920-4734-8213-fd81d7f992fc}";
 
 constexpr std::array<const char*, 3> kPropIds = {"deadband", "umax", "alpha0"};
-constexpr std::array<Ref, 3> kPropRefs = {17u, 33u, 16u};
+constexpr std::array<Ref, 3> kPropRefs = {666u, 925u, 665u};
 constexpr std::array<const char*, 1> kInputIds = {"cmd"};
-constexpr std::array<Ref, 1> kInputRefs = {12u};
+constexpr std::array<Ref, 1> kInputRefs = {46u};
 constexpr std::array<const char*, 2> kOutputIds = {"theta", "alpha"};
-constexpr std::array<Ref, 2> kOutputRefs = {15u, 11u};
+constexpr std::array<Ref, 2> kOutputRefs = {664u, 45u};
 
 class Rig final : public paperboat::StationObject {
  public:
