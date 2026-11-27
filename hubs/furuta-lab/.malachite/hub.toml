@@ -1,0 +1,8 @@
+# A Malachite hub (github.com/paperboatlab/malachite). Set from its Settings or `paperboat hub config`.
+id = "h_furutalabexample"
+name = "furuta-lab"
+schema = 3
+author = "bench3"
+created = "2026-11-16T08:00:00Z"
+keep = "always"
+ignore = ".malachite/out/ *.tmp stations/*/build/"

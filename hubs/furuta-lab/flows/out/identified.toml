@@ -1,0 +1,12 @@
+# Identified by flows/estimate.psf (and tools/identify.jl, the same problem) from runs/2026-11-18_e2-excitation/identification.csv.
+# The fitted ones carry their standard error; the others are the datasheet's (measured).
+Lr = 0.1            # measured
+Jr = 0.00037        # measured
+mp = 0.03131        # ± 0.00032
+Lp = 0.15           # measured
+lp = 0.08166        # ± 9.2e-5
+Br = 0.001431       # ± 4.7e-5
+Bp = 3.882e-5       # ± 2.0e-6
+Rm = 7.5            # measured
+km = 0.03578        # ± 0.00026
+fc = 0.001198       # ± 0.00011

@@ -1,0 +1,12 @@
+# Bench 3 rotary pendulum, from the kit's datasheet (FP-150, rev B). SI units.
+# The pendulum's own inertia is the rod's, mp Lp^2 / 12 (furuta.jl adds it).
+Lr = 0.100     # arm, motor axis to pendulum pivot (m)
+Jr = 3.7e-4    # arm and hub about the motor axis (kg m^2)
+mp = 0.030     # pendulum (kg)
+Lp = 0.150     # pendulum rod's length (m)
+lp = 0.075     # pendulum pivot to its centre of mass (m)
+Br = 8.0e-4    # arm viscous friction (N m s/rad)
+Bp = 3.0e-5    # pendulum viscous friction (N m s/rad)
+Rm = 7.5       # motor armature resistance (ohm)
+km = 0.045     # motor torque and back-emf constant (N m/A, V s/rad)
+fc = 0.0       # arm Coulomb friction (N m): the datasheet gives none

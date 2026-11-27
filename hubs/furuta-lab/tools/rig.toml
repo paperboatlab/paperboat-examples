@@ -1,0 +1,19 @@
+# The bench as it really is: tools/rig.jl simulates it to make the recorded runs. Nothing in the study
+# reads this file; finding these numbers again is the identification's job (notes/e2-identification.md).
+Lr = 0.100
+Jr = 3.7e-4
+mp = 0.034     # heavier than the datasheet: the encoder's magnet and its screw
+Lp = 0.150
+lp = 0.081     # the magnet moves the centre of mass down the rod
+Br = 1.6e-3    # a dry bearing
+Bp = 4.5e-5
+Rm = 7.5
+km = 0.040     # a weaker motor than the datasheet's
+fc = 1.5e-3    # Coulomb friction in the arm's hub
+
+# What the model leaves out
+deadband = 0.15     # V: the amplifier's dead band around 0
+u_max = 10.0        # V: the amplifier saturates
+counts = 8192       # encoder counts per turn (2048 lines, quadrature), both axes
+delay = 0.002       # s: the amplifier and the loop's own lag, on the voltage
+stop = 1.745        # rad (100°): the arm's end stops, a stiff spring past them
