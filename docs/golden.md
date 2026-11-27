@@ -63,8 +63,10 @@ that moved it.
 ## Running each kind headless
 
 - **simplicial:** a station's own `--run` (a C++ station built against `{simplicial}/engine`); a
-  saved flow with `{simplicial}/bin/simplicial open <file.psf> --run`. Python and Julia stations run
-  through the engine, `simplicial-engine host <dir> --run`, which leases a runtime from `paperboatd`.
+  saved flow with `{simplicial}/bin/simplicial open <file.psf> --run`, or, for a flow in the format
+  the app saves now (`"paperboat": 1`, which `open` rejects: simplicial#66), the station's own
+  `--run --psf <file.psf>`. Python and Julia stations run through the engine,
+  `simplicial-engine host <dir> --run`, which leases a runtime from `paperboatd`.
 - **julix:** Julix has no headless run yet, so a check runs the folder's script with Julia itself,
   `julia --project=. --startup-file=no main.jl` (`requires = ["julia"]`), in the folder's own
   environment (`Project.toml`, `Manifest.toml`), and the script writes its results (TOML is in
@@ -89,5 +91,6 @@ that moved it.
   `run = ["node", "{repo}/tools/malachite-index.ts", "{malachite}", "."]`, `requires = ["node"]`,
   `output = "json"`. That it renders has no headless check yet:
   `{malachite}/bin/malachite <folder> --port <n>` serves it, for a browser.
-- **hub:** one check per app, each with its `dir` in the hub, plus the malachite check over the
-  whole hub.
+- **hub:** one check per app (or per flow), each with its `dir` in the hub, plus the malachite
+  check over the whole hub. A hub's own scripts may rewrite its files (`hubs/furuta-lab`'s
+  `tools/make_runs.jl` does): its check runs them on a copy and prints the results.

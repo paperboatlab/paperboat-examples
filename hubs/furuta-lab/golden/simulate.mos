@@ -1,0 +1,9 @@
+// The model check (../example.toml): Articula has no headless simulate yet. Run from the hub with
+// `omc golden/simulate.mos`; writes golden/build/Furuta.Rig_res.csv. Furuta.Rig with no voltage:
+// the pendulum falls from 2° off upright and swings, the arm pushed round by it.
+mkdir("golden/build"); cd("golden/build"); deleteFile("Furuta.Rig_res.csv");
+if not installPackage(Modelica, "4.1.0", exactMatch = true) then print(getErrorString()); exit(1); end if;
+if not loadModel(Modelica, {"4.1.0"}) then print(getErrorString()); exit(1); end if;
+if not loadFile("../../model/Furuta.mo") then print(getErrorString()); exit(1); end if;
+simulate(Furuta.Rig, stopTime = 3, numberOfIntervals = 30, outputFormat = "csv");
+if not regularFileExists("Furuta.Rig_res.csv") then print(getErrorString()); exit(1); end if;

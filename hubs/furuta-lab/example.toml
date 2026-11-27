@@ -1,0 +1,99 @@
+# The golden harness's manifest (docs/golden.md): one check per app over the hub. The hub comes from
+# the workspace's furuta-lab/ as a git subtree; golden/ and this file are the examples repository's own.
+kind = "hub"
+app = "malachite"
+name = "Furuta Lab"
+description = "A Furuta pendulum study across four apps: MultiBody model, LQR and trajectory, grey-box fit, MPC"
+
+# Julix: make_runs.jl regenerates the design outputs, runs and results.toml (on a copy, as it writes in place)
+[[check]]
+name = "design"
+requires = ["julia"]
+run = ["julia", "--startup-file=no", "golden/design.jl"]
+timeout = 900
+output = "toml"
+golden = "golden/design.json"
+rtol = 1e-3       # results.toml keeps four significant digits
+
+# Articula: the MultiBody model simulated with omc
+[[check]]
+name = "model"
+requires = ["omc"]
+run = ["omc", "golden/simulate.mos"]
+output = "csv"
+file = "golden/build/Furuta.Rig_res.csv"
+vars = ["time", "theta", "alpha"]
+golden = "golden/model.json"
+atol = 1e-4
+
+# Simplicial: each flow on the station, headless (the station's own --run with --psf: `simplicial open`
+# reads only the old .psf format, simplicial#66). The station needs the control and optimization
+# toolkits in {simplicial}/engine/toolkit (paperboat toolkit install control). It builds outside the hub:
+# Malachite's index would take in build/_deps' READMEs as notes (malachite#69).
+[[check]]
+name = "flows/e1-lqr-datasheet"
+dir = "stations/furuta-rig"
+requires = ["cmake"]
+build = [
+  ["cmake", "-S", ".", "-B", "{repo}/build/furuta-rig", "-DCMAKE_BUILD_TYPE=Release", "-DPAPERBOAT_ENGINE_DIR={simplicial}/engine"],
+  ["cmake", "--build", "{repo}/build/furuta-rig", "--target", "paperboat-rig"],
+]
+run = ["{repo}/build/furuta-rig/paperboat-rig", "--run", "--psf", "../../flows/e1-lqr-datasheet.psf"]
+timeout = 2400
+output = "simplicial"
+golden = "golden/e1-lqr-datasheet.json"
+
+[[check]]
+name = "flows/excite"
+dir = "stations/furuta-rig"
+requires = ["cmake"]
+build = [
+  ["cmake", "-S", ".", "-B", "{repo}/build/furuta-rig", "-DCMAKE_BUILD_TYPE=Release", "-DPAPERBOAT_ENGINE_DIR={simplicial}/engine"],
+  ["cmake", "--build", "{repo}/build/furuta-rig", "--target", "paperboat-rig"],
+]
+run = ["{repo}/build/furuta-rig/paperboat-rig", "--run", "--psf", "../../flows/excite.psf"]
+timeout = 2400
+output = "simplicial"
+golden = "golden/excite.json"
+
+[[check]]
+name = "flows/e4-lqr-identified"
+dir = "stations/furuta-rig"
+requires = ["cmake"]
+build = [
+  ["cmake", "-S", ".", "-B", "{repo}/build/furuta-rig", "-DCMAKE_BUILD_TYPE=Release", "-DPAPERBOAT_ENGINE_DIR={simplicial}/engine"],
+  ["cmake", "--build", "{repo}/build/furuta-rig", "--target", "paperboat-rig"],
+]
+run = ["{repo}/build/furuta-rig/paperboat-rig", "--run", "--psf", "../../flows/e4-lqr-identified.psf"]
+timeout = 2400
+output = "simplicial"
+golden = "golden/e4-lqr-identified.json"
+
+[[check]]
+name = "flows/mpc"
+dir = "stations/furuta-rig"
+requires = ["cmake"]
+build = [
+  ["cmake", "-S", ".", "-B", "{repo}/build/furuta-rig", "-DCMAKE_BUILD_TYPE=Release", "-DPAPERBOAT_ENGINE_DIR={simplicial}/engine"],
+  ["cmake", "--build", "{repo}/build/furuta-rig", "--target", "paperboat-rig"],
+]
+run = ["{repo}/build/furuta-rig/paperboat-rig", "--run", "--psf", "../../flows/mpc.psf"]
+timeout = 2400
+output = "simplicial"
+golden = "golden/mpc.json"
+
+[[check]]
+name = "flows/estimate"
+pending = "ex#51: the nlp block needs Ipopt, and the flow has not run in Simplicial yet"
+dir = "stations/furuta-rig"
+run = ["{repo}/build/furuta-rig/paperboat-rig", "--run", "--psf", "../../flows/estimate.psf"]
+output = "simplicial"
+golden = "golden/estimate.json"
+
+# Malachite: the hub's index, every [[link]] resolved
+[[check]]
+name = "index"
+requires = ["node"]
+run = ["node", "{repo}/tools/malachite-index.ts", "{malachite}", "."]
+output = "json"
+golden = "golden/index.json"

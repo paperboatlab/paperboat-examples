@@ -1,0 +1,8 @@
+{
+  "status": "done",
+  "signals": {
+    "graph-theta": [-0.397301, 0.001],
+    "graph-alpha": [-3.43535, 0.001],
+    "graph-u": [-0.128011, 0.001]
+  }
+}
