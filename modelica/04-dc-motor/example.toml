@@ -1,0 +1,17 @@
+# The golden harness's manifest (docs/golden.md): simulate with omc (Articula has no headless
+# simulate yet) and compare the chosen variables at the experiment's output times.
+kind = "modelica"
+app = "articula"
+name = "04 DC motor"
+description = "MSL electrical and rotational parts: a DC motor on a voltage step, an elastic shaft to the load"
+
+[[check]]
+name = "simulate"
+requires = ["omc"]
+run = ["omc", "simulate.mos"]
+output = "csv"
+file = "build/DCMotor_res.csv"
+vars = ["time", "inductor.i", "load.w"]
+golden = "golden.json"
+atol = 1e-6
+rtol = 1e-4

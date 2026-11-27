@@ -69,13 +69,16 @@ that moved it.
   `julia --project=. --startup-file=no main.jl` (`requires = ["julia"]`), in the folder's own
   environment (`Project.toml`, `Manifest.toml`), and the script writes its results (TOML is in
   Julia's standard library).
-- **modelica:** Articula has no headless simulate yet, so a check runs a `.mos` with `omc`
-  (`requires = ["omc"]`): `loadFile`, then `simulate(Model, …, outputFormat = "csv")`, and reads
-  `<Model>_res.csv`. Where `omc` is only in a container, put a shim named `omc` on PATH, as CI does
-  (`.github/workflows/golden.yml`):
-  `exec podman run --rm -v "$PWD:$PWD:Z" -w "$PWD" --tmpfs /tmp -e HOME=/tmp docker.io/openmodelica/openmodelica:v1.27.1-minimal omc "$@"`.
-  That image has no Modelica Standard Library: a model that uses it calls
-  `installPackage(Modelica)` in its `.mos` first.
+- **modelica:** Articula has no headless simulate yet (articula#45), so a check runs the folder's
+  `simulate.mos` with `omc` (`requires = ["omc"]`): it `cd`s to `build/`, loads the model and
+  `simulate(Model, outputFormat = "csv")`s it with the model's own `experiment` (its `Interval` sets
+  the times the golden file holds), and exits 1 when no `<Model>_res.csv` comes out. Where `omc` is
+  only in a container, put a shim named `omc` on PATH, as CI does (`.github/workflows/golden.yml`),
+  with a folder of your own (made first) as omc's `HOME`, so the libraries stay installed between runs:
+  `exec podman run --rm -v "$PWD:$PWD:Z" -v "$HOME/.cache/omc-home:/omc:Z" -w "$PWD" --tmpfs /tmp -e HOME=/omc docker.io/openmodelica/openmodelica:v1.27.1-minimal omc "$@"`.
+  That image has no Modelica Standard Library: a model that uses it pins it in its `.mos`,
+  `installPackage(Modelica, "4.1.0", exactMatch = true)` (a no-op once installed) and
+  `loadModel(Modelica, {"4.1.0"})`, and in its `uses` annotation.
 - **malachite:** Malachite has no headless check yet: its index (notes, `[[links]]`, backlinks) is
   built only in the server (`server/index.ts`), and `paperboat hub show` reads only hubs already on
   the machine's list. Until a command such as `malachite hub check <folder> --json` exists, a check

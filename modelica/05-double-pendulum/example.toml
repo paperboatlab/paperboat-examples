@@ -1,0 +1,16 @@
+# The golden harness's manifest (docs/golden.md): simulate with omc (Articula has no headless
+# simulate yet) and compare the chosen variables at the experiment's output times.
+kind = "modelica"
+app = "articula"
+name = "05 Double pendulum"
+description = "MSL MultiBody: two bodies on two joints, falling from horizontal, drawn in 3D"
+
+[[check]]
+name = "simulate"
+requires = ["omc"]
+run = ["omc", "simulate.mos"]
+output = "csv"
+file = "build/DoublePendulum_res.csv"
+vars = ["time", "revolute1.phi", "revolute2.phi"]
+golden = "golden.json"
+atol = 1e-3       # rad: a chaotic system, kept short

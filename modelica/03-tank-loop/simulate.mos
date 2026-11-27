@@ -1,0 +1,6 @@
+// The headless run the golden check makes (Articula has no headless simulate yet: articula#45).
+// omc writes build/Basics.Loop_res.csv; run it with `omc simulate.mos` from this folder.
+mkdir("build"); cd("build"); deleteFile("Basics.Loop_res.csv");
+if not loadFile("../Basics/package.mo") then print(getErrorString()); exit(1); end if;
+simulate(Basics.Loop, outputFormat = "csv");
+if not regularFileExists("Basics.Loop_res.csv") then print(getErrorString()); exit(1); end if;
