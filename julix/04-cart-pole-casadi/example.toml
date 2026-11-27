@@ -1,0 +1,18 @@
+# The golden harness's manifest (docs/golden.md): instantiate the folder's environment (CasADiNative
+# and its binaries, JulixPlot), run the script with Julia (Julix has no headless run) and compare what
+# it writes with golden.json. Ipopt's answer moves with the platform's arithmetic: compare loosely.
+kind = "julix"
+app = "julix"
+name = "04 Cart-Pole Swing-Up"
+description = "Optimal control with CasADiNative.jl from the General registry: a cart-pole swing-up, solved with Ipopt"
+
+[[check]]
+requires = ["julia"]
+build = [["julia", "--project=.", "--startup-file=no", "-e", "import Pkg; Pkg.instantiate()"]]
+run = ["julia", "--project=.", "--startup-file=no", "main.jl"]
+timeout = 1800
+output = "toml"
+file = "out/results.toml"
+golden = "golden.json"
+atol = 1e-6
+rtol = 1e-5

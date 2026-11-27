@@ -32,6 +32,8 @@ jobs:
       - uses: actions/checkout@v5
       - uses: julia-actions/setup-julia@v2
         with: { version: '1.11' }
+      # ~/.julia: the folders' packages (JulixPlot, CasADiNative and its JLLs), which each check instantiates
+      - uses: julia-actions/cache@v2
       - run: python3 golden.py --strict julix/
 
   modelica:
