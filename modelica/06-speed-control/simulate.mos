@@ -1,0 +1,8 @@
+// The headless run the golden check makes (Articula has no headless simulate yet: articula#45).
+// omc writes build/SpeedControl_res.csv; run it with `omc simulate.mos` from this folder.
+mkdir("build"); cd("build"); deleteFile("SpeedControl_res.csv");
+if not installPackage(Modelica, "4.1.0", exactMatch = true) then print(getErrorString()); exit(1); end if;
+if not loadModel(Modelica, {"4.1.0"}) then print(getErrorString()); exit(1); end if;
+if not loadFile("../SpeedControl.mo") then print(getErrorString()); exit(1); end if;
+simulate(SpeedControl, outputFormat = "csv");
+if not regularFileExists("SpeedControl_res.csv") then print(getErrorString()); exit(1); end if;

@@ -1,0 +1,6 @@
+// The headless run the golden check makes (Articula has no headless simulate yet: articula#45).
+// omc writes build/MassSpringDamper_res.csv; run it with `omc simulate.mos` from this folder.
+mkdir("build"); cd("build"); deleteFile("MassSpringDamper_res.csv");
+if not loadFile("../MassSpringDamper.mo") then print(getErrorString()); exit(1); end if;
+simulate(MassSpringDamper, outputFormat = "csv");
+if not regularFileExists("MassSpringDamper_res.csv") then print(getErrorString()); exit(1); end if;

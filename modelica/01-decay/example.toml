@@ -1,0 +1,17 @@
+# The golden harness's manifest (docs/golden.md): simulate with omc (Articula has no headless
+# simulate yet) and compare the chosen variables at the experiment's output times.
+kind = "modelica"
+app = "articula"
+name = "01 First-order decay"
+description = "One state, one equation: der(x) = -x/tau, against exp(-t/tau)"
+
+[[check]]
+name = "simulate"
+requires = ["omc"]
+run = ["omc", "simulate.mos"]
+output = "csv"
+file = "build/Decay_res.csv"
+vars = ["time", "x"]
+golden = "golden.json"
+atol = 1e-6
+rtol = 1e-4

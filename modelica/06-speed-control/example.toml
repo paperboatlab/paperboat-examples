@@ -1,0 +1,17 @@
+# The golden harness's manifest (docs/golden.md): simulate with omc (Articula has no headless
+# simulate yet) and compare the chosen variables at the experiment's output times.
+kind = "modelica"
+app = "articula"
+name = "06 Speed control"
+description = "A limited PI controller holds a loaded shaft at a speed set point"
+
+[[check]]
+name = "simulate"
+requires = ["omc"]
+run = ["omc", "simulate.mos"]
+output = "csv"
+file = "build/SpeedControl_res.csv"
+vars = ["time", "speed.w", "torque.tau"]
+golden = "golden.json"
+atol = 1e-6
+rtol = 1e-4

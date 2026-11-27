@@ -1,0 +1,8 @@
+// The headless run the golden check makes (Articula has no headless simulate yet: articula#45).
+// omc writes build/DCMotor_res.csv; run it with `omc simulate.mos` from this folder.
+mkdir("build"); cd("build"); deleteFile("DCMotor_res.csv");
+if not installPackage(Modelica, "4.1.0", exactMatch = true) then print(getErrorString()); exit(1); end if;
+if not loadModel(Modelica, {"4.1.0"}) then print(getErrorString()); exit(1); end if;
+if not loadFile("../DCMotor.mo") then print(getErrorString()); exit(1); end if;
+simulate(DCMotor, outputFormat = "csv");
+if not regularFileExists("DCMotor_res.csv") then print(getErrorString()); exit(1); end if;

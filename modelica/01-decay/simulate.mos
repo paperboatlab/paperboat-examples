@@ -1,0 +1,6 @@
+// The headless run the golden check makes (Articula has no headless simulate yet: articula#45).
+// omc writes build/Decay_res.csv; run it with `omc simulate.mos` from this folder.
+mkdir("build"); cd("build"); deleteFile("Decay_res.csv");
+if not loadFile("../Decay.mo") then print(getErrorString()); exit(1); end if;
+simulate(Decay, outputFormat = "csv");
+if not regularFileExists("Decay_res.csv") then print(getErrorString()); exit(1); end if;

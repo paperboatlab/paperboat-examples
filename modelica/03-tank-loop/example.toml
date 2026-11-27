@@ -1,0 +1,17 @@
+# The golden harness's manifest (docs/golden.md): simulate with omc (Articula has no headless
+# simulate yet) and compare the chosen variables at the experiment's output times.
+kind = "modelica"
+app = "articula"
+name = "03 Tank loop"
+description = "A package of your own: connector, record, function, block; a pump fills a tank until it stalls"
+
+[[check]]
+name = "simulate"
+requires = ["omc"]
+run = ["omc", "simulate.mos"]
+output = "csv"
+file = "build/Basics.Loop_res.csv"
+vars = ["time", "tank.level", "tank.port.m_flow"]
+golden = "golden.json"
+atol = 1e-6
+rtol = 1e-4

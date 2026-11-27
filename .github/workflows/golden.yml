@@ -39,11 +39,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      # omc's HOME, where installPackage puts the MSL the models pin (simulate.mos): kept between runs
+      - uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/omc-home
+          key: omc-1.27.1-msl-4.1.0
       # omc from the OpenModelica image, called as `omc` by the models' checks
       - run: |
           docker pull -q docker.io/openmodelica/openmodelica:v1.27.1-minimal
-          mkdir -p "$RUNNER_TEMP/bin"
-          printf '#!/bin/sh\nexec docker run --rm -v "$PWD:$PWD" -w "$PWD" -u "$(id -u):$(id -g)" --tmpfs /tmp -e HOME=/tmp docker.io/openmodelica/openmodelica:v1.27.1-minimal omc "$@"\n' > "$RUNNER_TEMP/bin/omc"
+          mkdir -p "$RUNNER_TEMP/bin" "$RUNNER_TEMP/omc-home"
+          printf '#!/bin/sh\nexec docker run --rm -v "$PWD:$PWD" -v "%s:/omc" -w "$PWD" -u "$(id -u):$(id -g)" --tmpfs /tmp -e HOME=/omc docker.io/openmodelica/openmodelica:v1.27.1-minimal omc "$@"\n' "$RUNNER_TEMP/omc-home" > "$RUNNER_TEMP/bin/omc"
           chmod +x "$RUNNER_TEMP/bin/omc" && echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
       - run: omc --version && python3 golden.py --strict modelica/
 
