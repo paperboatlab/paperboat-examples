@@ -1,6 +1,9 @@
 # The golden harness's manifest (docs/golden.md): build the station against a simplicial checkout,
 # run its starter headless and compare the run with expected.json (the file `simplicial check` reads).
 kind = "simplicial"
+app = "simplicial"
+name = "09 Modular Synth"
+description = "Vector wires [6]: six-voice synth, per-voice filters, Scope and PCM Speaker"
 
 [[check]]
 name = "starter"

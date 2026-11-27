@@ -1,3 +1,6 @@
 # The golden harness's manifest (docs/golden.md). Not ported to the rebuilt Simplicial yet.
 kind = "simplicial"
+app = "simplicial"
+name = "02 Cart-Pole"
+description = "Station object in code: PID balances a cart-pole; Variables formulas"
 pending = "ex#44: port to the rebuilt Simplicial"

@@ -1,3 +1,6 @@
 # The golden harness's manifest (docs/golden.md). Not ported to the rebuilt Simplicial yet.
 kind = "simplicial"
+app = "simplicial"
+name = "05 Rover Lander"
+description = "Custom HTML5 web station: manual pilot vs autonomous lunar landing"
 pending = "ex#44: port to the rebuilt Simplicial"

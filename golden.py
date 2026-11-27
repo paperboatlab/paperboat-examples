@@ -24,11 +24,12 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent
 # Checkouts a command may name: {simplicial} is the Simplicial app (its engine), from
-# $SIMPLICIAL_DIR, else a checkout next to this repository.
-PLACES = {
-    "repo": str(REPO),
-    "simplicial": os.environ.get("SIMPLICIAL_DIR") or str(REPO.parent / "simplicial"),
-}
+# $SIMPLICIAL_DIR, else a checkout next to this repository; the same for each app.
+PLACES = {"repo": str(REPO)} | {
+    app: os.environ.get(f"{app.upper()}_DIR") or str(REPO.parent / app)
+    for app in ("simplicial", "julix", "articula", "malachite")}
+# What every example.toml says, for the harness and for `paperboat example list` (pb#72).
+NEEDS = ("kind", "app", "name", "description")
 
 
 class Skip(Exception):
@@ -78,9 +79,9 @@ def read_table(path: Path, names: list[str]) -> dict:
     return {n: [float(r[n]) for r in rows] for n in names}
 
 
-def read_data(path: Path, names: list[str]) -> dict:
-    """A JSON or TOML file of named results (a Julix script's saved results, a hub's results.toml)."""
-    data = tomllib.loads(path.read_text()) if path.suffix == ".toml" else json.loads(path.read_text())
+def read_data(text: str, toml: bool, names: list[str]) -> dict:
+    """JSON or TOML of named results (a Julix script's saved results, a hub's results.toml, a --json)."""
+    data = tomllib.loads(text) if toml else json.loads(text)
     return {n: data[n] for n in names} if names else data
 
 
@@ -166,8 +167,8 @@ def run_check(example: Path, check: dict, update: bool) -> list[str]:
         got = read_simplicial(proc.stdout)
     elif kind == "csv":
         got = read_table(cwd / check["file"], names)
-    elif kind in ("json", "toml"):
-        got = read_data(cwd / check["file"], names)
+    elif kind in ("json", "toml"):  # a file the run writes, else what it prints
+        got = read_data((cwd / check["file"]).read_text() if "file" in check else proc.stdout, kind == "toml", names)
     else:
         raise RuntimeError(f"unknown output {kind!r} (simplicial, csv, json, toml, exit)")
 
@@ -207,6 +208,14 @@ def main() -> int:
     for example in find(args):
         name = example.relative_to(REPO).as_posix() if example.is_relative_to(REPO) else str(example)
         manifest = tomllib.loads((example / "example.toml").read_text())
+        if missing := [k for k in NEEDS if k not in manifest]:
+            counts["FAIL"] += 1
+            print(f"FAIL    {name}\n        example.toml needs {', '.join(missing)}", flush=True)
+            continue
+        if listing:
+            print(f"{manifest['app']:10} {name}: {manifest['name']} · {manifest['description']}"
+                  + (" (pending)" if "pending" in manifest else ""))
+            continue
         if "pending" in manifest:
             counts["pending"] += 1
             print(f"pending {name}: {manifest['pending']}", flush=True)
@@ -216,9 +225,6 @@ def main() -> int:
             print(f"FAIL    {name}\n        no [[check]] and not pending", flush=True)
         for check in manifest.get("check", []):
             label = f"{name} {check['name']}" if len(manifest["check"]) > 1 else name
-            if listing:
-                print(f"{manifest['kind']:10} {label}")
-                continue
             try:
                 problems = run_check(example, check, update)
                 status = "FAIL" if problems else "ok"

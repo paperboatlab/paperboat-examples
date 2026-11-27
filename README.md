@@ -1,8 +1,8 @@
 # Paperboat examples
 
 Examples for the [Paperboat](https://github.com/paperboatlab/paperboat) apps, grouped by app, each
-with golden results that CI checks: Simplicial stations, Julix folders, Modelica models, and hubs
-that use them all. They exist to prove the apps and to learn them from, not as products.
+with golden results that CI checks: Simplicial stations, Julix folders, Modelica models, Malachite
+hubs of notes, and hubs that use them all. They exist to prove the apps and to learn them from, not as products.
 
 **Docs:** each group's README below, and each app's manual at <https://paperboatlab.org/apps/>.
 
@@ -12,14 +12,16 @@ that use them all. They exist to prove the apps and to learn them from, not as p
 simplicial/   the ten-level Simplicial tutorial curriculum: stations and flows
 julix/        standalone Julix folders: scripts and notebooks
 modelica/     standalone Modelica models, for Articula and omc
-hubs/         Malachite hubs that use every app (furuta-lab)
+malachite/    standalone Malachite hubs: Markdown notes
+hubs/         hubs that use every app (furuta-lab)
 legacy/       the nine stations from before the curriculum, kept for reference; not tested
 golden.py     the golden harness; its manifest, example.toml, is in docs/golden.md
+tools/        helpers the checks run
 ```
 
-An app finds its examples here: Simplicial looks for a checkout next to its own
-(`../paperboat-examples/simplicial`, or `$PAPERBOAT_EXAMPLES_DIR`), and `paperboat station examples`
-fetches this repository when there is none.
+Each example's `example.toml` names the app it opens in, its display name and a one-line
+description. Simplicial finds its stations in `simplicial/` of a checkout next to its own (or
+`$PAPERBOAT_EXAMPLES_DIR`); `paperboat station examples` fetches this repository when there is none.
 
 ## Check
 

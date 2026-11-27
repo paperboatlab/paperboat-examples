@@ -46,3 +46,16 @@ jobs:
           printf '#!/bin/sh\nexec docker run --rm -v "$PWD:$PWD" -w "$PWD" -u "$(id -u):$(id -g)" --tmpfs /tmp -e HOME=/tmp docker.io/openmodelica/openmodelica:v1.27.1-minimal omc "$@"\n' > "$RUNNER_TEMP/bin/omc"
           chmod +x "$RUNNER_TEMP/bin/omc" && echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
       - run: omc --version && python3 golden.py --strict modelica/
+
+  malachite:
+    name: Malachite hubs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5
+        with: { repository: paperboatlab/malachite, path: .malachite-app }
+      - uses: actions/setup-node@v5
+        with: { node-version: 22 }
+      - run: python3 golden.py --strict malachite/
+        env:
+          MALACHITE_DIR: ${{ github.workspace }}/.malachite-app
