@@ -12,8 +12,8 @@ python3 golden.py --strict simplicial/  # a skip fails too: CI, where the tools 
 ```
 
 Each check prints `ok`, `FAIL`, `skip` (a tool in `requires` or a checkout is missing here) or
-`pending` (the example says it is not ready); only `FAIL` fails the run. Python 3.11+, standard
-library only.
+`pending` (the example, or one of its checks, says it is not ready: its golden file waits for the
+app); only `FAIL` fails the run. Python 3.11+, standard library only.
 
 ## example.toml
 
@@ -35,6 +35,7 @@ output = "simplicial"          # how to read the results (below)
 file = "build/Model_res.csv"   # csv, json, toml: the file the run writes, from dir
 vars = ["time", "x"]           # csv (required in practice), json, toml: which results; default all
 golden = "golden.json"         # the golden file, from the example
+pending = "malachite#N: …"     # optional: this check waits on the app; listed, never run
 atol = 1e-9                    # optional: a number matches within atol, or rtol of the larger (math.isclose)
 rtol = 0.0
 tol = { x = 1e-3 }             # optional: an atol per result
@@ -79,8 +80,9 @@ that moved it.
   built only in the server (`server/index.ts`), and `paperboat hub show` reads only hubs already on
   the machine's list. Until a command such as `malachite hub check <folder> --json` exists, a check
   runs `tools/malachite-index.ts`, which builds the index with Malachite's own code and prints each
-  note's resolved links and the unresolved ones (`"unresolved": []` in the golden file is the
-  check that every link resolves):
+  note's resolved links, backlinks, tags, number of code cells and callout kinds (Malachite's
+  registry: an alias as its kind, an unknown kind as a note), and the unresolved links
+  (`"unresolved": []` in the golden file is the check that every link resolves):
   `run = ["node", "{repo}/tools/malachite-index.ts", "{malachite}", "."]`, `requires = ["node"]`,
   `output = "json"`. That it renders has no headless check yet:
   `{malachite}/bin/malachite <folder> --port <n>` serves it, for a browser.

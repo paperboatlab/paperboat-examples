@@ -1,0 +1,8 @@
+# A Malachite hub (github.com/paperboatlab/malachite): the examples copy of tank-lab, its own id. Set from its Settings or `paperboat hub config`.
+id = "h_tanklabgolden"
+name = "tank-lab"
+schema = 3
+author = "lab"
+created = "2026-11-17T13:00:00Z"
+keep = "always"
+ignore = ".malachite/out/ *.tmp"
