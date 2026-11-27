@@ -5,4 +5,4 @@ schema = 3
 author = "bench3"
 created = "2026-11-16T08:00:00Z"
 keep = "always"
-ignore = ".malachite/out/ *.tmp stations/*/build/"
+ignore = ".malachite/out/ out/ *.tmp stations/*/build/"

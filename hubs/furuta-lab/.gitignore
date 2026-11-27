@@ -3,3 +3,6 @@
 !**/.malachite/hub.toml
 stations/*/build/
 *.tmp
+# what the apps export (an FMU, a linear model, a gain): made again from the hub. The results the
+# study reads are committed on purpose; delete this line to track every out/ file
+out/

@@ -50,3 +50,7 @@ Nothing here has to run in sequence; this is the order the study went in, and th
 | `notes/`, `report.md` | Malachite | this notebook |
 | `media/` | | the figures the notes show |
 | `tools/` | | the bench, simulated: `julia tools/make_runs.jl` regenerates every run, output and figure |
+
+An `out/` folder holds what an app made from the hub, so the hub's history leaves it out (its
+`ignore`, and `out/` in `.gitignore`); the outputs above ship with the example all the same. Take `out/`
+out of both to version them.
