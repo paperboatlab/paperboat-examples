@@ -1,0 +1,8 @@
+{
+  "status": "done",
+  "max_alpha_err_deg": 1.4546,
+  "rms_alpha_err_deg": 0.38,
+  "max_theta_deg": 68.8184,
+  "rms_track_deg": 2.0011,
+  "fell": false
+}

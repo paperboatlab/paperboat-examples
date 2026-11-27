@@ -1,0 +1,8 @@
+name = "Furuta study"
+show = "board"
+group = "status"
+columns = "open, in progress, blocked, done"
+date = "created"
+
+[filter]
+project = "furuta"

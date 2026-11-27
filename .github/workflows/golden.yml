@@ -66,3 +66,40 @@ jobs:
       - run: python3 golden.py --strict malachite/
         env:
           MALACHITE_DIR: ${{ github.workspace }}/.malachite-app
+
+  hub:
+    name: Hubs across the apps
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v5
+      # design: Julia; model: omc in the OpenModelica image; flows: the station on a simplicial checkout with
+      # the control and optimization toolkits (what `paperboat toolkit install control` puts there); index: node
+      - uses: julia-actions/setup-julia@v2
+        with: { version: '1.11' }
+      - uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/omc-home
+          key: omc-1.27.1-msl-4.1.0
+      - run: |
+          docker pull -q docker.io/openmodelica/openmodelica:v1.27.1-minimal
+          mkdir -p "$RUNNER_TEMP/bin" "$RUNNER_TEMP/omc-home"
+          printf '#!/bin/sh\nexec docker run --rm -v "$PWD:$PWD" -v "%s:/omc" -w "$PWD" -u "$(id -u):$(id -g)" --tmpfs /tmp -e HOME=/omc docker.io/openmodelica/openmodelica:v1.27.1-minimal omc "$@"\n' "$RUNNER_TEMP/omc-home" > "$RUNNER_TEMP/bin/omc"
+          chmod +x "$RUNNER_TEMP/bin/omc" && echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+      - uses: actions/checkout@v5
+        with: { repository: paperboatlab/simplicial, path: .simplicial }
+      - uses: actions/checkout@v5
+        with: { repository: paperboatlab/simplicial-toolkit-optimization, ref: v0.1.1, path: .tk-optimization }
+      - uses: actions/checkout@v5
+        with: { repository: paperboatlab/simplicial-toolkit-control, ref: v0.1.2, path: .tk-control }
+      - run: cp -r .tk-optimization/engine/toolkit/optimization .tk-control/engine/toolkit/control .simplicial/engine/toolkit/
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ninja-build
+      - uses: actions/checkout@v5
+        with: { repository: paperboatlab/malachite, path: .malachite-app }
+      - uses: actions/setup-node@v5
+        with: { node-version: 22 }
+      - run: python3 golden.py --strict hubs/
+        env:
+          SIMPLICIAL_DIR: ${{ github.workspace }}/.simplicial
+          MALACHITE_DIR: ${{ github.workspace }}/.malachite-app
+          CMAKE_GENERATOR: Ninja

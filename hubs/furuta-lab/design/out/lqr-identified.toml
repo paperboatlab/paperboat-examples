@@ -1,0 +1,5 @@
+# design/lqr.jl with flows/out/identified.toml: u = -K (x - x_ref), x = [θ, α, θ̇, α̇], Ts = 0.002 s
+K = [-9.6483, -80.837, -4.0121, -7.5787]
+Ts = 0.002
+open_loop_poles = [-13.03, -2.3, 0.0, 11.45]
+closed_loop_radius = 0.98929

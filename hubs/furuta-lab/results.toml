@@ -1,0 +1,69 @@
+# Written by tools/make_runs.jl: every number the notes and the report quote.
+[e1_lqr_datasheet]
+fell = false
+max_alpha_err_deg = 12.96
+max_theta_deg = 85.61
+past_limit_s = 0.0
+rms_alpha_err_deg = 2.887
+rms_track_deg = 8.554
+saturated_pct = 5.943
+
+[e4_lqr_identified]
+fell = false
+max_alpha_err_deg = 1.642
+max_theta_deg = 68.6
+past_limit_s = 0.0
+rms_alpha_err_deg = 0.3917
+rms_track_deg = 1.994
+saturated_pct = 0.0
+
+[e5_mpc]
+fell = false
+max_alpha_err_deg = 2.007
+max_theta_deg = 69.35
+past_limit_s = 0.0
+rms_alpha_err_deg = 0.4686
+rms_track_deg = 3.16
+saturated_pct = 0.0
+
+[identification.datasheet]
+Bp = 3.0e-5
+Br = 0.0008
+fc = 0.0
+km = 0.045
+lp = 0.075
+mp = 0.03
+
+[identification.estimate]
+Bp = 3.881530308621253e-5
+Br = 0.0014306376214550482
+fc = 0.0011983417046433921
+km = 0.035778819893725694
+lp = 0.08166172855391468
+mp = 0.03131266998146226
+
+[identification.fit_alpha_pct]
+datasheet = -58.63109075817319
+identified = 91.34814762886366
+
+[identification.fit_theta_pct]
+datasheet = 33.30401558123272
+identified = 93.53212105899907
+
+[identification.stderr]
+Bp = 2.025737211129779e-6
+Br = 4.6635174792474016e-5
+fc = 0.00011202845532766185
+km = 0.00025721647417496904
+lp = 9.218515881411716e-5
+mp = 0.0003226232279175486
+
+[trajectory_datasheet]
+move_s = 0.64
+peak_alpha_deg = 13.99
+peak_u_ff = 6.13
+
+[trajectory_identified]
+move_s = 0.72
+peak_alpha_deg = 11.06
+peak_u_ff = 5.98
