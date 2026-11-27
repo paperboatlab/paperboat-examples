@@ -1,75 +1,44 @@
 # Paperboat examples
 
-Example stations for [Paperboat](https://github.com/paperboatlab/paperboat): each folder is a
-project of its own that uses the Paperboat engine (C++) or its Python bindings, and turns the
-same domain-free UI into a different app. They exist to prove the framework: every one must
-pass the protocol smoke test and its own golden result.
+Examples for the [Paperboat](https://github.com/paperboatlab/paperboat) apps, grouped by app, each
+with golden results that CI checks: Simplicial stations, Julix folders, Modelica models, Malachite
+hubs of notes, and hubs that use them all. They exist to prove the apps and to learn them from, not as products.
 
-The repository is now a **ten-level tutorial curriculum**. Each level introduces a distinct
-Paperboat capability, from a first clocked Signal flow to vector wires, custom web stations
-and an acausal Modelica reference.
+**Docs:** each group's README below, and each app's manual at <https://paperboatlab.org/apps/>.
 
-| Level | Folder | Port | Language | What it shows |
-| --- | --- | --- | --- | --- |
-| 01 | `01-smart-thermostat-python/` | 51301 | Python | Signal flow on a clock: bang-bang heating hysteresis, Board plots, Variables |
-| 02 | `02-cart-pole-cpp/` | 51302 | C++ | Station object in code: PID balances a cart-pole; Variables formulas |
-| 03 | `03-low-poly-island-python/` | 51303 | Python | Evaluated once: procedural terrain, list/array wires, block commenting |
-| 04 | `04-cocktail-barista-python/` | 51304 | Python | Step flow: Excel menu, Board Choice, visual groups, subsystem, E-stop key |
-| 05 | `05-rover-lander-python/` | 51305 | Python | Custom HTML5 web station: manual pilot vs autonomous lunar landing |
-| 06 | `06-robot-pick-place-python/` | 51306 | Python | ABB-style palletizer: analytical IK, quintic trajectories, fork pick-and-place |
-| 07 | `07-airfoil-cfd-python/` | 51307 | Python | Lattice-Boltzmann wind tunnel: velocity field, streamlines, lift/drag |
-| 08 | `08-air-hockey-tracker-cpp/` | 51308 | C++ | Optional OpenCV toolkit: image wires, HSV→centroid pipeline, air-hockey tracking |
-| 09 | `09-modular-synth-cpp/` | 51309 | C++ | Vector wires `[6]`: six-voice synth, per-voice filters, Scope and PCM Speaker |
-| 10 | `10-train-pantograph-cpp/` | 51310 | C++/Modelica | Active contact-force regulator, compliant catenary, bypass and arcing |
+## Layout
 
-Station ports start at 51301 and follow the level number; a new example takes the next free
-number from 51301 (51311 is the default of Articula's generated stations).
-
-The nine legacy stations are archived under [`legacy/`](legacy/) for reference; they are not
-part of the curriculum, the CLI's example list or the golden run.
-
-## Set up
-
-Clone this repository next to Paperboat:
-
+```text
+simplicial/   the ten-level Simplicial tutorial curriculum: stations and flows
+julix/        standalone Julix folders: scripts and notebooks
+modelica/     standalone Modelica models, for Articula and omc
+malachite/    standalone Malachite hubs: Markdown notes
+hubs/         hubs that use every app (furuta-lab)
+legacy/       the nine stations from before the curriculum, kept for reference; not tested
+golden.py     the golden harness; its manifest, example.toml, is in docs/golden.md
+tools/        helpers the checks run
 ```
-work/
-  paperboat/            the framework (engine, Python bindings, UI, protocol)
-  paperboat-examples/   this repository
-```
+
+Each example's `example.toml` names the app it opens in, its display name and a one-line
+description. Simplicial finds its stations in `simplicial/` of a checkout next to its own (or
+`$PAPERBOAT_EXAMPLES_DIR`); `paperboat station examples` fetches this repository when there is none.
+
+## Check
 
 ```sh
-cd paperboat && npm install && npm run build:python   # the UI, and the Python bindings
-pip install websockets jsonschema                      # for the tests
+python3 golden.py            # every example: run headless, compare with its golden files
+python3 golden.py --update simplicial/09-modular-synth-cpp   # rewrite one example's golden files
 ```
 
-## Run one
+A C++ station builds against a [simplicial](https://github.com/paperboatlab/simplicial) checkout
+next to this one (or `$SIMPLICIAL_DIR`); a check whose tools are missing is skipped, not failed.
 
-```sh
-# Python (the bindings: PYTHONPATH=../paperboat/python, or pip install ../paperboat/python)
-PYTHONPATH=../paperboat/python python3 04-cocktail-barista-python/server.py
+## CI
 
-# C++ (finds ../paperboat/engine; or -DPAPERBOAT_ENGINE_DIR=…)
-cmake -S 09-modular-synth-cpp -B 09-modular-synth-cpp/build && cmake --build 09-modular-synth-cpp/build
-09-modular-synth-cpp/build/paperboat-modular-synth
+| Check | What it runs | `dev` |
+| --- | --- | --- |
+| Golden | `golden.py` over each group, on Linux | [![golden](https://github.com/paperboatlab/paperboat-examples/actions/workflows/golden.yml/badge.svg?branch=dev)](https://github.com/paperboatlab/paperboat-examples/actions/workflows/golden.yml?query=branch%3Adev) |
 
-# Or let the CLI build and run it
-./paperboat/bin/paperboat run 04
-```
+## Licence
 
-Then, in `../paperboat`, `npm run dev` and open
-`http://localhost:5173/?station=ws://localhost:<port>`. Every station also runs its starter
-headless with `--run` (protocol messages as JSON lines).
-
-## Test
-
-```sh
-python3 ../paperboat/protocol/golden.py --examples .        # every starter run vs expected.json
-python3 ../paperboat/protocol/smoke_test.py --port <port>   # a running station vs the protocol
-./paperboat/bin/paperboat check <folder>                    # manifest, catalog, smoke, golden
-```
-
-Writing your own station: see Paperboat's API reference (`docs/api`, quickstart) and the
-numbered README next to each station.
-
-This repository is published from Paperboat's development tree (`examples/stations`).
+GNU General Public License version 3 (see [LICENSE](LICENSE)).

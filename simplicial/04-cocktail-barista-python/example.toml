@@ -1,0 +1,6 @@
+# The golden harness's manifest (docs/golden.md). Not ported to the rebuilt Simplicial yet.
+kind = "simplicial"
+app = "simplicial"
+name = "04 Cocktail Barista"
+description = "Step flow: Excel menu, Board Choice, visual groups, subsystem, E-stop key"
+pending = "ex#44: port to the rebuilt Simplicial"

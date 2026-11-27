@@ -1,0 +1,6 @@
+# The golden harness's manifest (docs/golden.md). Not ported to the rebuilt Simplicial yet.
+kind = "simplicial"
+app = "simplicial"
+name = "03 Low Poly Island"
+description = "Evaluated once: procedural terrain, list/array wires, block commenting"
+pending = "ex#44: port to the rebuilt Simplicial"

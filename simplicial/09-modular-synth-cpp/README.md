@@ -64,6 +64,7 @@ bars each frame.
 │   ├── synth.hpp         # Synth state: levels, mix, RMS, scene
 │   └── synth.cpp         # Chord, VCO, ADSR, VCA, VCF, LFO, Mixer, AudioOut, VoiceProbe
 ├── expected.json         # golden run: 6 voices, final RMS/peak
+├── example.toml          # how the golden harness builds and runs it (docs/golden.md)
 └── README.md
 ```
 
@@ -76,6 +77,6 @@ dimension at run time.
 ## 4. Verification
 
 ```sh
-./paperboat/bin/paperboat check paperboat-examples/09-modular-synth-cpp
-python3 paperboat/protocol/golden.py --examples paperboat-examples 09-modular-synth-cpp
+python3 golden.py simplicial/09-modular-synth-cpp   # from the repository root: build, run, compare
+paperboat check simplicial/09-modular-synth-cpp     # manifest, catalog, smoke and golden
 ```

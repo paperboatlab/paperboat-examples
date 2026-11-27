@@ -1,0 +1,61 @@
+# The golden harness (docs/golden.md) over each group of examples, each job with the tools its
+# group needs; a pending example is listed, not run.
+name: golden
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  simplicial:
+    name: Simplicial stations
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5
+        with: { repository: paperboatlab/simplicial, path: .simplicial }
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ninja-build
+      - run: python3 golden.py --strict simplicial/
+        env:
+          SIMPLICIAL_DIR: ${{ github.workspace }}/.simplicial
+          CMAKE_GENERATOR: Ninja
+
+  julix:
+    name: Julix folders
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: julia-actions/setup-julia@v2
+        with: { version: '1.11' }
+      - run: python3 golden.py --strict julix/
+
+  modelica:
+    name: Modelica models
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      # omc from the OpenModelica image, called as `omc` by the models' checks
+      - run: |
+          docker pull -q docker.io/openmodelica/openmodelica:v1.27.1-minimal
+          mkdir -p "$RUNNER_TEMP/bin"
+          printf '#!/bin/sh\nexec docker run --rm -v "$PWD:$PWD" -w "$PWD" -u "$(id -u):$(id -g)" --tmpfs /tmp -e HOME=/tmp docker.io/openmodelica/openmodelica:v1.27.1-minimal omc "$@"\n' > "$RUNNER_TEMP/bin/omc"
+          chmod +x "$RUNNER_TEMP/bin/omc" && echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+      - run: omc --version && python3 golden.py --strict modelica/
+
+  malachite:
+    name: Malachite hubs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5
+        with: { repository: paperboatlab/malachite, path: .malachite-app }
+      - uses: actions/setup-node@v5
+        with: { node-version: 22 }
+      - run: python3 golden.py --strict malachite/
+        env:
+          MALACHITE_DIR: ${{ github.workspace }}/.malachite-app

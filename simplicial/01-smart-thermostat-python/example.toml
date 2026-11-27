@@ -1,0 +1,6 @@
+# The golden harness's manifest (docs/golden.md). Not ported to the rebuilt Simplicial yet.
+kind = "simplicial"
+app = "simplicial"
+name = "01 Smart Thermostat"
+description = "Signal flow on a clock: bang-bang heating hysteresis, Board plots, Variables"
+pending = "ex#44: port to the rebuilt Simplicial"
