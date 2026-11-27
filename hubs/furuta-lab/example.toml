@@ -14,6 +14,9 @@ timeout = 900
 output = "toml"
 golden = "golden/design.json"
 rtol = 1e-3       # results.toml keeps four significant digits
+# The closed-loop runs' RMS and saturation move by a few % between machines: the arm hunts through the
+# dead band (notes/issue-arm-hunting.md), and the cycle's phase follows the last bit of the arithmetic
+tol = { "e1_lqr_datasheet.rms_alpha_err_deg" = 0.3, "e1_lqr_datasheet.rms_track_deg" = 0.9, "e1_lqr_datasheet.saturated_pct" = 0.6, "e4_lqr_identified.rms_alpha_err_deg" = 0.04, "e4_lqr_identified.rms_track_deg" = 0.2, "e5_mpc.rms_alpha_err_deg" = 0.05, "e5_mpc.rms_track_deg" = 0.3 }
 
 # Articula: the MultiBody model simulated with omc
 [[check]]
@@ -26,10 +29,11 @@ vars = ["time", "theta", "alpha"]
 golden = "golden/model.json"
 atol = 1e-4
 
-# Simplicial: each flow on the station, headless (the station's own --run with --psf: `simplicial open`
-# reads only the old .psf format, simplicial#66). The station needs the control and optimization
-# toolkits in {simplicial}/engine/toolkit (paperboat toolkit install control). It builds outside the hub:
-# Malachite's index would take in build/_deps' READMEs as notes (malachite#69).
+# Simplicial: each flow on the station, headless: the station's own --run --psf (`simplicial open` rejects
+# the .psf format the app saves now, simplicial#66). A closed loop's figures of merit come from its scopes
+# (golden/flow.py). The station needs the control and optimization toolkits in {simplicial}/engine/toolkit
+# (paperboat toolkit install control), and builds outside the hub: Malachite's index would take in
+# build/_deps' READMEs as notes (malachite#69).
 [[check]]
 name = "flows/e1-lqr-datasheet"
 dir = "stations/furuta-rig"
@@ -38,10 +42,11 @@ build = [
   ["cmake", "-S", ".", "-B", "{repo}/build/furuta-rig", "-DCMAKE_BUILD_TYPE=Release", "-DPAPERBOAT_ENGINE_DIR={simplicial}/engine"],
   ["cmake", "--build", "{repo}/build/furuta-rig", "--target", "paperboat-rig"],
 ]
-run = ["{repo}/build/furuta-rig/paperboat-rig", "--run", "--psf", "../../flows/e1-lqr-datasheet.psf"]
+run = ["python3", "../../golden/flow.py", "{repo}/build/furuta-rig/paperboat-rig", "--run", "--psf", "../../flows/e1-lqr-datasheet.psf"]
 timeout = 2400
-output = "simplicial"
+output = "json"
 golden = "golden/e1-lqr-datasheet.json"
+rtol = 0.1        # the figures of merit, as results.toml has them: the hunting moves them a few %
 
 [[check]]
 name = "flows/excite"
@@ -64,10 +69,11 @@ build = [
   ["cmake", "-S", ".", "-B", "{repo}/build/furuta-rig", "-DCMAKE_BUILD_TYPE=Release", "-DPAPERBOAT_ENGINE_DIR={simplicial}/engine"],
   ["cmake", "--build", "{repo}/build/furuta-rig", "--target", "paperboat-rig"],
 ]
-run = ["{repo}/build/furuta-rig/paperboat-rig", "--run", "--psf", "../../flows/e4-lqr-identified.psf"]
+run = ["python3", "../../golden/flow.py", "{repo}/build/furuta-rig/paperboat-rig", "--run", "--psf", "../../flows/e4-lqr-identified.psf"]
 timeout = 2400
-output = "simplicial"
+output = "json"
 golden = "golden/e4-lqr-identified.json"
+rtol = 0.1        # the figures of merit, as results.toml has them: the hunting moves them a few %
 
 [[check]]
 name = "flows/mpc"
@@ -77,10 +83,11 @@ build = [
   ["cmake", "-S", ".", "-B", "{repo}/build/furuta-rig", "-DCMAKE_BUILD_TYPE=Release", "-DPAPERBOAT_ENGINE_DIR={simplicial}/engine"],
   ["cmake", "--build", "{repo}/build/furuta-rig", "--target", "paperboat-rig"],
 ]
-run = ["{repo}/build/furuta-rig/paperboat-rig", "--run", "--psf", "../../flows/mpc.psf"]
+run = ["python3", "../../golden/flow.py", "{repo}/build/furuta-rig/paperboat-rig", "--run", "--psf", "../../flows/mpc.psf"]
 timeout = 2400
-output = "simplicial"
+output = "json"
 golden = "golden/mpc.json"
+rtol = 0.1        # the figures of merit, as results.toml has them: the hunting moves them a few %
 
 [[check]]
 name = "flows/estimate"

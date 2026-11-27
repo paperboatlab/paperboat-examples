@@ -1,6 +1,8 @@
 {
   "status": "done",
-  "signals": {
-    "graph-u": [0.485568, 0.001]
-  }
+  "max_alpha_err_deg": 1.8396,
+  "rms_alpha_err_deg": 0.4712,
+  "max_theta_deg": 69.6973,
+  "rms_track_deg": 3.2821,
+  "fell": false
 }

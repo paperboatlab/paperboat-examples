@@ -93,4 +93,6 @@ that moved it.
   `{malachite}/bin/malachite <folder> --port <n>` serves it, for a browser.
 - **hub:** one check per app (or per flow), each with its `dir` in the hub, plus the malachite
   check over the whole hub. A hub's own scripts may rewrite its files (`hubs/furuta-lab`'s
-  `tools/make_runs.jl` does): its check runs them on a copy and prints the results.
+  `tools/make_runs.jl` does): its check runs them on a copy and prints the results. Where a flow's
+  last values are noise (a loop that hunts), a small script runs the station and prints figures of
+  merit from its traces instead (`hubs/furuta-lab/golden/flow.py`, `output = "json"`).
