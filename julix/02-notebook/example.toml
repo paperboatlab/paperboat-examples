@@ -1,0 +1,15 @@
+# The golden harness's manifest (docs/golden.md): run the script with Julia in the folder's own
+# environment (Julix has no headless run) and compare what it writes with golden.json.
+kind = "julix"
+app = "julix"
+name = "02 Notebook"
+description = "A notebook of cells: fit a step response, draw it as SVG without a package"
+
+[[check]]
+requires = ["julia"]
+build = [["julia", "--project=.", "--startup-file=no", "-e", "import Pkg; Pkg.instantiate()"]]
+run = ["julia", "--project=.", "--startup-file=no", "main.jl"]
+output = "toml"
+file = "out/results.toml"
+golden = "golden.json"
+atol = 1e-8

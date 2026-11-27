@@ -12,3 +12,6 @@ CLAUDE.md
 AGENTS.md
 .claude/
 .remember/
+# what the Julix examples write when run
+julix/*/out/
+julix/*/.julix/
