@@ -33,22 +33,19 @@ Overhead Camera → HSV range → Open → Close → Centroid → Puck Tracker
 ### Optional toolkit and degraded mode
 
 `station.toml` does **not** hard-require OpenCV. CMake links `paperboat::toolkit_opencv` when
-it is available (an installed `engine/toolkit/opencv`, or the `paperboat-toolkit-opencv`
-checkout next to this repo) and defines `PAPERBOAT_HAS_OPENCV`. With it, `main.cpp` loads
+it is available (installed in Simplicial's `engine/toolkit/opencv` by
+`paperboat toolkit install opencv`, or a `simplicial-toolkit-opencv` checkout beside this
+repository) and defines `PAPERBOAT_HAS_OPENCV`. With it, `main.cpp` loads
 `descriptor.toml`. Without it, it loads `descriptor-degraded.toml`, which uses the domain's
 synthetic vision stage and a placeholder Image tile. Both run the same tracker and pass the
 same golden result.
-
-The **Toolkits** button now finds the installed OpenCV toolkit from the example checkout:
-`find_repo_root` also checks the sibling `paperboat/` directory, because the examples live
-next to Paperboat rather than inside it.
 
 ---
 
 ## 2. Cockpit exploration
 
 ```sh
-./bin/paperboat run 08
+paperboat run 08
 # http://localhost:30471/?station=ws://localhost:51308
 ```
 
@@ -79,24 +76,24 @@ next to Paperboat rather than inside it.
 │   ├── vision.hpp             # register_tracker()
 │   └── vision.cpp             # Camera, degraded Vision, Tracker, Truth, fallback view
 ├── expected.json              # golden run: tracker x/z, 11 true bounces
+├── example.toml               # how the golden harness builds and runs it (docs/golden.md)
 └── README.md
 ```
 
 The `centroid` block lives in the toolkit repository:
-`paperboat-toolkit-opencv/engine/toolkit/opencv/src/centroid.cpp`.
+`simplicial-toolkit-opencv/engine/toolkit/opencv/src/opencv/centroid/`.
 
 ---
 
 ## 4. Verification
 
 ```sh
-./paperboat/bin/paperboat check paperboat-examples/08-air-hockey-tracker-cpp
-python3 paperboat/protocol/golden.py --examples paperboat-examples 08-air-hockey-tracker-cpp
+python3 golden.py simplicial/08-air-hockey-tracker-cpp   # from the repository root: build, run, compare
+paperboat check simplicial/08-air-hockey-tracker-cpp     # manifest, catalog, smoke and golden
 ```
 
 To force the degraded build:
 
 ```sh
-cmake -S paperboat-examples/08-air-hockey-tracker-cpp -B /tmp/air-hockey-no-cv \
-  -DPAPERBOAT_ENGINE_DIR=paperboat/engine -DPAPERBOAT_WITH_OPENCV=OFF
+cmake -S . -B build-no-cv -DPAPERBOAT_ENGINE_DIR=<simplicial>/engine -DPAPERBOAT_WITH_OPENCV=OFF
 ```

@@ -1,7 +1,7 @@
 {
   "$comment": "What `--run` (the starter, headless) must produce; checked by protocol/golden.py.",
   "status": "done",
-  "run": "server.py",
+  "run": "station.py",
   "signals": {
     "display-fill": [90.0, 0.5],
     "display-served": [1.0, 1e-9]
@@ -10,6 +10,6 @@
     "cup detected",
     "pour 30 ml gin",
     "Order complete: Negroni",
-    "Served Negroni: 90 ml"
+    "bar: fill_ml = 90, served = 1"
   ]
 }

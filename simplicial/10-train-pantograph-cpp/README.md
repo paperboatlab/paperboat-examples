@@ -43,7 +43,7 @@ The C++ implementation in `domain/pantograph.cpp` carries the same equations; op
 ## 2. Cockpit exploration
 
 ```sh
-./bin/paperboat run 10
+paperboat run 10
 # http://localhost:30471/?station=ws://localhost:51310
 ```
 
@@ -74,6 +74,7 @@ The C++ implementation in `domain/pantograph.cpp` carries the same equations; op
 ├── modelica/
 │   └── PantographCatenary.mo  # acausal reference model
 ├── expected.json         # golden run: 126.7 N, 320 km/h, 0 losses
+├── example.toml          # how the golden harness builds and runs it (docs/golden.md)
 └── README.md
 ```
 
@@ -86,6 +87,6 @@ the Flow `contact`, `speed`, `z`, `wire`, `uplift`, `losses`, `arcing` and `in_w
 ## 4. Verification
 
 ```sh
-./paperboat/bin/paperboat check paperboat-examples/10-train-pantograph-cpp
-python3 paperboat/protocol/golden.py --examples paperboat-examples 10-train-pantograph-cpp
+python3 golden.py simplicial/10-train-pantograph-cpp   # from the repository root: build, run, compare
+paperboat check simplicial/10-train-pantograph-cpp     # manifest, catalog, smoke and golden
 ```

@@ -31,7 +31,7 @@ control on the Board (or the Variables dock); the recipe stages read the same wo
 ## 2. Cockpit exploration
 
 ```sh
-./bin/paperboat run 04
+paperboat run 04
 # http://localhost:30471/?station=ws://localhost:51304
 ```
 
@@ -58,27 +58,33 @@ control on the Board (or the Variables dock); the recipe stages read the same wo
 04-cocktail-barista-python/
 ├── station.toml          # format = 0, port 51304, solver = discrete
 ├── descriptor.toml       # variables, Step-flow starter, groups, board
-├── server.py             # paperboat.serve (mode = "clock", step blocks)
+├── station.py            # the station file: registers the bar and the blocks (paperboat_runtime)
 ├── data/
 │   └── recipes.xlsx      # the bar manager's recipe sheet
 ├── domain/
 │   ├── __init__.py
 │   ├── recipe.py         # stdlib XLSX reader; RECIPES/BY_NAME
-│   ├── state.py          # Barista: valves, volumes, shaker, E-stop, scene
-│   └── blocks.py         # CupSensor, CheckCup, Dispense (Timed), ShakeChill, Serve…
+│   ├── state.py          # Barista, the bar (a station object): valves, volumes, shaker, E-stop, scene
+│   └── blocks.py         # CupSensor, CheckCup, Dispense, ShakeChill, Serve…
 ├── expected.json         # golden run: 90 ml served, Negroni log
+├── example.toml          # how the golden harness runs it (docs/golden.md)
 └── README.md
 ```
 
-The Timed blocks (`Dispense`, `ShakeChill`, `Rinse`) derive from `paperboat.Timed` and
-implement `advance(ctx, start, end)`; the engine owns the clock, the progress output and the
-step wire. Everything else is a `paperboat.Step` with `enter()` / `tick()`.
+The station's code runs out of process, in a Python runtime `paperboatd` leases; `station.py`
+registers each type with its definition (Simplicial's docs/stations.rst). The bar is a station
+object (`[station] objects`): the engine makes one per run and steps it after each pass, and the
+blocks reach it through `state.current()`. Each step block is `"base": "step"` with
+`enter(ctx, inputs)` and `tick(ctx, inputs)`, which returns the port to leave by (`"next"`, or
+`""` to stay); the timed ones (`Dispense`, `ShakeChill`, `Rinse`) count their own time from
+`ctx["dt"]` and output their `progress`. When the run is done the Console shows the bar's
+`served` and `fill_ml`.
 
 ---
 
 ## 4. Verification
 
 ```sh
-./paperboat/bin/paperboat check paperboat-examples/04-cocktail-barista-python
-python3 paperboat/protocol/golden.py --examples paperboat-examples 04-cocktail-barista-python
+python3 golden.py simplicial/04-cocktail-barista-python   # from the repository root: run, compare
+paperboat check simplicial/04-cocktail-barista-python     # manifest, catalog, smoke and golden
 ```

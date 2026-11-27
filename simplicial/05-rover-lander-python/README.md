@@ -38,7 +38,7 @@ floating run dock, and the **⛶** button opens it fullscreen when the Station p
 ## 2. Cockpit exploration
 
 ```sh
-./bin/paperboat run 05
+paperboat run 05
 # http://localhost:30471/?station=ws://localhost:51305
 ```
 
@@ -47,9 +47,9 @@ floating run dock, and the **⛶** button opens it fullscreen when the Station p
 2. **Fly it manually**: flip the autopilot switch on the Board (or press **P**), click the
    cockpit to focus it, then hold **W / A / D**. The switch is a `board/switch` monitor
    with a keyboard binding.
-3. **Move the landing pad** — the floating run dock has a **landing_x** slider. Drag it while
-   the autopilot flies: LZ-1, its beacon and the target marker move laterally and the GNC law
-   steers to the new point. `descent_rate` and `landing_floor` in the Variables sheet
+3. **Move the landing pad** — the floating run dock has a **landing_x** slider. The GNC law
+   steers to it live; LZ-1 and its beacon (the lander's `landing_x` property) move with the next
+   run. `descent_rate` and `landing_floor` in the Variables sheet
    (`Alt+V`) change the descent profile; a slower approach costs more propellant.
 4. **Board** — altitude, vertical speed, fuel and target readouts plus a three-channel Scope.
 5. **Station** — the custom cockpit page, served from `station/` on the station's port.
@@ -62,28 +62,38 @@ floating run dock, and the **⛶** button opens it fullscreen when the Station p
 05-rover-lander-python/
 ├── station.toml          # format = 0, port 51305, solver = rk4
 ├── descriptor.toml       # [station] view = "web", guidance graph, variables
-├── server.py             # paperboat.serve (dt = 1/60, duration = 50 s, speed 4×)
+├── station.py            # the station file: registers the lander and the blocks (paperboat_runtime)
 ├── domain/
 │   ├── __init__.py
-│   ├── state.py          # Lander: 2-D flight, propellant, touchdown, scene
+│   ├── state.py          # Lander (a station object): 2-D flight, propellant, touchdown, scene
 │   └── blocks.py         # LanderProbe, Guidance, ManualThrusters, Thrusters
 ├── station/
 │   ├── index.html        # CRT cockpit markup
 │   ├── cockpit.js        # canvas renderer, signals, key forwarding
 │   └── styles.css        # phosphor palette, scanlines
 ├── expected.json         # touchdown at LZ-1, 0 m altitude, ~62 kg left
+├── example.toml          # how the golden harness runs it (docs/golden.md)
 └── README.md
 ```
 
 `station.js` (served by the engine at `/paperboat/station.js`) gives the page
 `paperboat.on("signal" | "log" | …)`, `paperboat.entities`, and `paperboat.input(key, down)`.
-The page never simulates anything.
+The page never simulates anything; it finds the lander's entities by their ids, which the
+station object prefixes with its own (`lander/lander`, `lander/flame`).
+
+The station's code runs out of process, in a Python runtime `paperboatd` leases; `station.py`
+registers each type with its definition (Simplicial's docs/stations.rst). The run's clock
+(`dt = 1/60`, 50 s, 4×) and the 2-D view are `[run]` and `[view]` in `station.toml`. The lander
+is a station object: the engine steps it after each pass, the blocks reach it through
+`state.current()`, and after touchdown it stays where it came down. `landing_x` is one of its
+properties, so moving it takes effect with the next run; live, mid-run changes wait on
+`ctx.variable` for Python stations (paperboatlab/simplicial#60).
 
 ---
 
 ## 4. Verification
 
 ```sh
-./paperboat/bin/paperboat check paperboat-examples/05-rover-lander-python
-python3 paperboat/protocol/golden.py --examples paperboat-examples 05-rover-lander-python
+python3 golden.py simplicial/05-rover-lander-python   # from the repository root: run, compare
+paperboat check simplicial/05-rover-lander-python     # manifest, catalog, smoke and golden
 ```

@@ -1,13 +1,24 @@
 [station]
 format = 0
 name = "05-rover-lander-python"
-version = "0.1.0"
+version = "0.2.0"
 engine = ">=0.1"
 language = "python"
-run = "server.py"
+run = "station.py"
 port = 51305
 descriptor = "descriptor.toml"
 solver = "rk4"
+
+[run]
+duration = 50.0
+dt = 0.016666666666666666  # 1/60 s
+emit_every = 2
+speed = 4.0
+
+[view]
+mode = "2d"
+center = [0, 18]
+height = 46
 
 [test]
 golden = "expected.json"

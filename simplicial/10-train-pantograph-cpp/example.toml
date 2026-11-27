@@ -1,6 +1,18 @@
-# The golden harness's manifest (docs/golden.md). Not ported to the rebuilt Simplicial yet.
+# The golden harness's manifest (docs/golden.md): build the station against a simplicial checkout,
+# run its starter headless and compare the run with expected.json (the file `simplicial check` reads).
 kind = "simplicial"
 app = "simplicial"
 name = "10 Train Pantograph"
 description = "Active contact-force regulator, compliant catenary, bypass and arcing"
-pending = "ex#44: port to the rebuilt Simplicial"
+
+[[check]]
+name = "starter"
+requires = ["cmake"]
+build = [
+  ["cmake", "-S", ".", "-B", "build", "-DCMAKE_BUILD_TYPE=Release", "-DPAPERBOAT_ENGINE_DIR={simplicial}/engine"],
+  ["cmake", "--build", "build", "--target", "paperboat-train-pantograph"],
+]
+run = ["build/paperboat-train-pantograph", "--run"]
+timeout = 1800   # seconds per command: the build compiles the engine
+output = "simplicial"
+golden = "expected.json"

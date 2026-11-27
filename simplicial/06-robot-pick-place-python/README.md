@@ -34,7 +34,7 @@ S-curve to bin → vacuum off) → Stop`.
 ## 2. Cockpit exploration
 
 ```sh
-./bin/paperboat run 06
+paperboat run 06
 # http://localhost:30471/?station=ws://localhost:51306
 ```
 
@@ -58,31 +58,36 @@ S-curve to bin → vacuum off) → Stop`.
 06-robot-pick-place-python/
 ├── station.toml          # format = 0, port 51306, solver = euler
 ├── descriptor.toml       # variables, Step-flow cycle, IK demo, board
-├── server.py             # paperboat.serve (dt = 1/50, duration = 22 s)
+├── station.py            # the station file: registers the cell and the blocks (paperboat_runtime)
 ├── domain/
 │   ├── __init__.py
 │   ├── kinematics.py     # forward, analytical inverse, quintic, angle wrap
-│   ├── state.py          # RobotCell: joints, parts, pallets, CAD scene
+│   ├── state.py          # RobotCell, the cell (a station object): joints, parts, pallets, CAD scene
 │   ├── stl.py            # binary/ASCII STL reader for the CAD parts
 │   └── blocks.py         # ArmProbe, InverseKinematics, Trajectory, Grip, CellStatus
 ├── data/
 │   ├── generate_cad.py   # rebuilds the palletizer STL parts
 │   └── cad/*.stl         # base, turret, arm1, arm2, fork
 ├── expected.json         # golden run: 3 parts placed, BIN A/B audit
+├── example.toml          # how the golden harness runs it (docs/golden.md)
 └── README.md
 ```
 
-`Trajectory` is a `paperboat.Timed` step: `begin()` captures the start TCP and target,
-`advance()` evaluates the quintic, raises the Cartesian path and calls the analytical IK.
-The 3D geometry is assembled in `RobotCell.entities()`: the static base/turret and moving
-arm/fork are `shape = "mesh"` entities carrying `vertices` and `indices`; `patch()` sends
-only their pose. The IK, quintic paths and fork state machine are the substantive part.
+The station's code runs out of process, in a Python runtime `paperboatd` leases; `station.py`
+registers each type with its definition (Simplicial's docs/stations.rst). The cell is a station
+object (`[station] objects`): the engine makes one per run and steps it after each pass, and the
+blocks reach it through `state.current()`. `Trajectory` is a step (`"base": "step"`): `enter()`
+captures the start TCP and target, each `tick()` advances its progress by `ctx["dt"] / seconds`,
+evaluates the quintic, raises the Cartesian path and calls the analytical IK, and returns
+`"next"` at the end. The 3D geometry is assembled in `RobotCell.entities(id, z)`: the static
+base/turret and moving arm/fork are `shape = "mesh"` entities carrying `vertices` and
+`indices`. The IK, quintic paths and fork state machine are the substantive part.
 
 ---
 
 ## 4. Verification
 
 ```sh
-./paperboat/bin/paperboat check paperboat-examples/06-robot-pick-place-python
-python3 paperboat/protocol/golden.py --examples paperboat-examples 06-robot-pick-place-python
+python3 golden.py simplicial/06-robot-pick-place-python   # from the repository root: run, compare
+paperboat check simplicial/06-robot-pick-place-python     # manifest, catalog, smoke and golden
 ```

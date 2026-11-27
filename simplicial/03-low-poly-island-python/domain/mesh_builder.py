@@ -6,14 +6,9 @@ and packs geometry into Station 3D entities.
 
 import math
 
-import paperboat
-from paperboat import Port
+import paperboat_runtime as pb
 
 from .noise import octave_noise
-
-POINTS = "points"
-NUMBERS = "numbers"
-TREES = "trees"
 
 
 def shade_color(hex_color: str, factor: float) -> str:
@@ -46,19 +41,15 @@ def biome_color(h: float, sea_level: float = 0.25) -> str:
         return "#f8fafc"
 
 
-class Block(paperboat.Block):
-    def __init__(self, params: dict) -> None:
-        super().__init__(params)
+class Block:
+    """A block whose params (keywords, as station.py's definition gives them) are `self.p`."""
+
+    def __init__(self, **params) -> None:
         self.p = params
 
 
 class Grid(Block):
     """Generates a 2D grid matrix of (x, z) coordinate pairs."""
-
-    type, label = "grid", "Grid"
-    description = "Generates 2D grid matrix of (x, z) coordinates"
-    outputs = [Port("points", POINTS)]
-    params = {"nx": 24, "nz": 24, "spacing": 0.35}
 
     def step(self, ctx, inputs) -> dict:
         nx = max(int(self.p.get("nx", 24)), 2)
@@ -72,19 +63,6 @@ class Grid(Block):
 
 class NoiseHarmonics(Block):
     """Evaluates multi-octave 2D procedural noise elevation heights."""
-
-    type, label = "noise", "Noise Harmonics"
-    description = "Procedural multi-octave 2D noise terrain generator"
-    inputs = [Port("points", POINTS)]
-    outputs = [Port("heights", NUMBERS)]
-    params = {
-        "seed": 42,
-        "octaves": 4,
-        "persistence": 0.5,
-        "lacunarity": 2.0,
-        "scale": 3.0,
-        "height_scale": 2.8,
-    }
 
     def step(self, ctx, inputs) -> dict:
         points = inputs.get("points", [])
@@ -112,12 +90,6 @@ class NoiseHarmonics(Block):
 class RadialFalloff(Block):
     """Tapers elevation heights radially into the ocean."""
 
-    type, label = "falloff", "Radial Falloff"
-    description = "Distance-from-center falloff weighting ensuring island silhouette"
-    inputs = [Port("points", POINTS), Port("heights", NUMBERS)]
-    outputs = [Port("heights", NUMBERS)]
-    params = {"radius": 3.8, "power": 2.2}
-
     def step(self, ctx, inputs) -> dict:
         points = inputs.get("points", [])
         heights = inputs.get("heights", [])
@@ -142,16 +114,6 @@ class ErosionFilter(Block):
 
     Supports block bypass (Ctrl+Shift+Y) to inspect raw terrain.
     """
-
-    type, label = "erosion", "Erosion & Terracing"
-    description = "Beach shelf clamping and ridge sharpening elevation filter"
-    inputs = [Port("heights", NUMBERS)]
-    outputs = [Port("heights", NUMBERS)]
-    params = {
-        "sea_level": 0.25,
-        "beach_shelf": 0.12,
-        "ridge_sharpness": 1.35,
-    }
 
     def step(self, ctx, inputs) -> dict:
         heights = inputs.get("heights", [])
@@ -180,17 +142,6 @@ class TreePlacer(Block):
 
     Supports block commenting (Ctrl+/) to mute vegetation.
     """
-
-    type, label = "trees", "Vegetation Placement"
-    description = "Detects slope & elevation sweet spot for procedural palm trees"
-    inputs = [Port("points", POINTS), Port("heights", NUMBERS)]
-    outputs = [Port("trees", TREES)]
-    params = {
-        "min_elevation": 0.28,
-        "max_elevation": 0.85,
-        "max_slope": 0.40,
-        "min_dist": 0.70,
-    }
 
     def step(self, ctx, inputs) -> dict:
         points = inputs.get("points", [])
@@ -235,23 +186,11 @@ class TreePlacer(Block):
 class IslandScene(Block):
     """Assembles 3D entities (ocean, low-poly terrain, palm trees, sun arrow) in Station scene."""
 
-    type, label, kind = "island_scene", "Island Scene → Station", "source"
-    description = "Packs procedural low-poly geometry into Station 3D entities"
-    inputs = [
-        Port("points", POINTS),
-        Port("heights", NUMBERS),
-        Port("trees", TREES),
-    ]
-    outputs = [Port("max_elevation", "signal")]
-    params = {
-        "water_size": 12.0,
-        "water_color": "#0e7490",
-        "sun_x": 0.6,
-        "sun_y": -0.7,
-        "sun_z": 0.4,
-        "block_size": 0.35,
-        "sea_level": 0.25,
-    }
+    scene: list[dict] = []
+
+    def entities(self) -> list[dict]:
+        """What the Station page draws: the island this block last built."""
+        return self.scene
 
     def step(self, ctx, inputs) -> dict:
         points = inputs.get("points", [])
@@ -347,51 +286,9 @@ class IslandScene(Block):
                 "color": "#15803d",
             })
 
-        if hasattr(ctx, "state") and ctx.state is not None:
-            ctx.state.build(ocean, sun_entities, terrain_entities, tree_entities, max_h)
-
+        # The block draws the island on the Station page itself: its entities are the scene.
+        self.scene = [ocean, *sun_entities, *terrain_entities, *tree_entities]
+        pb.log(f"Archipelago generated: {len(terrain_entities)} terrain facets, "
+               f"{len(tree_entities) // 2} palm trees, max elevation {max_h:.1f} m")
         return {"max_elevation": round(max_h, 4)}
 
-
-class IslandState(paperboat.DomainState):
-    """Station 3D state holding the ocean plane, sun vector, low-poly terrain, and palm trees."""
-
-    def __init__(self) -> None:
-        self.ocean: dict = {
-            "id": "ocean",
-            "shape": "box",
-            "pos": [0.0, -0.05, 0.0],
-            "size": [12.0, 0.1, 12.0],
-            "color": "#0e7490",
-        }
-        self.sun_entities: list[dict] = []
-        self.terrain: list[dict] = []
-        self.trees: list[dict] = []
-        self.max_elevation: float = 0.0
-
-    def build(
-        self,
-        ocean: dict,
-        sun_entities: list[dict],
-        terrain: list[dict],
-        trees: list[dict],
-        max_elevation: float,
-    ) -> None:
-        self.ocean = ocean
-        self.sun_entities = sun_entities
-        self.terrain = terrain
-        self.trees = trees
-        self.max_elevation = max_elevation
-
-    def entities(self) -> list[dict]:
-        return [self.ocean, *self.sun_entities, *self.terrain, *self.trees]
-
-    def summary(self) -> str:
-        tree_count = len(self.trees) // 2  # trunk + crown per tree
-        return (
-            f"Archipelago generated: {len(self.terrain)} terrain facets, "
-            f"{tree_count} palm trees, max elevation {self.max_elevation:.1f} m"
-        )
-
-
-BLOCKS = [Grid, NoiseHarmonics, RadialFalloff, ErosionFilter, TreePlacer, IslandScene]

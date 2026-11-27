@@ -33,6 +33,10 @@ group = "Wind Tunnel"
 note = "Free-stream lattice speed U∞"
 tunable = true
 
+# The station: the wind tunnel's test section
+[station]
+objects = [{ id = "tunnel", type = "wind_tunnel" }]
+
 [graph]
 nodes = [
   { id = "alpha-var", type = "variable", params = { name = "alpha" }, pos = [0, 60] },

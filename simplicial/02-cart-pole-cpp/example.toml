@@ -1,6 +1,20 @@
-# The golden harness's manifest (docs/golden.md). Not ported to the rebuilt Simplicial yet.
+# The golden harness's manifest (docs/golden.md): build the station against a simplicial checkout,
+# run its starter headless and compare the run with expected.json (the file `simplicial check` reads).
+# It needs the optional control and optimization toolkits installed in that checkout
+# (engine/toolkit/<name>: `paperboat toolkit install control`; CI copies them in).
 kind = "simplicial"
 app = "simplicial"
 name = "02 Cart-Pole"
 description = "Station object in code: PID balances a cart-pole; Variables formulas"
-pending = "ex#44: port to the rebuilt Simplicial"
+
+[[check]]
+name = "starter"
+requires = ["cmake"]
+build = [
+  ["cmake", "-S", ".", "-B", "build", "-DCMAKE_BUILD_TYPE=Release", "-DPAPERBOAT_ENGINE_DIR={simplicial}/engine"],
+  ["cmake", "--build", "build", "--target", "paperboat-cart-pole"],
+]
+run = ["build/paperboat-cart-pole", "--run"]
+timeout = 1800   # seconds per command: the build compiles the engine
+output = "simplicial"
+golden = "expected.json"

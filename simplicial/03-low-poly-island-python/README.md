@@ -30,7 +30,7 @@ Unlike time-series physical simulations driven by continuous ODE integration clo
 
 Launch the station and open the Paperboat Cockpit:
 ```bash
-./bin/paperboat run 03-low-poly-island-python
+paperboat run 03
 ```
 Navigate to `http://localhost:30471/?station=ws://localhost:51303`.
 
@@ -79,29 +79,29 @@ Press `Alt+V` to open the Variables sheet:
 
 ```text
 03-low-poly-island-python/
-├── station.toml          # Declarative format = 0 manifest (port = 51303, solver = "discrete")
+├── station.toml          # Declarative format = 0 manifest (port = 51303, [run] mode = "once")
 ├── descriptor.toml       # Variables sheet (seed, octaves, scale), Flow starter graph
-├── server.py             # Minimal Python entrypoint (paperboat.serve)
+├── station.py            # The station file: registers each block with its ports (paperboat_runtime)
 ├── domain/
-│   ├── __init__.py       # Exports BLOCKS, IslandState, IslandScene
+│   ├── __init__.py
 │   ├── noise.py          # Pure Python multi-octave 2D Simplex noise generator
 │   └── mesh_builder.py   # Procedural blocks, erosion filter, 3D scene assembler
 ├── expected.json         # Golden run assertions
+├── example.toml          # How the golden harness runs it (docs/golden.md)
 └── README.md             # Hands-on tutorial guide
 ```
+
+The station's code runs out of process, in a Python runtime `paperboatd` leases; `station.py`
+registers each block with its definition (Simplicial's docs/stations.rst). Points travel as a
+table (rows of x, z), heights as a list, trees as a table of x, y, z. The Island Scene block draws
+the island itself: its `entities()` are the Station page's scene, and it logs what it built.
 
 ---
 
 ## 4. Verification
 
 Run local verification suites:
-```bash
-# Fast manifest & catalog check
-./paperboat/bin/paperboat check paperboat-examples/03-low-poly-island-python --fast
-
-# Full 4-stage check (manifest, catalog, smoke, golden)
-./paperboat/bin/paperboat check paperboat-examples/03-low-poly-island-python
-
-# Golden verification
-python3 paperboat/protocol/golden.py --examples paperboat-examples 03-low-poly-island-python
+```sh
+python3 golden.py simplicial/03-low-poly-island-python   # from the repository root: run, compare
+paperboat check simplicial/03-low-poly-island-python     # manifest, catalog, smoke and golden
 ```

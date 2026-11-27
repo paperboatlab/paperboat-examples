@@ -1,6 +1,20 @@
-# The golden harness's manifest (docs/golden.md). Not ported to the rebuilt Simplicial yet.
+# The golden harness's manifest (docs/golden.md): a Python station runs out of process, so the check
+# builds Simplicial's engine once (into the repository's build/, shared by every Python level), runs
+# the starter headless with `simplicial-engine host . --run`, which leases a Python runtime from
+# paperboatd, and compares the run with expected.json (the file `simplicial check` reads).
 kind = "simplicial"
 app = "simplicial"
 name = "03 Low Poly Island"
 description = "Evaluated once: procedural terrain, list/array wires, block commenting"
-pending = "ex#44: port to the rebuilt Simplicial"
+
+[[check]]
+name = "starter"
+requires = ["cmake", "paperboatd"]
+build = [
+  ["cmake", "-S", "{simplicial}/engine", "-B", "{repo}/build/simplicial", "-DCMAKE_BUILD_TYPE=Release", "-DPAPERBOAT_BUILD_TESTS=OFF"],
+  ["cmake", "--build", "{repo}/build/simplicial", "--target", "simplicial-engine"],
+]
+run = ["{repo}/build/simplicial/tools/simplicial-engine", "host", ".", "--run"]
+timeout = 1800   # seconds per command: the first one builds the engine
+output = "simplicial"
+golden = "expected.json"

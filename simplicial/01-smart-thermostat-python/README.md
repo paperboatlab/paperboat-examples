@@ -28,7 +28,7 @@ This tutorial introduces the foundations of the Paperboat platform. You will bui
 
 Launch the station and open the Paperboat Cockpit:
 ```bash
-./bin/paperboat run 01-smart-thermostat-python
+paperboat run 01
 ```
 Navigate to `http://localhost:30471/?station=ws://localhost:51301`.
 
@@ -50,7 +50,7 @@ Paperboat opens in **Navigator Mode**, designed for clean signal flow observatio
    - The **Target Label** readout displays the current target setpoint.
    - The **Console** pane displays real-time execution logs.
 4. **Floating Run Dock Controls**:
-   - Toggle **`open_window`** in the bottom floating dock to swing open the 3D living room window! Freezing outdoor air rushes into the room, causing thermal heat losses to jump ($140\,\text{W/K}$) and forcing the thermostat heater into overdrive.
+   - Toggle **`open_window`** in the bottom floating dock to swing open the 3D living room window! Freezing outdoor air rushes into the room, causing thermal heat losses to jump ($140\,\text{W/K}$) and forcing the thermostat heater into overdrive. The window is a property of the room (a station object), so it opens with the next run; live, mid-run changes wait on `ctx.variable` for Python stations (paperboatlab/simplicial#60).
    - Adjust **`target_temp`** slider in the dock or Variables panel (`Alt+V`).
    - Press `Space` to pause and resume simulation.
    - Adjust execution time scale in the bottom Run Dock (`1×`, `2×`, `5×`).
@@ -64,12 +64,13 @@ The station directory contains:
 01-smart-thermostat-python/
 ├── station.toml          # Declarative format = 0 manifest
 ├── descriptor.toml       # Imports, variables, and starter Flow wiring
-├── server.py             # Minimal Python entrypoint (paperboat.serve)
+├── station.py            # The station file: registers the room and the blocks (paperboat_runtime)
 ├── domain/
 │   ├── __init__.py
-│   ├── state.py          # RoomThermostat (DomainState) & 3D entities
+│   ├── state.py          # RoomThermostat, the room (a station object) & its 3D entities
 │   └── blocks.py         # RoomSensor and HeaterActuator blocks
 ├── expected.json         # Headless golden verification baseline
+├── example.toml          # how the golden harness runs it (docs/golden.md)
 └── README.md
 ```
 
@@ -79,24 +80,45 @@ Every Paperboat station is declared with a `station.toml` manifest:
 [station]
 format = 0
 name = "01-smart-thermostat-python"
-version = "0.1.0"
+version = "0.2.0"
 engine = ">=0.1"
 language = "python"
-run = "server.py"
+run = "station.py"
 port = 51301
 descriptor = "descriptor.toml"
 solver = "euler"
+
+[run]
+duration = 20.0
+dt = 0.05
+emit_every = 4
+speed = 2.0
 
 [test]
 golden = "expected.json"
 ```
 
-### 3.2 Running Headless & Verifying
-Verify this station from the command line without opening a browser:
-```bash
-# Run 4-stage verification
-./paperboat/bin/paperboat check paperboat-examples/01-smart-thermostat-python --fast
+### 3.2 The station file (`station.py`)
+Simplicial's engine is the station: it loads the descriptor, runs the Flow and serves the page.
+Only the domain code is Python, and it runs out of process, in a Python runtime that `paperboatd`
+leases (a container, or a process on the host). `station.py` registers each type with a name and
+a definition (Simplicial's docs/stations.rst):
 
-# Verify golden test protocol conformance
-python3 paperboat/protocol/golden.py --examples paperboat-examples 01-smart-thermostat-python
+```python
+pb.register("room", RoomThermostat, definition={"base": "object", "props": {"open_window": False}})
+pb.register("heater", HeaterActuator, definition={"inputs": ["cmd"]})
+pb.register("room_sensor", RoomSensor, definition={"kind": "source", "outputs": ["t_room", "t_amb"]})
+```
+
+The room is a station object (`[station] objects` in the descriptor): the engine makes one per
+run and steps it after each pass of the Flow, and the sensor and heater reach it through
+`state.room()`. When the run is done the Console shows its final `t_room` and `t_amb`.
+
+### 3.3 Running Headless & Verifying
+Verify this station from the command line without opening a browser (it needs `paperboatd`,
+which the engine starts on demand):
+```sh
+<simplicial>/bin/simplicial host . --run   # in this folder: the starter, headless, as JSON lines
+python3 golden.py simplicial/01-smart-thermostat-python   # from the repository root: run, compare
+paperboat check simplicial/01-smart-thermostat-python     # manifest, catalog, smoke and golden
 ```

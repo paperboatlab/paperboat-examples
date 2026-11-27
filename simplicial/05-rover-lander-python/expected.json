@@ -1,7 +1,7 @@
 {
   "$comment": "What `--run` (the starter, headless) must produce; checked by protocol/golden.py.",
   "status": "done",
-  "run": "server.py",
+  "run": "station.py",
   "signals": {
     "display-alt": [0.0, 0.05],
     "display-vy": [-1.06, 0.15],

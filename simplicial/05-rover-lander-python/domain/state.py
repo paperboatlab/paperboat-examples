@@ -2,11 +2,13 @@
 
 The autopilot lives on the Flow page (domain/blocks.py); this file is only the vehicle and
 the moon. The custom web station (station/index.html) draws the scene the engine sends.
+The lander is a station object: the engine makes one per run and steps it after each pass of
+the Flow; the blocks reach it through `current()`.
 """
 
 import math
 
-from paperboat import DomainState
+import paperboat_runtime as pb
 
 G_MOON = 1.62          # m/s²
 DRY_MASS = 220.0       # kg
@@ -26,10 +28,20 @@ def _clamp(value: float, low: float, high: float) -> float:
     return min(max(value, low), high)
 
 
-class Lander(DomainState):
+_lander = None
+
+
+def current() -> "Lander":
+    """The lander this run made."""
+    return _lander
+
+
+class Lander:
     """A two-dimensional lunar module above the LZ-1 pad."""
 
-    def __init__(self) -> None:
+    def __init__(self, landing_x: float = PAD_X) -> None:
+        global _lander
+        _lander = self
         self.y = 70.0
         self.vy = -2.0
         self.x = -8.0
@@ -39,7 +51,7 @@ class Lander(DomainState):
         self.rcs = 0.0
         self.cmd_main = 0.0
         self.cmd_rcs = 0.0
-        self.target_x = PAD_X
+        self.target_x = landing_x  # the `landing_x` variable, bound in the descriptor
         self.landed = False
         self.crashed = False
         self.touchdown_vy = 0.0
@@ -54,12 +66,11 @@ class Lander(DomainState):
     def on_pad(self) -> bool:
         return abs(self.x - self.target_x) <= PAD_HALF
 
-    def step(self, ctx) -> str | None:
-        self.sim_time = ctx.t
-        # The floating dock slider is a live variable: move the pad and the target with it.
-        target = ctx.variable("landing_x")
-        if target is not None:
-            self.target_x = float(target)
+    def step(self, ctx, inputs) -> None:
+        self.sim_time = ctx["t"]
+        if self.landed or self.crashed:  # on the surface: the module stays where it came down
+            self.main = self.rcs = 0.0
+            return
         self.main = _clamp(self.cmd_main, 0.0, 1.0)
         self.rcs = _clamp(self.cmd_rcs, -1.0, 1.0)
         if self.fuel <= 0.0:
@@ -72,7 +83,7 @@ class Lander(DomainState):
         ax = self.rcs * RCS_THRUST / mass
 
         # Simple semi-implicit integration; the engine calls this once per clock pass.
-        dt = ctx.dt
+        dt = ctx["dt"]
         self.vy += ay * dt
         self.y += self.vy * dt
         self.vx += ax * dt
@@ -86,20 +97,20 @@ class Lander(DomainState):
             self.touchdown_vx = self.vx
             safe = abs(self.vy) <= MAX_TOUCH_VY and abs(self.vx) <= MAX_TOUCH_VX and self.on_pad()
             if safe:
-                return (f"Touchdown at LZ-1: vy = {self.vy:.2f} m/s, "
-                        f"vx = {self.vx:.2f} m/s, fuel = {self.fuel:.1f} kg")
+                pb.log(f"Touchdown at LZ-1: vy = {self.vy:.2f} m/s, "
+                       f"vx = {self.vx:.2f} m/s, fuel = {self.fuel:.1f} kg")
+                pb.log(f"Landed safely at LZ-1 with {self.fuel:.1f} kg propellant left")
+            else:
+                self.crashed = True
+                pb.log(f"CRASH at x = {self.x:.2f} m: vy = {self.vy:.2f} m/s, "
+                       f"vx = {self.vx:.2f} m/s", "warn")
+        elif self.y < -2.0:
             self.crashed = True
-            return (f"CRASH at x = {self.x:.2f} m: vy = {self.vy:.2f} m/s, "
-                    f"vx = {self.vx:.2f} m/s")
-        if self.y < -2.0:
-            self.crashed = True
-            return "CRASH: the module went below the lunar surface"
-        return None
+            pb.log("CRASH: the module went below the lunar surface", "warn")
 
-    def summary(self) -> str:
-        if self.landed and not self.crashed:
-            return f"Landed safely at LZ-1 with {self.fuel:.1f} kg propellant left"
-        return "Mission failed: the module did not reach LZ-1"
+    def read(self) -> dict:
+        """What the Console shows when a run is done."""
+        return {"landed": 1.0 if self.landed and not self.crashed else 0.0, "fuel": self.fuel}
 
     # --- the station's scene --------------------------------------------------------------
 
@@ -120,7 +131,10 @@ class Lander(DomainState):
             })
         return segments
 
-    def entities(self) -> list[dict]:
+    def entities(self, id: str, z: float) -> list[dict]:
+        return [{**e, "id": f"{id}/{e['id']}"} for e in self.scene()]
+
+    def scene(self) -> list[dict]:
         return [
             {"id": "sky", "shape": "box", "pos": [0, 30, -1.5], "size": [40, 90, 0.1], "color": "#0b1020"},
             {"id": "pad", "shape": "box", "pos": [self.target_x, 0.02, 0.0], "size": [2.2, 0.06, 1.6], "color": "#f59e0b"},

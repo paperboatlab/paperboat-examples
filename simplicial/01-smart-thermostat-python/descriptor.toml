@@ -38,6 +38,10 @@ note = "Open living room window to let freezing outdoor air rush in"
 tunable = true
 dock = true
 
+# The station: the living room, its window bound to the `open_window` variable
+[station]
+objects = [{ id = "room", type = "room", props = { open_window = { var = "open_window" } } }]
+
 # Starter Flow graph: Sensor -> Error (Setpoint - RoomTemp) -> Threshold -> Heater + 3-channel Scope
 [graph]
 nodes = [

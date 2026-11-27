@@ -40,7 +40,7 @@ airfoil outline, the chord line and lift/drag arrows.
 ## 2. Cockpit exploration
 
 ```sh
-./bin/paperboat run 07
+paperboat run 07
 # http://localhost:30471/?station=ws://localhost:51307
 ```
 
@@ -61,23 +61,31 @@ The lattice is pure NumPy; a full run is a few seconds on a laptop.
 07-airfoil-cfd-python/
 ├── station.toml          # format = 0, port 51307, solver = discrete
 ├── descriptor.toml       # wind-tunnel variables, LBM flow, board
-├── server.py             # paperboat.serve (dt = 0.1, duration = 9 s)
+├── station.py            # the station file: registers the tunnel and the blocks (paperboat_runtime)
 ├── domain/
 │   ├── __init__.py
 │   ├── airfoil.py        # NACA 0012 mask and outline
 │   ├── lbm_solver.py     # D2Q9 equilibrium, collision, streaming, bounce-back
 │   ├── forces.py         # lift/drag polars with the stall break
-│   ├── state.py          # WindTunnel: lattice, scene, arrows and streamlines
+│   ├── state.py          # WindTunnel, the tunnel (a station object): lattice, scene, arrows, streamlines
 │   └── blocks.py         # Airfoil, Inflow, LbmStep, Forces
 ├── expected.json         # golden run: C_L ≈ 0.591 at 6°, 546 lattice steps
+├── example.toml          # how the golden harness runs it (docs/golden.md)
 └── README.md
 ```
+
+The station's code runs out of process, in a Python runtime `paperboatd` leases; `station.py`
+registers each type with its definition (Simplicial's docs/stations.rst). The lattice needs numpy,
+which lives in the station's package volume, never on the host:
+`paperboat package add python numpy --project .`. The tunnel is a station object: the blocks
+reach it through `state.current()`; `alpha` and `flow_speed` reach the Flow through Variable
+blocks, so moving them acts at once.
 
 ---
 
 ## 4. Verification
 
 ```sh
-./paperboat/bin/paperboat check paperboat-examples/07-airfoil-cfd-python
-python3 paperboat/protocol/golden.py --examples paperboat-examples 07-airfoil-cfd-python
+python3 golden.py simplicial/07-airfoil-cfd-python   # from the repository root: run, compare
+paperboat check simplicial/07-airfoil-cfd-python     # manifest, catalog, smoke and golden
 ```

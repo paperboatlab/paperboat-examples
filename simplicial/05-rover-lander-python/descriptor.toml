@@ -43,6 +43,7 @@ note = "Slowest target descent speed above the pad"
 [station]
 view = "web"
 page = "station/index.html"
+objects = [{ id = "lander", type = "lander", props = { landing_x = { var = "landing_x" } } }]
 
 [graph]
 nodes = [

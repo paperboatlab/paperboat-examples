@@ -19,8 +19,27 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/checkout@v5
         with: { repository: paperboatlab/simplicial, path: .simplicial }
-      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ninja-build
-      - run: python3 golden.py --strict simplicial/
+      # The optional toolkits 02 (control, optimization) and 08 (opencv) use, installed into the
+      # checkout's engine/toolkit/<name> as `paperboat toolkit install` does
+      - uses: actions/checkout@v5
+        with: { repository: paperboatlab/simplicial-toolkit-optimization, path: .toolkits/optimization }
+      - uses: actions/checkout@v5
+        with: { repository: paperboatlab/simplicial-toolkit-control, path: .toolkits/control }
+      - uses: actions/checkout@v5
+        with: { repository: paperboatlab/simplicial-toolkit-opencv, path: .toolkits/opencv }
+      - run: |
+          sudo apt-get update && sudo apt-get install -y --no-install-recommends ninja-build \
+            libopencv-core-dev libopencv-imgproc-dev libopencv-imgcodecs-dev rpm2cpio cpio
+          for t in optimization control opencv; do cp -r .toolkits/$t/engine/toolkit/$t .simplicial/engine/toolkit/; done
+      # paperboat and paperboatd from the newest release's rpm: the Python levels lease their runtime
+      # from paperboatd (docker here), as on a desktop
+      - run: |
+          tag=$(gh release list -R paperboatlab/paperboat -L 1 --json tagName -q '.[0].tagName')
+          gh release download "$tag" -R paperboatlab/paperboat -p 'paperboat-cli-*.x86_64.rpm' -D "$RUNNER_TEMP"
+          mkdir -p "$RUNNER_TEMP/paperboat" && cd "$RUNNER_TEMP/paperboat" && rpm2cpio "$RUNNER_TEMP"/paperboat-cli-*.rpm | cpio -idm --quiet
+          echo "$RUNNER_TEMP/paperboat/usr/bin" >> "$GITHUB_PATH"
+        env: { GH_TOKEN: "${{ github.token }}" }
+      - run: paperboat runtime list && python3 golden.py --strict simplicial/
         env:
           SIMPLICIAL_DIR: ${{ github.workspace }}/.simplicial
           CMAKE_GENERATOR: Ninja

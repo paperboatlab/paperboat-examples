@@ -1,13 +1,19 @@
 [station]
 format = 0
 name = "01-smart-thermostat-python"
-version = "0.1.0"
+version = "0.2.0"
 engine = ">=0.1"
 language = "python"
-run = "server.py"
+run = "station.py"
 port = 51301
 descriptor = "descriptor.toml"
 solver = "euler"
+
+[run]
+duration = 20.0
+dt = 0.05
+emit_every = 4
+speed = 2.0
 
 [test]
 golden = "expected.json"
