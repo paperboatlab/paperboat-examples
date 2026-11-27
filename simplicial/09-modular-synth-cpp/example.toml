@@ -1,0 +1,14 @@
+# The golden harness's manifest (docs/golden.md): build the station against a simplicial checkout,
+# run its starter headless and compare the run with expected.json (the file `simplicial check` reads).
+kind = "simplicial"
+
+[[check]]
+name = "starter"
+requires = ["cmake"]
+build = [
+  ["cmake", "-S", ".", "-B", "build", "-DCMAKE_BUILD_TYPE=Release", "-DPAPERBOAT_ENGINE_DIR={simplicial}/engine"],
+  ["cmake", "--build", "build", "--target", "paperboat-modular-synth"],
+]
+run = ["build/paperboat-modular-synth", "--run"]
+output = "simplicial"
+golden = "expected.json"

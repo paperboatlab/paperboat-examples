@@ -1,0 +1,3 @@
+# The golden harness's manifest (docs/golden.md). Not ported to the rebuilt Simplicial yet.
+kind = "simplicial"
+pending = "ex#44: port to the rebuilt Simplicial"
