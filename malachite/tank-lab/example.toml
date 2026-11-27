@@ -1,0 +1,20 @@
+# The golden harness's manifest (docs/golden.md): Malachite's index over the hub (links, backlinks, tags,
+# cells, callout kinds; every link resolves), and the outputs its code cells should give.
+kind = "malachite"
+app = "malachite"
+name = "Tank Lab"
+description = "A lab notebook: embedded picture, video and PDF, backlinks, callouts, tags, tables, a diagram, Python and Julia cells"
+
+[[check]]
+name = "index"
+requires = ["node"]
+run = ["node", "{repo}/tools/malachite-index.ts", "{malachite}", "."]
+output = "json"
+golden = "index.json"
+
+[[check]]
+name = "cells"
+pending = "malachite#67: no headless run of a hub's cells yet; cells.json holds the outputs each cell gives"
+run = ["{malachite}/bin/malachite", "hub", "run", ".", "--json"]
+output = "json"
+golden = "cells.json"

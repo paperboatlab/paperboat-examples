@@ -225,6 +225,10 @@ def main() -> int:
             print(f"FAIL    {name}\n        no [[check]] and not pending", flush=True)
         for check in manifest.get("check", []):
             label = f"{name} {check['name']}" if len(manifest["check"]) > 1 else name
+            if "pending" in check:  # a check that waits on the app: its golden is there, not run
+                counts["pending"] += 1
+                print(f"pending {label}: {check['pending']}", flush=True)
+                continue
             try:
                 problems = run_check(example, check, update)
                 status = "FAIL" if problems else "ok"

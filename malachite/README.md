@@ -7,3 +7,7 @@ use every app are in [`hubs/`](../hubs/). Back to the [repository](../README.md)
 Each folder is a hub (`.malachite/hub.toml` and its notes; open it with
 `paperboat app open malachite <folder>`), with its golden file and an `example.toml`
 ([golden tests](../docs/golden.md)).
+
+| Hub | What it shows |
+| --- | --- |
+| [`tank-lab`](tank-lab/) | A lab notebook: embedded picture, video and PDF, backlinks, callouts, tags, tables, a diagram, Python and Julia cells |
