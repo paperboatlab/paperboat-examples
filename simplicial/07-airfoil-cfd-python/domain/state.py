@@ -1,8 +1,11 @@
-"""The wind tunnel: the lattice, its aerodynamic coefficients and the Station scene."""
+"""The wind tunnel: the lattice, its aerodynamic coefficients and the Station scene.
+
+The tunnel is a station object: the engine makes one per run; the blocks reach it through
+`current()`.
+"""
 
 import math
 
-from paperboat import DomainState
 from domain.airfoil import naca0012_outline
 from domain.forces import polars
 from domain.lbm_solver import LatticeBoltzmann
@@ -12,10 +15,20 @@ TUNNEL_W, TUNNEL_H = 3.9, 1.7
 LEFT, BOTTOM = -0.1, 0.1
 
 
-class WindTunnel(DomainState):
+_tunnel = None
+
+
+def current() -> "WindTunnel":
+    """The tunnel this run made."""
+    return _tunnel
+
+
+class WindTunnel:
     """A 2-D test section with a pitching NACA 0012 and a live velocity field."""
 
     def __init__(self) -> None:
+        global _tunnel
+        _tunnel = self
         self.lattice = LatticeBoltzmann(NX, NY)
         self.alpha = 6.0
         self.speed = 0.08
@@ -32,10 +45,10 @@ class WindTunnel(DomainState):
         self.coefficients = polars(self.alpha, self.speed)
         return self.residual
 
-    def summary(self) -> str:
+    def read(self) -> dict:
+        """What the Console shows when a run is done."""
         c = self.coefficients
-        return (f"NACA 0012 at {self.alpha:.1f} deg: CL = {c['cl']:.3f}, "
-                f"CD = {c['cd']:.3f}, L/D = {c['ld']:.1f}")
+        return {"alpha": self.alpha, "cl": c["cl"], "cd": c["cd"], "ld": c["ld"]}
 
     # --- mapping the lattice to the Station scene ------------------------------------------
 
@@ -152,9 +165,7 @@ class WindTunnel(DomainState):
              "color": "#f97316"},
         ]
 
-    def entities(self) -> list[dict]:
-        return [*self._static_entities(), *self._airfoil_entities(), *self._field_entities(),
-                *self._streamlines(), *self._force_entities()]
-
-    def patch(self) -> list[dict]:
-        return [*self._airfoil_entities(), *self._field_entities(), *self._streamlines(), *self._force_entities()]
+    def entities(self, id: str, z: float) -> list[dict]:
+        scene = [*self._static_entities(), *self._airfoil_entities(), *self._field_entities(),
+                 *self._streamlines(), *self._force_entities()]
+        return [{**e, "id": f"{id}/{e['id']}"} for e in scene]

@@ -30,6 +30,10 @@ step = 0.05
 group = "Trajectory"
 note = "How high the tool arcs over the conveyor"
 
+# The station: the cell (the arm, the conveyor, the parts and the pallets)
+[station]
+objects = [{ id = "cell", type = "robot_cell" }]
+
 [graph]
 nodes = [
   { id = "start-1", type = "start", pos = [0, 100] },

@@ -1,13 +1,22 @@
 [station]
 format = 0
 name = "04-cocktail-barista-python"
-version = "0.1.0"
+version = "0.2.0"
 engine = ">=0.1"
 language = "python"
-run = "server.py"
+run = "station.py"
 port = 51304
 descriptor = "descriptor.toml"
 solver = "discrete"
+
+[run]
+duration = 18.0
+dt = 0.05
+emit_every = 2
+
+[view]
+mode = "3d"
+camera = { eye = [2.6, 1.6, 3.4], target = [0, 0.1, 0] }
 
 [test]
 golden = "expected.json"

@@ -1,18 +1,18 @@
-"""The wind tunnel's Flow blocks: airfoil mask, lattice step and the polar readout."""
+"""The wind tunnel's Flow blocks: airfoil mask, lattice step and the polar readout.
 
-import math
+The lattice step and the polars act on the tunnel, the station object (domain/state.py), through
+`current()`; station.py registers each block with its ports and params.
+"""
 
-import paperboat
-from domain.forces import polars
+import paperboat_runtime as pb
+
 from domain.airfoil import naca0012_mask
+from domain.forces import polars
+from domain.state import current
 
 
-class Airfoil(paperboat.Block):
+class Airfoil:
     """The NACA 0012 mask at the angle of attack on its input."""
-
-    type, label, kind = "airfoil", "NACA 0012 Mask", "function"
-    inputs = ["alpha"]
-    outputs = ["alpha", "solid_fraction", "stalled"]
 
     def step(self, ctx, inputs) -> dict:
         alpha = float(inputs.get("alpha", 0.0))
@@ -24,12 +24,8 @@ class Airfoil(paperboat.Block):
         }
 
 
-class Inflow(paperboat.Block):
+class Inflow:
     """Free-stream speed and Reynolds number."""
-
-    type, label, kind = "inflow", "Inflow Condition", "function"
-    inputs = ["speed"]
-    outputs = ["u", "reynolds"]
 
     def step(self, ctx, inputs) -> dict:
         u = max(1e-4, float(inputs.get("speed", 0.08)))
@@ -38,26 +34,21 @@ class Inflow(paperboat.Block):
         return {"u": u, "reynolds": u * 90.0 / nu}
 
 
-class LbmStep(paperboat.Block):
+class LbmStep:
     """Advance the D2Q9 lattice by a few substeps and report convergence."""
 
-    type, label = "lbm_step", "LBM Step (D2Q9)"
-    inputs = ["alpha", "u"]
-    outputs = ["steps", "residual", "max_speed"]
-    params = {"substeps": 6}
-
-    def __init__(self, params: dict) -> None:
-        super().__init__(params)
+    def __init__(self, substeps: float = 6) -> None:
+        self.substeps = int(substeps)
         self.last_log = -100
 
     def step(self, ctx, inputs) -> dict:
-        tunnel = ctx.state
+        tunnel = current()
         alpha = float(inputs.get("alpha", tunnel.alpha))
         u = float(inputs.get("u", tunnel.speed))
-        residual = tunnel.advance(alpha, u, int(self.params.get("substeps", 6)))
+        residual = tunnel.advance(alpha, u, self.substeps)
         if tunnel.steps - self.last_log >= 120:
             self.last_log = tunnel.steps
-            ctx.log(f"LBM {tunnel.steps} steps, residual {residual:.2e}, max |u| {tunnel.lattice.max_speed():.3f}")
+            pb.log(f"LBM {tunnel.steps} steps, residual {residual:.2e}, max |u| {tunnel.lattice.max_speed():.3f}")
         return {
             "steps": float(tunnel.steps),
             "residual": residual,
@@ -65,19 +56,14 @@ class LbmStep(paperboat.Block):
         }
 
 
-class Forces(paperboat.Block):
+class Forces:
     """Lift and drag coefficients, and the glide ratio."""
 
-    type, label, kind = "forces", "Lift & Drag Polars", "probe"
-    inputs = ["alpha", "u"]
-    outputs = ["cl", "cd", "ld", "lift", "drag"]
-
     def step(self, ctx, inputs) -> dict:
-        alpha = float(inputs.get("alpha", ctx.state.alpha))
-        u = float(inputs.get("u", ctx.state.speed))
+        tunnel = current()
+        alpha = float(inputs.get("alpha", tunnel.alpha))
+        u = float(inputs.get("u", tunnel.speed))
         c = polars(alpha, u)
-        ctx.state.coefficients = c
+        tunnel.coefficients = c
         return {key: float(value) for key, value in c.items()}
 
-
-BLOCKS = [Airfoil, Inflow, LbmStep, Forces]

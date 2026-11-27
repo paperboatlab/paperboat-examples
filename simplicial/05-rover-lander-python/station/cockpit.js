@@ -86,7 +86,7 @@ function drawRadarGrid() {
 function drawTerrain() {
   const s = scale();
   for (const e of paperboat.entities.values()) {
-    if (!e.id.startsWith("terrain-")) continue;
+    if (!e.id.startsWith("lander/terrain-")) continue;
     const [left, top] = px(e.pos[0] - e.size[0] / 2, e.pos[1] + e.size[1] / 2);
     ctx.fillStyle = "rgba(52, 211, 153, 0.28)";
     ctx.fillRect(left, top, e.size[0] * s, e.size[1] * s);
@@ -94,13 +94,13 @@ function drawTerrain() {
 }
 
 function drawLander() {
-  const lander = paperboat.entities.get("lander");
+  const lander = paperboat.entities.get("lander/lander");
   if (!lander) return;
   const s = scale();
   const [cx, cy] = px(lander.pos[0], lander.pos[1]);
 
   // Thruster flame.
-  const flame = paperboat.entities.get("flame");
+  const flame = paperboat.entities.get("lander/flame");
   if (flame && flame.size[0] > 0.02) {
     const [fx, fy] = px(flame.pos[0], flame.pos[1] - flame.size[1] / 2);
     const width = flame.size[0] * s;
@@ -142,7 +142,7 @@ function draw() {
   drawTerrain();
   drawLander();
   // A small velocity vector at the lander.
-  const [cx, cy] = px(paperboat.entities.get("lander")?.pos[0] ?? 0, paperboat.entities.get("lander")?.pos[1] ?? 0);
+  const [cx, cy] = px(paperboat.entities.get("lander/lander")?.pos[0] ?? 0, paperboat.entities.get("lander/lander")?.pos[1] ?? 0);
   ctx.strokeStyle = "rgba(125, 255, 176, 0.8)";
   ctx.lineWidth = 2;
   ctx.beginPath();

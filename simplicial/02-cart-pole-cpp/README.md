@@ -31,7 +31,7 @@ $$\ddot{x} = \frac{F + m l \left( \dot{\theta}^2 \sin\theta - \ddot{\theta}\cos\
 
 Launch the station and open the Paperboat Cockpit:
 ```bash
-./bin/paperboat run 02-cart-pole-cpp
+paperboat run 02
 ```
 Navigate to `http://localhost:30471/?station=ws://localhost:51302`.
 
@@ -67,12 +67,14 @@ The station is organized as a standalone C++ project:
 02-cart-pole-cpp/
 ├── station.toml          # Format = 0 manifest (port = 51302, solver = "rk4")
 ├── descriptor.toml       # Variables, starter Station, and starter Flow wiring
-├── CMakeLists.txt        # Native C++ build linking paperboat::core
+├── CMakeLists.txt        # Native C++ build against Simplicial's engine and its control toolkit
+├── toolkit_requirements.toml  # the optional toolkits it needs: control, optimization
 ├── main.cpp              # Canonical paperboat::main entrypoint
 ├── domain/
 │   ├── cart_pole.hpp     # Registration declaration
 │   └── cart_pole.cpp     # ISA-88 StationObject, step(), and entities()
 ├── expected.json         # Golden run verification baseline
+├── example.toml          # how the golden harness builds and runs it (docs/golden.md)
 └── README.md
 ```
 
@@ -87,10 +89,10 @@ The cart-pole implements `paperboat::StationObject`:
 ## 4. Verification
 
 Run verification from the command line:
-```bash
-# Verify station manifest and catalog
-./paperboat/bin/paperboat check paperboat-examples/02-cart-pole-cpp --fast
+It needs Simplicial's optional control and optimization toolkits (`toolkit_requirements.toml`),
+installed into its `engine/toolkit/`: `paperboat toolkit install control` installs both.
 
-# Run headless golden protocol test
-python3 paperboat/protocol/golden.py --examples paperboat-examples 02-cart-pole-cpp
+```sh
+python3 golden.py simplicial/02-cart-pole-cpp   # from the repository root: build, run, compare
+paperboat check simplicial/02-cart-pole-cpp     # manifest, catalog, smoke and golden
 ```

@@ -1,6 +1,20 @@
-# The golden harness's manifest (docs/golden.md). Not ported to the rebuilt Simplicial yet.
+# The golden harness's manifest (docs/golden.md): a Python station runs out of process, so the check
+# builds the checkout's engine where it keeps it (engine/build; once, for every Python level), runs the
+# starter headless with `bin/simplicial host . --run`, the engine leasing a Python runtime from
+# paperboatd, and compares the run with expected.json (the file `simplicial check` reads).
 kind = "simplicial"
 app = "simplicial"
 name = "06 Robot Pick-and-Place"
 description = "ABB-style palletizer: analytical IK, quintic trajectories, fork pick-and-place"
-pending = "ex#44: port to the rebuilt Simplicial"
+
+[[check]]
+name = "starter"
+requires = ["cmake", "paperboatd"]
+build = [
+  ["cmake", "-S", "{simplicial}/engine", "-B", "{simplicial}/engine/build", "-DCMAKE_BUILD_TYPE=Release", "-DPAPERBOAT_BUILD_TESTS=OFF"],
+  ["cmake", "--build", "{simplicial}/engine/build", "--target", "simplicial-engine"],
+]
+run = ["{simplicial}/bin/simplicial", "host", ".", "--run"]
+timeout = 1800   # seconds per command: the first one builds the engine
+output = "simplicial"
+golden = "expected.json"

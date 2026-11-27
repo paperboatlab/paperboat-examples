@@ -2,11 +2,12 @@
 
 The menu comes from `data/recipes.xlsx` (see domain/recipe.py). The station is the equipment
 (ISA-88); the blocks on the Flow page are the procedure that opens valves, shakes and serves.
+The bar is a station object: the engine makes one per run and steps it after each pass of the
+Flow; the blocks reach it through `current()`.
 """
 
 import math
 
-from paperboat import DomainState
 from domain.recipe import RECIPES
 
 VALVES = tuple(dict.fromkeys([pour.valve for recipe in RECIPES for pour in recipe.pours] + ["soda"]))
@@ -25,10 +26,20 @@ def _clamp01(value: float) -> float:
     return min(max(value, 0.0), 1.0)
 
 
-class Barista(DomainState):
+_bar = None
+
+
+def current() -> "Barista":
+    """The bar this run made."""
+    return _bar
+
+
+class Barista:
     """The beverage station's live state and its 3D stainless-steel scene."""
 
     def __init__(self) -> None:
+        global _bar
+        _bar = self
         self.recipe_index = 0
         self.recipe = RECIPES[0]
         self.cup_present = True
@@ -64,19 +75,23 @@ class Barista(DomainState):
 
     # --- the run's clock ------------------------------------------------------------------
 
-    def step(self, ctx) -> None:
-        self.sim_time = ctx.t
+    def step(self, ctx, inputs) -> None:
+        self.sim_time = ctx["t"]
         if self.shake_energy > 0.0:
             self.shake_angle = 0.16 * math.sin(14.0 * self.sim_time) * self.shake_energy
         else:
             self.shake_angle *= 0.85
 
-    def summary(self) -> str:
-        return f"Served {self.recipe.name}: {self.recipe.total_ml():.0f} ml"
+    def read(self) -> dict:
+        """What the Console shows when a run is done."""
+        return {"served": 1.0 if self.served else 0.0, "fill_ml": self.total_ml()}
 
     # --- the station's scene --------------------------------------------------------------
 
-    def entities(self) -> list[dict]:
+    def entities(self, id: str, z: float) -> list[dict]:
+        return [{**e, "id": f"{id}/{e['id']}"} for e in self.scene()]
+
+    def scene(self) -> list[dict]:
         liquid_level = min(0.38, 0.02 + self.total_ml() / 420.0)
         glass_x = 0.0
         mixed = self.total_ml() > 0.1

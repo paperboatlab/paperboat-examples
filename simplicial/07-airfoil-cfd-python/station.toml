@@ -1,13 +1,23 @@
 [station]
 format = 0
 name = "07-airfoil-cfd-python"
-version = "0.1.0"
+version = "0.2.0"
 engine = ">=0.1"
 language = "python"
-run = "server.py"
+run = "station.py"
 port = 51307
 descriptor = "descriptor.toml"
 solver = "discrete"
+
+[run]
+duration = 9.0
+dt = 0.1
+emit_every = 1
+
+[view]
+mode = "2d"
+center = [1.8, 0.95]
+height = 2.4
 
 [test]
 golden = "expected.json"

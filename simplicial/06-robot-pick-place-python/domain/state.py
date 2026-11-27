@@ -1,9 +1,12 @@
-"""The robot cell: the arm, three workpieces, the conveyor and the two sorting bins."""
+"""The robot cell: the arm, three workpieces, the conveyor and the two sorting bins.
+
+The cell is a station object: the engine makes one per run and steps it after each pass of the
+Flow; the blocks reach it through `current()`.
+"""
 
 import math
 from pathlib import Path
 
-from paperboat import DomainState
 from domain.kinematics import BIN_A, BIN_B, HOME, LINK1, LINK2, BASE_HEIGHT, forward, inverse, quintic, shortest_delta
 from domain.stl import load as load_stl
 
@@ -40,10 +43,20 @@ class Part:
         self.bin = "A" if index % 2 == 0 else "B"
 
 
-class RobotCell(DomainState):
+_cell = None
+
+
+def current() -> "RobotCell":
+    """The cell this run made."""
+    return _cell
+
+
+class RobotCell:
     """Three joints, a vacuum gripper and the parts on the infeed conveyor."""
 
     def __init__(self) -> None:
+        global _cell
+        _cell = self
         self.q = list(inverse(HOME))
         self.q_prev = list(self.q)
         self.dq = [0.0, 0.0, 0.0]
@@ -129,16 +142,17 @@ class RobotCell(DomainState):
         self.current += 1
         return part
 
-    def step(self, ctx) -> None:
-        self.sim_time = ctx.t
-        if ctx.dt > 0:
-            self.dq = [(a - b) / ctx.dt for a, b in zip(self.q, self.q_prev)]
+    def step(self, ctx, inputs) -> None:
+        self.sim_time, dt = ctx["t"], ctx["dt"]
+        if dt > 0:
+            self.dq = [(a - b) / dt for a, b in zip(self.q, self.q_prev)]
         self.q_prev = list(self.q)
         if self.held is not None:
             self.held.position = self.tcp()
 
-    def summary(self) -> str:
-        return f"Cell complete: {self.placed} parts sorted ({self.placed_a} in BIN A, {self.placed_b} in BIN B)"
+    def read(self) -> dict:
+        """What the Console shows when a run is done."""
+        return {"placed": float(self.placed), "placed_a": float(self.placed_a), "placed_b": float(self.placed_b)}
 
     # --- the station's scene --------------------------------------------------------------
 
@@ -157,27 +171,28 @@ class RobotCell(DomainState):
         )
         return shoulder, elbow, wrist
 
-    def _cad(self, name: str, color: str, pos, rot=None, arrays=True) -> dict:
+    def _cad(self, name: str, color: str, pos, rot=None) -> dict:
         """One CAD part as a Station mesh entity, in metres and radians."""
         vertices, indices = load_stl(Path(__file__).resolve().parent.parent / "data" / "cad" / f"{name}.stl")
-        entity = {
+        return {
             "id": name,
             "shape": "mesh",
             "pos": [round(v, 5) for v in pos],
             "rot": [round(v, 5) for v in (rot or (0.0, 0.0, 0.0))],
             "color": color,
+            "vertices": vertices,
+            "indices": indices,
         }
-        if arrays:
-            entity["vertices"] = vertices
-            entity["indices"] = indices
-        return entity
 
     def _arm_rot(self, pitch: float) -> list[float]:
         # A CAD link runs along +y; turn it to the radial direction at this pitch and yaw.
         direction = [math.sin(pitch) * math.sin(self.q[0]), math.cos(pitch), math.sin(pitch) * math.cos(self.q[0])]
         return _euler_xyz(_quat_from_to([0.0, 1.0, 0.0], direction))
 
-    def entities(self) -> list[dict]:
+    def entities(self, id: str, z: float) -> list[dict]:
+        return [{**e, "id": f"{id}/{e['id']}"} for e in self.scene()]
+
+    def scene(self) -> list[dict]:
         parts = []
         for part in self.parts:
             if part.state == "placed":
@@ -195,7 +210,7 @@ class RobotCell(DomainState):
             })
         # The palletizer's CAD parts are binary STLs in data/cad (see data/generate_cad.py):
         # a cast base, a rotating turret, two arm links and a fork. They are loaded once and
-        # sent as Station mesh entities; the moving links patch only their pose.
+        # sent as Station mesh entities.
         crates = []
         for row, z in enumerate((-0.78, -0.46, -0.14, 0.18)):
             crates.append({"id": f"crate-a-{row}", "shape": "box", "pos": [1.30, 0.13 + row * 0.2, z],
@@ -223,20 +238,3 @@ class RobotCell(DomainState):
             *crates,
             *parts,
         ]
-
-    def patch(self) -> list[dict]:
-        """Only the moving CAD links and workpieces; the meshes' vertices stay in the scene."""
-        shoulder, elbow, wrist = self._joint_points()
-        arm1_rot = self._arm_rot(self.q[1])
-        arm2_rot = self._arm_rot(self.q[1] + self.q[2])
-        moving = [
-            self._cad("turret", "#f97316", (0.0, 0.70, 0.0), (0.0, self.q[0], 0.0), arrays=False),
-            self._cad("arm1", "#f97316", shoulder, arm1_rot, arrays=False),
-            self._cad("arm2", "#fb923c", elbow, arm2_rot, arrays=False),
-            self._cad("fork", "#facc15" if self.gripper > 0.5 else "#a16207", wrist, arm2_rot, arrays=False),
-        ]
-        for part in self.parts:
-            color = "#22c55e" if part.state == "placed" else "#f59e0b" if part.state == "held" else "#cbd5e1"
-            moving.append({"id": f"part-{part.index}", "shape": "box",
-                           "pos": [round(v, 4) for v in part.position], "size": [0.16, 0.16, 0.16], "color": color})
-        return moving

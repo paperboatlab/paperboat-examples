@@ -5,7 +5,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(NOT PAPERBOAT_ENGINE_DIR)
-  foreach(dir "${CMAKE_CURRENT_LIST_DIR}/../../../engine" "${CMAKE_CURRENT_LIST_DIR}/../../paperboat/engine")
+  # A simplicial checkout next to this repository (paperboat-examples/simplicial/<level>/).
+  foreach(dir "${CMAKE_CURRENT_LIST_DIR}/../../../simplicial/engine")
     if(EXISTS "${dir}/CMakeLists.txt")
       set(PAPERBOAT_ENGINE_DIR "${dir}")
       break()
@@ -30,7 +31,7 @@ foreach(toolkit optimization control)
   if(NOT TARGET paperboat::toolkit_${toolkit})
     foreach(dir
         "${PAPERBOAT_ENGINE_DIR}/toolkit/${toolkit}"
-        "${CMAKE_CURRENT_LIST_DIR}/../paperboat-toolkit-${toolkit}/engine/toolkit/${toolkit}")
+        "${CMAKE_CURRENT_LIST_DIR}/../../../simplicial-toolkit-${toolkit}/engine/toolkit/${toolkit}")
       if(EXISTS "${dir}/toolkit.toml")
         add_subdirectory("${dir}" "${CMAKE_CURRENT_BINARY_DIR}/${toolkit}-toolkit")
         break()

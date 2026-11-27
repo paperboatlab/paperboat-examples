@@ -9,7 +9,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(NOT PAPERBOAT_ENGINE_DIR)
-  foreach(dir "${CMAKE_CURRENT_LIST_DIR}/../../../engine" "${CMAKE_CURRENT_LIST_DIR}/../../paperboat/engine")
+  # A simplicial checkout next to this repository (paperboat-examples/simplicial/<level>/).
+  foreach(dir "${CMAKE_CURRENT_LIST_DIR}/../../../simplicial/engine")
     if(EXISTS "${dir}/CMakeLists.txt")
       set(PAPERBOAT_ENGINE_DIR "${dir}")
       break()
@@ -28,10 +29,10 @@ else()
 endif()
 
 # The optional OpenCV package: an installed copy under engine/toolkit/opencv, or the
-# paperboat-toolkit-opencv checkout next to this repository.
+# simplicial-toolkit-opencv checkout next to this repository.
 if(NOT TARGET paperboat::toolkit_opencv)
   foreach(dir "${PAPERBOAT_ENGINE_DIR}/toolkit/opencv"
-              "${CMAKE_CURRENT_LIST_DIR}/../../paperboat-toolkit-opencv/engine/toolkit/opencv")
+              "${CMAKE_CURRENT_LIST_DIR}/../../../simplicial-toolkit-opencv/engine/toolkit/opencv")
     if(EXISTS "${dir}/CMakeLists.txt")
       add_subdirectory("${dir}" air-hockey-opencv)
       break()

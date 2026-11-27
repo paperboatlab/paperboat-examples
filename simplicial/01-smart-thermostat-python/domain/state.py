@@ -1,7 +1,11 @@
-"""Room thermal dynamics state: room temperature with ambient heat loss, electric heating, and operable 3D window."""
+"""The living room, a station object: room temperature with ambient heat loss, electric heating,
+and an operable 3D window.
+
+The engine makes one room per run and steps it after each pass of the Flow; the blocks reach it
+through `room()`.
+"""
 
 import math
-from paperboat import DomainState
 
 # Thermal constants
 C_ROOM = 800.0        # J/K (thermal capacitance of the room air mass)
@@ -13,35 +17,41 @@ T_AMB_AMP = 6.0       # °C (sinusoidal diurnal amplitude)
 T_AMB_FREQ = 0.05     # Hz (weather fluctuation frequency)
 
 
-class RoomThermostat(DomainState):
-    """Living room thermal dynamics state with 3D architectural station entities."""
+_room = None
 
-    def __init__(self) -> None:
+
+def room() -> "RoomThermostat":
+    """The room this run made."""
+    return _room
+
+
+class RoomThermostat:
+    """Living room thermal dynamics with 3D architectural station entities."""
+
+    def __init__(self, open_window: bool = False) -> None:
+        global _room
+        _room = self
         self.t_room = 18.5         # °C (initial indoor room temperature)
         self.t_amb = T_AMB_BASE    # °C (current outdoor ambient temperature)
         self.heater_power = 0.0    # W (active heating power)
         self.heater_on = 0.0       # 1.0 = ON, 0.0 = OFF
-        self.window_open = False   # Tunable variable state ("open_window")
+        self.window_open = bool(open_window)  # the `open_window` variable, bound in the descriptor
         self.window_opening = 0.0  # 0.0 (shut) to 1.0 (fully open), smoothly animated
         self.sim_time = 0.0
 
-    def step(self, ctx) -> None:
-        self.sim_time = ctx.t
+    def step(self, ctx, inputs) -> None:
+        t, dt = ctx["t"], ctx["dt"]
+        self.sim_time = t
         # Calculate ambient diurnal outdoor temperature
-        self.t_amb = T_AMB_BASE + T_AMB_AMP * math.sin(2.0 * math.pi * T_AMB_FREQ * ctx.t)
-
-        # Read tunable project variable "open_window" from the dock control
-        win_var = ctx.variable("open_window")
-        if win_var is not None:
-            self.window_open = bool(float(win_var) > 0.5)
+        self.t_amb = T_AMB_BASE + T_AMB_AMP * math.sin(2.0 * math.pi * T_AMB_FREQ * t)
 
         # Animate smooth window opening/closing transition (~0.6s)
         target = 1.0 if self.window_open else 0.0
         speed = 2.0  # rate / sec
         if self.window_opening < target:
-            self.window_opening = min(target, self.window_opening + speed * ctx.dt)
+            self.window_opening = min(target, self.window_opening + speed * dt)
         elif self.window_opening > target:
-            self.window_opening = max(target, self.window_opening - speed * ctx.dt)
+            self.window_opening = max(target, self.window_opening - speed * dt)
 
         # Thermal energy balance: C_room * dT_room/dt = Q_in - Q_loss
         k_eff = K_LOSS_CLOSED + (K_LOSS_OPEN - K_LOSS_CLOSED) * self.window_opening
@@ -50,11 +60,11 @@ class RoomThermostat(DomainState):
         dt_room = (q_in - q_loss) / C_ROOM
 
         # Integrate indoor temperature
-        self.t_room += dt_room * ctx.dt
+        self.t_room += dt_room * dt
 
-    def entities(self) -> list[dict]:
+    def entities(self, id: str, z: float) -> list[dict]:
         """Architectural cross-section of a living room with baseboard heater, digital thermostat, and 3D window."""
-        return [
+        return [{**e, "id": f"{id}/{e['id']}"} for e in [
             # Room floor (dark charcoal wood parquet)
             {"id": "floor", "shape": "box", "pos": [0, -1.5, 0], "size": [6.0, 0.2, 4.0], "color": "#2a2d32"},
             # Solid interior left wall behind the baseboard radiator
@@ -76,7 +86,7 @@ class RoomThermostat(DomainState):
             # Thermostat wall plate (on right side of back wall)
             {"id": "thermostat_plate", "shape": "box", "pos": [1.2, 0.3, -1.88], "size": [0.6, 0.6, 0.06], "color": "#16181a"},
             *self.patch(),
-        ]
+        ]]
 
     def patch(self) -> list[dict]:
         """Dynamic per-frame state visualizations (heater glow, heat plumes, dial color, animated 3D window)."""
@@ -111,5 +121,6 @@ class RoomThermostat(DomainState):
             {"id": "cold_draft", "shape": "box", "pos": [-1.2, 0.4, round(draft_pos_z, 3)], "size": [1.2, 0.9, 1.1], "scale": [round(draft_scale, 3), round(draft_scale, 3), round(draft_scale, 3)], "color": "#a5f3fc"},
         ]
 
-    def summary(self) -> str:
-        return f"done, final T_room = {self.t_room:.2f} °C, T_amb = {self.t_amb:.2f} °C"
+    def read(self) -> dict:
+        """What the Console shows when a run is done."""
+        return {"t_room": self.t_room, "t_amb": self.t_amb}

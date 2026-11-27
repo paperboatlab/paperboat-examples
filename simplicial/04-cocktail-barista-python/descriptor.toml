@@ -16,6 +16,7 @@ import = ["base", "board", "math", "signal", "step", "string"]
 # Starter station: the stainless bar, four-valve gantry, shaker and serving glass.
 [station]
 view = "scene"
+objects = [{ id = "bar", type = "barista" }]
 
 # Starter Flow graph.
 [graph]

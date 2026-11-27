@@ -1,7 +1,7 @@
 {
   "$comment": "What `--run` (the starter, headless) must produce; checked by protocol/golden.py.",
   "status": "done",
-  "run": "server.py",
+  "run": "station.py",
   "signals": {
     "display-cl": [0.5911, 0.001],
     "display-cd": [0.02004, 0.0005],
@@ -10,6 +10,6 @@
   },
   "logs": [
     "LBM",
-    "NACA 0012 at 6.0 deg"
+    "tunnel: alpha = 6, cd = 0.02004, cl = 0.5911"
   ]
 }
