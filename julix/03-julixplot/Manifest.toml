@@ -145,8 +145,8 @@ version = "1.8.0"
 
 [[deps.JulixPlot]]
 deps = ["Base64", "Cairo", "Colors", "FreeType2_jll", "PrecompileTools", "Printf", "SHA"]
-git-tree-sha1 = "2a978f8e284bb5c24b0e86df522386d3d84087be"
-repo-rev = "3a8b7e0b516bf3e956829d61d88f7302b178b4dd"
+git-tree-sha1 = "6d048751217db4fe8a79de1996235f75d482c203"
+repo-rev = "1da11228e9af31981cbb92630d2796b1a7ca4a7d"
 repo-url = "https://github.com/paperboatlab/JulixPlot.jl"
 uuid = "a0581f93-fa5f-40d4-84b8-c56ea884187e"
 version = "0.2.0"
